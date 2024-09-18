@@ -7,11 +7,11 @@ function page({
   params,
 }: {
   params: {
-    id: string;
+    slug: string;
   };
 }) {
-  const id = params?.id;
-  if (!id) {
+  const slug = params?.slug;
+  if (!slug) {
     notFound();
   }
 
@@ -20,7 +20,7 @@ function page({
       <header className="mt-4 lg:mt-5 mb-18 max-w-[62.125rem]">
         <div className="border flex items-center justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb
-            prevPaths={[{ href: "/communities/hello", label: "Cellena" }]}
+            prevPaths={[{ href: "/communities/hello", label: "Cellana" }]}
             activePath="Members"
           />
 

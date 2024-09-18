@@ -17,15 +17,15 @@ function page({
   params,
 }: {
   params: {
-    id: string;
+    slug: string;
   };
 }) {
-  const id = params?.id;
-  if (!id) {
+  const slug = params?.slug;
+  if (!slug) {
     notFound();
   }
 
-  const community_name = "Cellena-" + id;
+  const community_name = slug;
 
   return (
     <>
@@ -55,7 +55,7 @@ function page({
               }
               contentClassName="border border-athens bg-white space-y-2 rounded-lg py-[0.625rem] px-[0.375rem] max-w-[8.3125rem] drop-shadow-popover"
             >
-              <button className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako">
+              <button className="w-full flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako">
                 <span>
                   <HomeIconOutline />
                 </span>

@@ -1,7 +1,8 @@
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import React from "react";
 
-const ProposalCard = () => {
+const ProposalCard = ({ isClosed }: { isClosed?: boolean }) => {
   return (
     <Link
       href="/communities/hello/proposals/hey"
@@ -15,9 +16,20 @@ const ProposalCard = () => {
             <h5 className="text-xs text-gray">18 mins ago</h5>
           </span>
         </div>
-        <span className="flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]">
-          <span className="rounded-full bg-emerald size-2 inline-block"></span>
-          <span>Active</span>
+        <span
+          className={cn(
+            "flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]",
+            {
+              "bg-red-100 text-red-600": isClosed,
+            }
+          )}
+        >
+          <span
+            className={cn("rounded-full bg-emerald size-2 inline-block", {
+              "bg-red-500": isClosed,
+            })}
+          ></span>
+          <span>{isClosed ? "Closed" : "Active"}</span>
         </span>
       </div>
       <h2 className="font-medium text-sm mb-[0.4375rem] text-mako">

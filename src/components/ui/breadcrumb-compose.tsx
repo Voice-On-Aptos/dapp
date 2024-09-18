@@ -26,7 +26,7 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
         <BreadcrumbItem>
           <BreadcrumbLink
             href={basePath?.href || "/communities"}
-            className="text-base lg:text-s20 text-dark-gray font-medium"
+            className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
           >
             {basePath?.label ?? "Communities"}
           </BreadcrumbLink>
@@ -40,7 +40,7 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
             <BreadcrumbItem>
               <BreadcrumbLink
                 href={path?.href}
-                className="text-base lg:text-s20 text-dark-gray font-medium"
+                className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
               >
                 {path?.label}
               </BreadcrumbLink>
@@ -53,7 +53,7 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
 
         {/* previous paths end */}
         <BreadcrumbItem>
-          <BreadcrumbPage className="text-base lg:text-s20 font-medium text-mako">
+          <BreadcrumbPage className="text-base capitalize lg:text-s20 font-medium text-mako">
             {activePath}
           </BreadcrumbPage>
         </BreadcrumbItem>

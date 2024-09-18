@@ -13,7 +13,7 @@ const CommunityInfo = () => {
     }
 
     const shareData = {
-      title: "Cellena Community",
+      title: "Cellana Community",
       url: `${window.location.origin}/`,
     };
 
@@ -45,7 +45,7 @@ const CommunityInfo = () => {
         <div className="flex items-center space-x-[0.5625rem]">
           <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
           <div>
-            <h4 className="font-medium text-mako text-sm">Cellena</h4>
+            <h4 className="font-medium text-mako text-sm">Cellana</h4>
             <span className="flex items-center text-xs text-gray space-x-1">
               <span>Created by</span>
               <button
@@ -73,12 +73,12 @@ const CommunityInfo = () => {
             "line-clamp-5": !show,
           })}
         >
-          Cellena is an independent, public goods company who acts as an
+          Cellana is an independent, public goods company who acts as an
           impartial watchdog for the Aptos ecosystem. Our mission is to provide
           comprehensive and unbiased analysis and comparative evaluations of
           Layer 2 solutions . We are committed to the verification and
           fact-checking of the claims made by each project, with a special focus
-          on the security aspects. What sets Cellena apart is our unwavering
+          on the security aspects. What sets Cellana apart is our unwavering
           commitment to delivering accurate and reliable information....
         </p>
         <button

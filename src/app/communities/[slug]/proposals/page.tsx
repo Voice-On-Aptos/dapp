@@ -1,7 +1,8 @@
-import PollCard from "@/components/shared/PollCard";
+import ProposalCard from "@/components/shared/ProposalCard";
 import Tabs from "@/components/shared/Tabs";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
-import { formatLargeNumber } from "@/lib/utils";
+import { cn, formatLargeNumber } from "@/lib/utils";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { LuPlus } from "react-icons/lu";
@@ -11,15 +12,15 @@ function page({
   searchParams,
 }: {
   params: {
-    id: string;
+    slug: string;
   };
   searchParams: {
     status?: string;
   };
 }) {
   const status = searchParams?.status || "all";
-  const id = params?.id;
-  if (!id) {
+  const slug = params?.slug;
+  if (!slug) {
     notFound();
   }
 
@@ -28,8 +29,8 @@ function page({
       <header className="border mt-4 lg:mt-5 mb-18 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
         <div className="flex items-center justify-between">
           <RBreadcrumb
-            prevPaths={[{ href: "/communities/hello", label: "Cellena" }]}
-            activePath="Polls"
+            prevPaths={[{ href: "/communities/hello", label: "Cellana" }]}
+            activePath="Proposals"
           />
 
           <div className="flex items-center space-x-3">
@@ -37,7 +38,7 @@ function page({
             <h5 className="text-2xl lg:text-s32 font-medium flex items-center space-x-2">
               <span>{formatLargeNumber(40)}</span>
               <span className="text-gray text-sm lg:text-base font-normal">
-                Polls
+                Proposals
               </span>
             </h5>
           </div>
@@ -47,11 +48,11 @@ function page({
             <Tabs active={status} routes={["all", "active", "closed"]} />
           </Suspense>
           <button
-            title="Create poll"
+            title="Create proposal"
             className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
           >
             <LuPlus size={18} />
-            <span>Create poll</span>
+            <span>Create proposal</span>
           </button>
         </div>
       </header>
@@ -60,7 +61,7 @@ function page({
           {Array(12)
             .fill("")
             .map((_, index) => (
-              <PollCard key={index} />
+              <ProposalCard key={index} isClosed={status === "closed"} />
             ))}
         </div>
       </section>

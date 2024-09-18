@@ -14,12 +14,14 @@ export default function Page() {
           className="w-[4.9375rem] text-sm text-dove-gray border border-white-smoke-4 rounded-lg"
         />
       </header>
-      <section className="space-y-3">
-        {Array(6)
-          .fill("")
-          .map((_, index) => (
-            <PostCard key={index} />
-          ))}
+      <section>
+        <div className="space-y-3 max-w-[43.625rem]">
+          {Array(6)
+            .fill("")
+            .map((_, index) => (
+              <PostCard key={index} />
+            ))}
+        </div>
       </section>
     </>
   );
