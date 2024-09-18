@@ -42,6 +42,9 @@ const config: Config = {
         twilight: "#F0FBFC",
         "dark-gray": "#AAAAAA",
         porcelain: "#EFF1F3",
+        beige: "#E7FFEF",
+        apple: "#05A83D",
+        emerald: "#70D994",
       },
       fontSize: {
         s9: ["0.5625rem", "0.67rem"],
@@ -60,6 +63,7 @@ const config: Config = {
       dropShadow: {
         card: "0px -1px 20px #0000000D",
         popover: "0px 1px 4px #0C0C0D0D",
+        tab: "0px 1px 4px #00000012",
       },
       keyframes: {
         "accordion-down": {

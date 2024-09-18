@@ -21,14 +21,14 @@ const Tabs = ({ routes, active }: Props) => {
 
   return (
     <ul className="flex items-center space-x-[0.625rem]">
-      {routes.map((route) => (
-        <li>
+      {routes.map((route, index) => (
+        <li key={index}>
           <button
             onClick={() => tabHandler(route)}
             className={cn(
-              "text-xs lg:text-sm capitalize text-dove-gray border border-dark-gray rounded-lg px-4 py-[0.625rem]",
+              "text-xs lg:text-sm capitalize bg-white text-dove-gray rounded-lg px-4 py-[0.625rem]",
               {
-                "border-accent": route === active,
+                "border-b-2 border-accent drop-shadow-tab": route === active,
               }
             )}
           >

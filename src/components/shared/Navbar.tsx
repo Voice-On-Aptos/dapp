@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import { IoMenu } from "react-icons/io5";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import NotificationIcon from "../custom-icons/NotificationIcon";
@@ -30,10 +30,12 @@ const Navbar = () => {
               className="hidden xl:block"
             />
           </Link>
-          <Search
-            placeholder="Search VOA"
-            className="hidden lg:block lg:w-[25rem] 1xl:w-[34.6875rem] max-w-full"
-          />
+          <Suspense>
+            <Search
+              placeholder="Search VOA"
+              className="hidden lg:block lg:w-[25rem] 1xl:w-[34.6875rem] max-w-full"
+            />
+          </Suspense>
         </div>
         <div className="hidden lg:flex space-x-4 items-center justify-between">
           <span className="flex items-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">

@@ -62,8 +62,8 @@ export function RewardChart() {
           {currencyFormatter(30000)}
         </h5>
         <ul className="mt-4 text-xs text-mako space-y-2">
-          {chartData?.map((data) => (
-            <li>
+          {chartData?.map((data, index) => (
+            <li key={index}>
               <span
                 style={{
                   backgroundColor: data?.fill,
