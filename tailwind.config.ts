@@ -19,6 +19,8 @@ const config: Config = {
         teal: "#046B61",
         gainsboro: "#D7D9DD",
         "gainsboro-2": "#D9D9D9",
+        shark: "#1E1E1E",
+        "shark-2": "#202020",
         "shark-3": "#292D32",
         "white-smoke": "#F7F7F8",
         "white-smoke-2": "#F7F7F7",
@@ -39,6 +41,7 @@ const config: Config = {
         "sun-glow": "#FFB320",
         twilight: "#F0FBFC",
         "dark-gray": "#AAAAAA",
+        porcelain: "#EFF1F3",
       },
       fontSize: {
         s9: ["0.5625rem", "0.67rem"],
@@ -46,6 +49,7 @@ const config: Config = {
         s13: ["0.81rem", "0.99rem"],
         s20: ["1.25rem", "1.88rem"],
         s26: ["1.625rem", "1.98rem"],
+        s32: ["2rem", "2.44rem"],
         s34: ["2.13rem", "1.69rem"],
         s46: ["2.88rem", "3.51rem"],
         s54: ["3.38rem", "3.38rem"],
@@ -55,6 +59,7 @@ const config: Config = {
       },
       dropShadow: {
         card: "0px -1px 20px #0000000D",
+        popover: "0px 1px 4px #0C0C0D0D",
       },
       keyframes: {
         "accordion-down": {

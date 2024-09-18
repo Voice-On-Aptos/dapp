@@ -15,11 +15,11 @@ export default function Page() {
         />
       </header>
       <section className="space-y-3">
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
+        {Array(6)
+          .fill("")
+          .map((_, index) => (
+            <PostCard key={index} />
+          ))}
       </section>
     </>
   );
