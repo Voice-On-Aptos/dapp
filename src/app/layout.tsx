@@ -1,3 +1,5 @@
+import Navbar from "@/components/shared/Navbar";
+import Sidebar from "@/components/shared/Sidebar";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -13,6 +15,11 @@ const helvetica_neue = localFont({
       path: "../fonts/HelveticaNeueLightItalic.otf",
       weight: "300",
       style: "italic",
+    },
+    {
+      path: "../fonts/HelveticaNeueRoman.otf",
+      weight: "400",
+      style: "normal",
     },
     {
       path: "../fonts/HelveticaNeueMedium.otf",
@@ -64,7 +71,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={helvetica_neue.className}>
-        <main className="min-h-dvh">{children}</main>
+        <Navbar />
+        <div className="flex items-start bg-white">
+          <Sidebar />
+          <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
