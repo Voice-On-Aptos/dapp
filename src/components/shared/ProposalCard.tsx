@@ -27,9 +27,9 @@ const ProposalCard = () => {
         Egestas feugiat posuere vel diam egestas tortor eget magna elementum.
         Odio blandit sit egestas tellus. ...
       </p>
-      <span className="mt-5 flex items-center space-x-[0.375rem] text-s10 text-mako">
+      <span className="mt-5 flex items-center space-x-[0.375rem] text-xs text-mako">
         <span>Proposal ends in:</span>
-        <span className="text-xs font-medium">6d 12h 3m</span>
+        <span className="text-sm font-medium">6d 12h 3m</span>
       </span>
     </Link>
   );

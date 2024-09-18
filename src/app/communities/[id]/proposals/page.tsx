@@ -29,14 +29,14 @@ function page({
       <header className="border mt-4 lg:mt-5 mb-18 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
         <div className="flex items-center justify-between">
           <RBreadcrumb
-            prevPaths={[{ href: "/communities/hello", label: "Digicask" }]}
+            prevPaths={[{ href: "/communities/hello", label: "Cellena" }]}
             activePath="Proposals"
           />
 
           <div className="flex items-center space-x-3">
             <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
-            <h5 className="text-2xl lg:text-s32 font-medium">
-              {formatLargeNumber(40)}{" "}
+            <h5 className="text-2xl lg:text-s32 font-medium flex items-center space-x-2">
+              <span>{formatLargeNumber(40)}</span>
               <span className="text-gray text-sm lg:text-base font-normal">
                 Proposals
               </span>

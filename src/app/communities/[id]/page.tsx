@@ -25,7 +25,7 @@ function page({
     notFound();
   }
 
-  const community_name = "Digicask-" + id;
+  const community_name = "Cellena-" + id;
 
   return (
     <>

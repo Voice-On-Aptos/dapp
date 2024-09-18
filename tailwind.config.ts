@@ -17,8 +17,11 @@ const config: Config = {
       colors: {
         accent: "#00B2A1",
         teal: "#046B61",
+        "blue-chill": "#0798A0",
         gainsboro: "#D7D9DD",
         "gainsboro-2": "#D9D9D9",
+        "gainsboro-3": "#DBDBDB",
+        mist: "#8F8F8F",
         shark: "#1E1E1E",
         "shark-2": "#202020",
         "shark-3": "#292D32",

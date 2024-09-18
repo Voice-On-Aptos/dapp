@@ -1,18 +1,19 @@
 "use client";
 import CopyIcon from "@/components/custom-icons/CopyIcon";
 import ShareIcon from "@/components/custom-icons/ShareIcon";
-import { shortenAddress } from "@/lib/utils";
-import React from "react";
-import { toast } from "sonner"
+import { cn, shortenAddress } from "@/lib/utils";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
 const CommunityInfo = () => {
+  const [show, setShowState] = useState(false);
   const shareHandler = async () => {
     if (!navigator.canShare) {
       return;
     }
 
     const shareData = {
-      title: "Digicask Community",
+      title: "Cellena Community",
       url: `${window.location.origin}/`,
     };
 
@@ -32,15 +33,21 @@ const CommunityInfo = () => {
     // toast("Address Copied.");
   };
 
+  const showMoreHandler = () => {
+    // Implement show more functionality here
+    console.log("Show more clicked");
+    setShowState(!show);
+  };
+
   return (
     <div className="w-full bg-white rounded-xl p-3 lg:p-[1.375rem] border border-alice-blue">
       <div className="flex items-start justify-between mb-[0.9375rem]">
         <div className="flex items-center space-x-[0.5625rem]">
           <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
           <div>
-            <h4 className="font-medium text-mako text-sm">DigiCask</h4>
+            <h4 className="font-medium text-mako text-sm">Cellena</h4>
             <span className="flex items-center text-xs text-gray space-x-1">
-              <span>Created by </span>
+              <span>Created by</span>
               <button
                 onClick={() => copyHandler("0x1D68893kcjeeaC")}
                 className="flex items-center space-x-1"
@@ -61,16 +68,25 @@ const CommunityInfo = () => {
         </button>
       </div>
       <div className="text-xs text-mako">
-        <p className="line-clamp-5 inline">
-          Digicask is an independent, public goods company who acts as an
+        <p
+          className={cn("inline", {
+            "line-clamp-5": !show,
+          })}
+        >
+          Cellena is an independent, public goods company who acts as an
           impartial watchdog for the Aptos ecosystem. Our mission is to provide
           comprehensive and unbiased analysis and comparative evaluations of
           Layer 2 solutions . We are committed to the verification and
           fact-checking of the claims made by each project, with a special focus
-          on the security aspects. What sets DigiCask apart is our unwavering
+          on the security aspects. What sets Cellena apart is our unwavering
           commitment to delivering accurate and reliable information....
         </p>
-        <button className="underline inline-block ml-1">see more</button>
+        <button
+          onClick={showMoreHandler}
+          className="underline inline-block ml-1"
+        >
+          {show ? "show less" : "see more"}
+        </button>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ const CommunityCard = () => {
         <div className="flex items-center space-x-[0.5625rem]">
           <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
           <div>
-            <h4 className="font-medium text-mako text-sm">DigiCask</h4>
+            <h4 className="font-medium text-mako text-sm">Cellena</h4>
             <h5 className="text-xs text-gray">1.4M Holders</h5>
           </div>
         </div>

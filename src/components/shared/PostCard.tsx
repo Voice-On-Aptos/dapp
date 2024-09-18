@@ -2,11 +2,11 @@ import Link from "next/link";
 import React from "react";
 import { MdMoreHoriz } from "react-icons/md";
 import { ClapIcon, ClapOutlineIcon } from "../custom-icons/ClapIcon";
+import InfoIcon from "../custom-icons/InfoIcon";
 import MessageIcon from "../custom-icons/MessageIcon";
 import { VoiceOutlineIcon } from "../custom-icons/VoiceIcon";
 import RAvatar from "../ui/avatar-compose";
 import RTooltip from "../ui/tooltip-compose";
-import InfoIcon from "../custom-icons/InfoIcon";
 
 const PostCard = () => {
   return (
@@ -38,7 +38,7 @@ const PostCard = () => {
       {/* rich text content */}
       <div className="mb-[0.9375rem]">
         <p className="text-sm text-mako">
-          Be optimistic 💪🏼, digicask will surprise us and launch at $100 or
+          Be optimistic 💪🏼, Cellena will surprise us and launch at $100 or
           something <br />
           Then we can all buy lambos
         </p>
