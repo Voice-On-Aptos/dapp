@@ -1,6 +1,10 @@
 import GoBack from "@/components/shared/GoBack";
 import { notFound } from "next/navigation";
 import React from "react";
+import Analytics from "./_components/Analytics";
+import PollInfo from "./_components/PollInfo";
+import Votes from "./_components/Votes";
+import VotesCasted from "./_components/VotesCasted";
 
 function page({
   params,
@@ -21,8 +25,14 @@ function page({
         <GoBack />
       </header>
       <section className="lg:flex lg:items-start lg:space-x-18">
-        <div className="w-full lg:max-w-[34.875rem] space-y-[0.875rem]"></div>
-        <div className="w-full lg:max-w-[26.125rem] lg:space-y-[0.875rem] sticky top-4"></div>
+        <div className="w-full lg:max-w-[34.875rem] space-y-[0.875rem]">
+          <PollInfo />
+          <VotesCasted />
+        </div>
+        <div className="w-full lg:max-w-[26.125rem] lg:space-y-[0.875rem] sticky top-4">
+          <Votes />
+          <Analytics />
+        </div>
       </section>
     </>
   );

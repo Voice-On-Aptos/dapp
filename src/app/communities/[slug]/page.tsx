@@ -29,7 +29,7 @@ function page({
 
   return (
     <>
-      <header className="mt-4 lg:mt-5 mb-18 max-w-[62.125rem]">
+      <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
         <div className="border flex items-center justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb activePath={community_name} />
 
@@ -83,6 +83,7 @@ function page({
           </div>
         </div>
       </header>
+      <section className="max-w-[62.125rem] bg-white-smoke-4 rounded-lg my-[0.875rem] min-h-[11.9375rem]"></section>
       <section className="lg:flex lg:items-start lg:space-x-[0.875rem]">
         <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
           <CommunityInfo />

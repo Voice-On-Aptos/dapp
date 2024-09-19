@@ -50,6 +50,10 @@ const config: Config = {
         apple: "#05A83D",
         emerald: "#70D994",
         "slate-grey": "#344054",
+        haze: "#F6F7F9",
+        squeeze: "#F3FEFF",
+        serenade: "#FFF8ED",
+        gamboge: "#E2990C",
       },
       fontSize: {
         s9: ["0.5625rem", "0.67rem"],

@@ -8,7 +8,7 @@ function page() {
   return (
     <>
       <header className="mt-4 lg:mt-5 mb-18 max-w-[62.125rem]">
-        <div className="mb-18 flex items-start lg:items-center space-x-3 border border-accent bg-twilight rounded-lg py-4 px-5 text-sm lg:text-base text-accent font-medium">
+        <div className="mb-18 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-sm lg:text-base text-gamboge font-medium">
           <BiSolidInfoCircle size={24} />
           <p>
             All communities currently listed, are for testnet purposes and

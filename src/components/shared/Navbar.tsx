@@ -6,6 +6,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import NotificationIcon from "../custom-icons/NotificationIcon";
 import VoiceIcon from "../custom-icons/VoiceIcon";
 import Search from "../ui/search-input";
+import WalletConnectButton from "./WalletConnectButton";
 
 const Navbar = () => {
   return (
@@ -50,13 +51,14 @@ const Navbar = () => {
               <NotificationIcon />
             </span>
           </span>
-          <span className="flex items-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">
+          {/* <span className="flex items-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">
             <span className="inline-block size-[1.75rem] bg-gainsboro rounded-full"></span>
             <span className="font-medium text-sm text-abbey">
               0xce91...4f8D
             </span>
             <MdKeyboardArrowDown size={16} />
-          </span>
+          </span> */}
+          <WalletConnectButton />
         </div>
         <button className="md:hidden text-shark-3">
           <IoMenu size={24} />

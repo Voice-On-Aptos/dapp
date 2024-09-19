@@ -52,7 +52,12 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
           {options.map((option, index) => (
             <div
               key={index}
-              className="flex items-center space-x-2 border hover:border-accent border-alice-blue rounded-lg py-[0.6875rem] px-[0.875rem] text-sm text-mako"
+              className={cn(
+                "flex items-center cursor-pointer border hover:border-accent border-alice-blue rounded-lg py-[0.6875rem] px-[0.875rem] text-sm text-mako",
+                {
+                  "border-accent": option === choice,
+                }
+              )}
             >
               <RadioGroupItem
                 value={option}
@@ -63,7 +68,7 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
               />
               <Label
                 htmlFor={index.toString()}
-                className="capitalize font-normal"
+                className="capitalize font-normal w-full block"
               >
                 {option}
               </Label>
