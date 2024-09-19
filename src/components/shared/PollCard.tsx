@@ -8,7 +8,7 @@ import { VoiceCircleIcon } from "../custom-icons/VoiceIcon";
 
 const options = ["yes", "no"];
 
-const PollCard = () => {
+const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
   const [choice, setChoice] = useState("");
   return (
     <div className="border border-alice-blue rounded-lg p-5">
@@ -21,9 +21,20 @@ const PollCard = () => {
           </span>
         </div>
         <div>
-          <span className="flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]">
-            <span className="rounded-full bg-emerald size-2 inline-block"></span>
-            <span>Active</span>
+          <span
+            className={cn(
+              "flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]",
+              {
+                "bg-red-100 text-red-600": isClosed,
+              }
+            )}
+          >
+            <span
+              className={cn("rounded-full bg-emerald size-2 inline-block", {
+                "bg-red-500": isClosed,
+              })}
+            ></span>
+            <span>{isClosed ? "Closed" : "Active"}</span>
           </span>
           <span className="flex items-center mt-[0.4375rem] text-s10 space-x-1 text-shark">
             <VoiceCircleIcon />
@@ -37,15 +48,16 @@ const PollCard = () => {
           <span className="text-s10 text-mist">choose one</span>
         </span>
 
-        <RadioGroup
-          value={choice}
-          onValueChange={(value) => setChoice(value)}
-          disabled={!!choice}
-        >
+        <RadioGroup value={choice} onValueChange={(value) => setChoice(value)}>
           {options.map((option, index) => (
             <div
               key={index}
-              className="flex items-center space-x-2 border hover:border-accent border-alice-blue rounded-lg py-[0.6875rem] px-[0.875rem] text-sm text-mako"
+              className={cn(
+                "flex items-center cursor-pointer border hover:border-accent border-alice-blue rounded-lg py-[0.6875rem] px-[0.875rem] text-sm text-mako",
+                {
+                  "border-accent": option === choice,
+                }
+              )}
             >
               <RadioGroupItem
                 value={option}
@@ -56,7 +68,7 @@ const PollCard = () => {
               />
               <Label
                 htmlFor={index.toString()}
-                className="capitalize font-normal"
+                className="capitalize font-normal w-full block"
               >
                 {option}
               </Label>

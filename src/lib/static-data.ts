@@ -1,7 +1,7 @@
 //communities
 export const communities = [
   {
-    name: "Cellena",
+    name: "Cellana",
     avatar: "",
   },
   {

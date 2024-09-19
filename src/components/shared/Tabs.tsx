@@ -6,16 +6,17 @@ import React from "react";
 interface Props {
   routes: string[];
   active: string;
+  paramKey?: string;
 }
 
-const Tabs = ({ routes, active }: Props) => {
+const Tabs = ({ routes, active, paramKey = "status" }: Props) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const tabHandler = (value: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set("status", value);
+    params.set(paramKey, value);
     replace(`${pathname}?${params.toString()}`);
   };
 

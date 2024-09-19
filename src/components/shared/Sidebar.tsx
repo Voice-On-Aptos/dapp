@@ -79,7 +79,9 @@ const Sidebar = () => {
             {communities.slice(0, 3).map((community) => (
               <Link
                 key={community.name}
-                href={`/communities/${community.name}`}
+                href={`/communities/${community.name
+                  .toLowerCase()
+                  .replace(/ /g, "-")}`}
                 className="text-sm px-4 py-[0.625rem] hover:bg-azure rounded-md text-mako flex items-center space-x-2"
               >
                 <span className="inline-block rounded-full size-6 bg-azure"></span>
@@ -107,7 +109,9 @@ const Sidebar = () => {
               {communities.map((community) => (
                 <Link
                   key={community.name}
-                  href={`/communities/${community.name}`}
+                  href={`/communities/${community.name
+                    .toLowerCase()
+                    .replace(/ /g, "-")}`}
                   className="text-sm px-4 hover:bg-azure rounded-md py-[0.625rem] text-mako flex items-center space-x-2"
                 >
                   <span className="inline-block rounded-full size-6 bg-azure"></span>

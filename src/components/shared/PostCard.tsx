@@ -10,7 +10,7 @@ import RTooltip from "../ui/tooltip-compose";
 
 const PostCard = () => {
   return (
-    <div className="bg-white border rounded-xl border-alice-blue p-4 max-w-[43.625rem]">
+    <div className="bg-white border rounded-xl border-alice-blue p-4">
       <div className="flex items-center justify-between mb-18">
         <div className="flex items-center space-x-[0.5625rem]">
           <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
@@ -38,7 +38,7 @@ const PostCard = () => {
       {/* rich text content */}
       <div className="mb-[0.9375rem]">
         <p className="text-sm text-mako">
-          Be optimistic 💪🏼, Cellena will surprise us and launch at $100 or
+          Be optimistic 💪🏼, Cellana will surprise us and launch at $100 or
           something <br />
           Then we can all buy lambos
         </p>

@@ -17,19 +17,19 @@ function page({
   params,
 }: {
   params: {
-    id: string;
+    slug: string;
   };
 }) {
-  const id = params?.id;
-  if (!id) {
+  const slug = params?.slug;
+  if (!slug) {
     notFound();
   }
 
-  const community_name = "Cellena-" + id;
+  const community_name = slug;
 
   return (
     <>
-      <header className="mt-4 lg:mt-5 mb-18 max-w-[62.125rem]">
+      <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
         <div className="border flex items-center justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb activePath={community_name} />
 
@@ -55,7 +55,7 @@ function page({
               }
               contentClassName="border border-athens bg-white space-y-2 rounded-lg py-[0.625rem] px-[0.375rem] max-w-[8.3125rem] drop-shadow-popover"
             >
-              <button className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako">
+              <button className="w-full flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako">
                 <span>
                   <HomeIconOutline />
                 </span>
@@ -83,6 +83,7 @@ function page({
           </div>
         </div>
       </header>
+      <section className="max-w-[62.125rem] bg-white-smoke-4 rounded-lg my-[0.875rem] min-h-[11.9375rem]"></section>
       <section className="lg:flex lg:items-start lg:space-x-[0.875rem]">
         <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
           <CommunityInfo />
