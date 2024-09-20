@@ -4,7 +4,7 @@ import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import { formatLargeNumber } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
-import { LuPlus } from "react-icons/lu";
+import CreatePoll from "../_components/CreatePoll";
 
 function page({
   params,
@@ -35,7 +35,7 @@ function page({
           <div className="flex items-center space-x-3">
             <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
             <h5 className="text-2xl lg:text-s32 font-medium flex items-center space-x-2">
-              <span>{formatLargeNumber(40)}</span>
+              <span>{formatLargeNumber(25)}</span>
               <span className="text-gray text-sm lg:text-base font-normal">
                 Polls
               </span>
@@ -46,16 +46,10 @@ function page({
           <Suspense>
             <Tabs active={status} routes={["all", "active", "closed"]} />
           </Suspense>
-          <button
-            title="Create poll"
-            className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
-          >
-            <LuPlus size={18} />
-            <span>Create poll</span>
-          </button>
+          <CreatePoll />
         </div>
       </header>
-      <section className="mt-[0.875rem] bg-white border border-white-smoke-4 rounded-lg p-4">
+      <section className="mt-[0.875rem] bg-white border max-w-[62.125rem] border-white-smoke-4 rounded-lg p-4">
         <div className="grid md:grid-cols-2 gap-4">
           {Array(12)
             .fill("")

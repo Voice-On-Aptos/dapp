@@ -24,7 +24,7 @@ function page({
       <header className="border mt-4 lg:mt-5 mb-4 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
         <GoBack />
       </header>
-      <section className="lg:flex lg:items-start lg:space-x-18">
+      <section className="lg:flex lg:items-start lg:space-x-18 max-w-[62.125rem]">
         <div className="w-full lg:max-w-[34.875rem] space-y-[0.875rem]">
           <PollInfo />
           <VotesCasted />

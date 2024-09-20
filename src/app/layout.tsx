@@ -72,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={helvetica_neue.className}>
+      <body className={`relative ${helvetica_neue.className}`}>
         <AptosWalletProvider>
           <Toaster />
           <Navbar />

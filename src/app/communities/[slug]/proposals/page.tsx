@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import { LuPlus } from "react-icons/lu";
+import CreateProposal from "../_components/CreateProposal";
 
 function page({
   params,
@@ -47,16 +48,10 @@ function page({
           <Suspense>
             <Tabs active={status} routes={["all", "active", "closed"]} />
           </Suspense>
-          <button
-            title="Create proposal"
-            className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
-          >
-            <LuPlus size={18} />
-            <span>Create proposal</span>
-          </button>
+          <CreateProposal />
         </div>
       </header>
-      <section className="mt-[0.875rem] bg-white border border-white-smoke-4 rounded-lg p-4">
+      <section className="mt-[0.875rem] max-w-[62.125rem] bg-white border border-white-smoke-4 rounded-lg p-4">
         <div className="grid md:grid-cols-2 gap-4">
           {Array(12)
             .fill("")

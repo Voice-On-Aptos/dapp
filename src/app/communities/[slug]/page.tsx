@@ -12,6 +12,7 @@ import CommunityInfo from "./_components/CommunityInfo";
 import CommunityPosts from "./_components/CommunityPosts";
 import CommunityRewardPool from "./_components/CommunityRewardPool";
 import CommunityStats from "./_components/CommunityStats";
+import CreatePost from "./_components/CreatePost";
 
 function page({
   params,
@@ -55,12 +56,7 @@ function page({
               }
               contentClassName="border border-athens bg-white space-y-2 rounded-lg py-[0.625rem] px-[0.375rem] max-w-[8.3125rem] drop-shadow-popover"
             >
-              <button className="w-full flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako">
-                <span>
-                  <HomeIconOutline />
-                </span>
-                <span>Post</span>
-              </button>
+              <CreatePost />
               <Link
                 href="/communities/hello/proposals?create"
                 className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"

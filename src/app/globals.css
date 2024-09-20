@@ -43,3 +43,7 @@
     @apply transition-all duration-75;
   }
 }
+
+.wallet-button {
+  @apply !bg-accent hover:!text-white hover:!bg-teal !rounded-lg !px-4 !py-[0.625rem] !font-medium !text-sm;
+}

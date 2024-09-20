@@ -31,6 +31,7 @@ const config: Config = {
         "white-smoke-3": "#EEEEEF",
         "white-smoke-4": "#E9EAEB",
         "white-smoke-5": "#F8F8F8",
+        "wood-smoke": "#121818",
         gallery: "#F0F1F1",
         gray: "#818488",
         abbey: "#4B5056",
@@ -54,6 +55,9 @@ const config: Config = {
         squeeze: "#F3FEFF",
         serenade: "#FFF8ED",
         gamboge: "#E2990C",
+        mirage: "#17222E",
+        tundora: "#484848",
+        alabaster: "#FAFAFA",
       },
       fontSize: {
         s9: ["0.5625rem", "0.67rem"],

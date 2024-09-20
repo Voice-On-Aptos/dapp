@@ -1,4 +1,5 @@
 import CommunityCard from "@/components/shared/CommunityCard";
+import CommunityGroup from "@/components/shared/CommunityGroup";
 import Link from "next/link";
 import React from "react";
 import { BiSolidInfoCircle } from "react-icons/bi";
@@ -7,8 +8,8 @@ import { LuPlus } from "react-icons/lu";
 function page() {
   return (
     <>
-      <header className="mt-4 lg:mt-5 mb-18 max-w-[62.125rem]">
-        <div className="mb-18 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-sm lg:text-base text-gamboge font-medium">
+      <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
+        <div className="mb-18 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-xs lg:text-sm text-gamboge">
           <BiSolidInfoCircle size={24} />
           <p>
             All communities currently listed, are for testnet purposes and
@@ -29,15 +30,19 @@ function page() {
           </Link>
         </div>
       </header>
-      <section>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-18 gap-x-[0.875rem]">
-          {/* Community cards */}
-          {Array(12)
-            .fill("")
-            .map((_, index) => (
-              <CommunityCard key={index} />
-            ))}
-        </div>
+      <section className="max-w-[62.125rem] mt-6 space-y-[2.75rem]">
+        <CommunityGroup
+          title="Popular Communities"
+          href="/communities/categories/popular"
+        />
+        <CommunityGroup
+          title="New Communities"
+          href="/communities/categories/new"
+        />
+        <CommunityGroup
+          title="All Communities"
+          href="/communities/categories/all"
+        />
       </section>
     </>
   );
