@@ -1,5 +1,6 @@
 "use client";
 
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import NotificationIcon from "../custom-icons/NotificationIcon";
 import VoiceIcon from "../custom-icons/VoiceIcon";
 import Search from "../ui/search-input";
 import AccountMenu from "./AccountMenu";
+import Sidebar from "./Sidebar";
 import WalletConnectButton from "./WalletConnectButton";
 
 const Navbar = () => {
@@ -58,9 +60,27 @@ const Navbar = () => {
           </span>
           {connected ? <AccountMenu /> : <WalletConnectButton />}
         </div>
-        <button className="md:hidden text-shark-3">
-          <IoMenu size={24} />
-        </button>
+
+        <Sheet>
+          <SheetTrigger className="lg:hidden" asChild>
+            <button className="lg:hidden flex items-center justify-center px-[0.5625rem] py-[0.625rem] border border-athens rounded-lg text-dove-gray">
+              <IoMenu size={24} />
+            </button>
+          </SheetTrigger>
+          <SheetContent className="px-0 lg:hidden">
+            <Sidebar className="block max-w-full border-none h-auto" />
+            <div className="px-8 flex flex-col items-center space-y-3">
+              <span className="flex items-center w-full justify-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">
+                <VoiceIcon />
+                <span className="text-base font-medium text-mako">159</span>
+                <span className="text-sm text-dove-gray font-normal">
+                  Voice Power
+                </span>
+              </span>
+              {connected ? <AccountMenu /> : <WalletConnectButton />}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </nav>
   );

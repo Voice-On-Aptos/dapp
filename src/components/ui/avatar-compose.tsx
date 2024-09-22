@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 const RAvatar = ({
   className,
-  src = "https://github.com/voice-on-aptos.png",
+  src = "https://avatar.iran.liara.run/public",
 }: {
   className?: string;
   src?: string;

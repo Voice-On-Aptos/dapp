@@ -1,5 +1,6 @@
 "use client";
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
+import { DateInput } from "@/components/ui/date-input";
 import {
   Form,
   FormControl,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,6 +27,15 @@ const formSchema = z.object({
   description: z.string().min(2, {
     message: "Title must be at least 2 characters.",
   }),
+  type: z.enum(["basic", "weighted"], {
+    required_error: "You need to select a proposal type.",
+  }),
+  start_date: z.date({
+    required_error: "A start date is required.",
+  }),
+  end_date: z.date({
+    required_error: "An end date is required.",
+  }),
 });
 
 const FormButton = () => {
@@ -39,16 +50,45 @@ const FormButton = () => {
   );
 };
 
+const types = [
+  {
+    label: "Basic Vote",
+    value: "basic",
+    description: "These votings have three choices. For, Against and Abstain",
+  },
+  {
+    label: "Weighted Vote",
+    value: "weighted",
+    description:
+      "Each voter has the ability to cast their votes across any number of options.",
+  },
+];
+
 const CreateProposal = () => {
+  const [creatingProposal, setCreatingProposalState] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [options, setOptions] = useState<string[]>([]);
-  const [creatingProposal, setCreatingProposalState] = useState(false);
+
+  const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const id = Number(event.target.id || 0);
+    setOptions((prev) => {
+      const valueIndex = id - 1;
+      const reducedArray = [...prev];
+      reducedArray[valueIndex] = value || "";
+      return reducedArray;
+    });
+    // if (id === optionsCount) {
+    //   setOptionsCount((prev) => prev + 1);
+    // }
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       description: "",
+      type: "basic",
     },
   });
 
@@ -74,7 +114,7 @@ const CreateProposal = () => {
       <Modal
         isOpen={creatingProposal}
         closeHandler={() => setCreatingProposalState(false)}
-        className="w-[24.125rem]"
+        className="w-[34.375rem]"
         title="Create a Proposal"
       >
         <div className="mt-7">
@@ -90,7 +130,7 @@ const CreateProposal = () => {
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div
                 className={cn("mb-7 space-y-5 overflow-hidden", {
-                  "scale-0": currentStep > 0,
+                  "scale-0 h-0 mb-0 space-y-0": currentStep > 0,
                 })}
               >
                 <FormField
@@ -138,16 +178,123 @@ const CreateProposal = () => {
                 </div>
               </div>
               <div
-                className={cn("scale-0 overflow-hidden", {
-                  "mb-7 space-y-5": currentStep !== 0,
+                className={cn("scale-0 h-0 overflow-hidden", {
+                  "mb-7 h-auto space-y-5 scale-100": currentStep !== 0,
                 })}
-              ></div>
+              >
+                <FormField
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem className="space-y-[0.375rem]">
+                      <FormLabel className="font-normal text-sm text-mako">
+                        Proposal type
+                      </FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="mb-4 flex justify-between flex-col sm:flex-row gap-3"
+                        >
+                          {types.map((option, index) => (
+                            <div
+                              key={index}
+                              className={cn(
+                                "flex items-start space-x-2 cursor-pointer border hover:border-accent border-alice-blue rounded-lg py-[0.6875rem] px-[0.875rem] text-sm text-mako",
+                                {
+                                  "border-accent":
+                                    option?.value === field.value,
+                                }
+                              )}
+                            >
+                              <RadioGroupItem
+                                value={option?.value}
+                                id={index.toString()}
+                                className={cn({
+                                  "border-blue-chill":
+                                    field.value === option?.value,
+                                })}
+                              />
+                              <div>
+                                <FormLabel
+                                  htmlFor={index.toString()}
+                                  className="capitalize font-medium text-slate-grey text-xs mb-1 block"
+                                >
+                                  {option?.label}
+                                </FormLabel>
+                                <p className="text-s10 text-gray">
+                                  {option?.description}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div>
+                  <FormLabel className="font-normal text-sm block text-mako mb-[0.375rem]">
+                    Options
+                  </FormLabel>
+                  <div className="space-y-[0.375rem]">
+                    {Array(3)
+                      .fill("")
+                      .map((_, index) => (
+                        <Input
+                          key={index}
+                          id={`${index + 1}`}
+                          value={options?.[index] || ""}
+                          onChange={optionHandler}
+                          className="border-alice-blue border shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
+                          placeholder="Add Option"
+                        />
+                      ))}
+                  </div>
+                </div>
+                <div className="flex justify-between md:items-center flex-col md:flex-row gap-18">
+                  <FormField
+                    control={form.control}
+                    name="start_date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col w-full">
+                        <FormLabel className="font-normal text-sm block text-mako">
+                          Start Date
+                        </FormLabel>
+                        <DateInput
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="end_date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col w-full">
+                        <FormLabel className="font-normal text-sm block text-mako">
+                          End Date
+                        </FormLabel>
+                        <DateInput
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
               {currentStep === 0 ? (
                 <button
                   type="button"
-                  disabled={!title || !description}
+                  disabled={!title || !content}
                   onClick={() => setCurrentStep(1)}
-                  className="bg-accent px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+                  className="bg-accent disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
                 >
                   Next
                 </button>

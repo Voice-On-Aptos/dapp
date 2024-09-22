@@ -2,6 +2,7 @@ import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import { formatLargeNumber } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import React from "react";
+import Members from "./_components/Members";
 
 function page({
   params,
@@ -36,6 +37,7 @@ function page({
           </div>
         </div>
       </header>
+      <Members />
     </>
   );
 }

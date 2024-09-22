@@ -18,6 +18,15 @@ export const currencyFormatter = (
   return formatted.replace(currency, "");
 };
 
+export const formatDate = (date: Date | undefined) => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+};
+
 export function shortenAddress(address: string) {
   if (address.length < 10) {
     // If the address is too short to be shortened, return it as is

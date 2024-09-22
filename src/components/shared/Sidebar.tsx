@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { LuPlus } from "react-icons/lu";
 import { HomeIcon, HomeIconOutline } from "../custom-icons/HomeIcon";
+import NotificationIcon from "../custom-icons/NotificationIcon";
 
 const routes = [
   {
@@ -29,33 +30,51 @@ const routes = [
 ];
 
 interface NavLinkProps {
+  className?: string;
   label: string;
   href: string;
   Icon: React.ReactNode;
   activeIcon: React.ReactNode;
 }
 
-const NavLink = ({ activeIcon, Icon, label, href }: NavLinkProps) => {
+const NavLink = ({
+  className,
+  activeIcon,
+  Icon,
+  label,
+  href,
+}: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = href !== "/" ? pathname.includes(href) : pathname === href;
 
   return (
     <li
-      className={cn("text-sm px-4 py-[0.781rem] rounded-md hover:bg-azure", {
-        "text-accent bg-azure": isActive,
-      })}
+      className={cn(
+        "text-sm px-4 py-[0.781rem] rounded-md hover:bg-azure",
+        className,
+        {
+          "text-accent bg-azure": isActive,
+        }
+      )}
     >
       <Link href={href} className={cn("flex items-center space-x-2")}>
-        <span>{isActive ? activeIcon : Icon}</span>
+        <span className="*:size-4 *:text-current">
+          {isActive ? activeIcon : Icon}
+        </span>
         <span>{label}</span>
       </Link>
     </li>
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ className }: { className?: string }) => {
   return (
-    <aside className="hidden lg:block w-full sticky top-0 overflow-auto hide-scrollbar max-w-[17.125rem] py-10 px-8 h-dvh border-r border-gainsboro">
+    <aside
+      className={cn(
+        "hidden lg:block w-full sticky top-0 overflow-auto hide-scrollbar max-w-[17.125rem] py-10 px-8 h-dvh border-r border-gainsboro",
+        className
+      )}
+    >
       <ul className="space-y-3 mb-5">
         {routes.map((route) => (
           <NavLink
@@ -66,6 +85,13 @@ const Sidebar = () => {
             href={route?.href}
           />
         ))}
+        <NavLink
+          className="lg:hidden"
+          Icon={<NotificationIcon />}
+          activeIcon={<NotificationIcon />}
+          label={"Notifications"}
+          href={"/notifications"}
+        />
       </ul>
       <Accordion type="multiple">
         <AccordionItem
