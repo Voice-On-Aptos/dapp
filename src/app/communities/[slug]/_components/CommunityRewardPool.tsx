@@ -7,7 +7,11 @@ const chartData = [
   { name: "Amount left", amount: 25000, fill: "#00BCD4" },
 ];
 
-const CommunityRewardPool = () => {
+interface CommunityRewardPoolProps {
+  amount: number
+}
+
+const CommunityRewardPool = ({amount}: CommunityRewardPoolProps) => {
   return (
     <div className="w-full bg-white rounded-lg text-mako p-3 pb-6 lg:p-4 lg:pb-8 border border-alice-blue">
       <h3 className="text-shark text-xs font-bold mb-[0.375rem]">
@@ -21,7 +25,7 @@ const CommunityRewardPool = () => {
         <div className="mt-4">
           <h4 className="text-xs text-abbey mb-1">Total Amount</h4>
           <h5 className="font-bold text-shark text-lg lg:text-s20">
-            {currencyFormatter(30000)}
+            {currencyFormatter(amount)}
           </h5>
           <ul className="mt-4 text-xs text-mako space-y-2">
             {chartData?.map((data, index) => (

@@ -79,16 +79,30 @@ function page({
           </div>
         </div>
       </header>
-      <section className="max-w-[62.125rem] bg-white-smoke-4 rounded-lg my-[0.875rem] min-h-[11.9375rem]"></section>
+      <section className="max-w-[62.125rem] bg-white-smoke-4 overflow-hidden relative rounded-lg my-[0.875rem] min-h-[11.9375rem]"></section>
       <section className="lg:flex lg:items-start lg:space-x-[0.875rem]">
         <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
-          <CommunityInfo />
-          <CommunityStats />
+          <CommunityInfo
+            name={"Cellena"}
+            description={`Cellana is an independent, public goods company who acts as an
+          impartial watchdog for the Aptos ecosystem. Our mission is to provide
+          comprehensive and unbiased analysis and comparative evaluations of
+          Layer 2 solutions . We are committed to the verification and
+          fact-checking of the claims made by each project, with a special focus
+          on the security aspects. What sets Cellana apart is our unwavering
+          commitment to delivering accurate and reliable information....`}
+            logo={""}
+            creator={"0x912CE59eerg4548"}
+          />
+          <CommunityStats members={0} proposals={0} polls={0} />
           <CommunityPosts />
         </div>
         <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
-          <CommunityCriteria />
-          <CommunityRewardPool />
+          <CommunityCriteria
+            token_address={"0x912CE59eerg4548"}
+            creator={"0x912CE59eerg4548"}
+          />
+          <CommunityRewardPool amount={0} />
         </div>
       </section>
     </>

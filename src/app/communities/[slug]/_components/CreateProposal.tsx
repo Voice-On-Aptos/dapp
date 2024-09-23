@@ -25,7 +25,7 @@ const formSchema = z.object({
     message: "Title must be at least 2 characters.",
   }),
   description: z.string().min(2, {
-    message: "Title must be at least 2 characters.",
+    message: "Description must be at least 2 characters.",
   }),
   type: z.enum(["basic", "weighted"], {
     required_error: "You need to select a proposal type.",

@@ -44,7 +44,17 @@ const AddressCard = ({ href, title, value }: AddressCardProps) => {
   );
 };
 
-const CommunityCriteria = () => {
+interface CommunityCriteriaProps {
+  disableJoin?: boolean;
+  creator: string;
+  token_address: string;
+}
+
+const CommunityCriteria = ({
+  disableJoin,
+  creator,
+  token_address,
+}: CommunityCriteriaProps) => {
   const joined = false;
   const [joinCommunity, setJoinCommunityState] = useState(false);
 
@@ -70,21 +80,14 @@ const CommunityCriteria = () => {
           </li>
         </ul>
         <div className="mb-6">
-          <AddressCard
-            href="#"
-            title="Token Address"
-            value="0x912CE59e782c548"
-          />
-          <AddressCard
-            href="#"
-            title="CREATOR ADDRESS"
-            value="0x912CE59e782c548"
-          />
+          <AddressCard href="#" title="Token Address" value={token_address} />
+          <AddressCard href="#" title="CREATOR ADDRESS" value={creator} />
         </div>
         <button
+          disabled={disableJoin}
           onClick={() => setJoinCommunityState(true)}
           className={cn(
-            "bg-accent px-4 py-2.5 w-full hover:bg-teal block text-white font-medium text-sm rounded-lg",
+            "bg-accent px-4 py-2.5 w-full disabled:opacity-0 disabled:cursor-not-allowed hover:bg-teal block text-white font-medium text-sm rounded-lg",
             {
               "bg-dove-gray": joined,
             }
