@@ -1,8 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { FaXTwitter } from "react-icons/fa6";
-import { RiGlobalLine } from "react-icons/ri";
-import { z } from "zod";
 import { FileUploader } from "@/components/ui/file-uploader";
 import {
   Form,
@@ -15,8 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { StepProps } from "./CreateCommunity";
 import useCreateCommunityStore from "@/store/community.store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { FaXTwitter } from "react-icons/fa6";
+import { RiGlobalLine } from "react-icons/ri";
+import { z } from "zod";
+import { StepProps } from "./CreateCommunity";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -51,6 +52,8 @@ const FormButton = () => {
 };
 
 export const BasicDetails = ({ nextHandler }: StepProps) => {
+  const [options, setOptions] = useState<string[]>([]);
+  const [optionsCount, setOptionsCount] = useState(2);
   const { update } = useCreateCommunityStore();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -63,11 +66,30 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
     },
   });
 
+  const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const id = Number(event.target.id || 0);
+    setOptions((prev) => {
+      const valueIndex = id - 1;
+      const reducedArray = [...prev];
+      reducedArray[valueIndex] = value || "";
+      return reducedArray;
+    });
+    if (id === optionsCount) {
+      setOptionsCount((prev) => prev + 1);
+    }
+  };
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    update({ ...values, logo: values.logo[0], banner: values.banner[0] });
+    update({
+      ...values,
+      logo: values.logo[0],
+      banner: values.banner[0],
+      criterias: options,
+    });
     nextHandler();
   }
 
@@ -129,6 +151,26 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
             <span className="absolute bottom-1 text-xs text-right text-gray right-1.5">
               {content.length}/1000
             </span>
+          </div>
+
+          <div>
+            <FormLabel className="font-normal text-sm block text-mako mb-[0.375rem]">
+              Add Community Criterias
+            </FormLabel>
+            <div className="space-y-[0.375rem]">
+              {Array(optionsCount)
+                .fill("")
+                .map((_, index) => (
+                  <Input
+                    key={index}
+                    id={`${index + 1}`}
+                    value={options?.[index] || ""}
+                    onChange={optionHandler}
+                    className="border-alice-blue border shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
+                    placeholder={`Criteria ${index + 1}`}
+                  />
+                ))}
+            </div>
           </div>
 
           <FormField

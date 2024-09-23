@@ -39,8 +39,8 @@ const FormButton = () => {
 
 const CreatePoll = () => {
   const [options, setOptions] = useState<string[]>([]);
-  const [creatingPoll, setCreatingPollState] = useState(false);
   const [optionsCount, setOptionsCount] = useState(2);
+  const [creatingPoll, setCreatingPollState] = useState(false);
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

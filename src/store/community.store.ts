@@ -6,6 +6,7 @@ interface DataProps {
   token_address: string;
   twitter: string;
   website: string;
+  criterias: string[];
   logo: File;
   banner: File;
   voice_power_rate: number;
