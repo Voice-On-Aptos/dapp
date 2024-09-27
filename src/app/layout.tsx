@@ -1,3 +1,4 @@
+import CompleteProfile from "@/components/shared/CompleteProfile";
 import Navbar from "@/components/shared/Navbar";
 import Sidebar from "@/components/shared/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -72,13 +73,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={helvetica_neue.className}>
+      <body className={`relative ${helvetica_neue.className}`}>
         <AptosWalletProvider>
           <Toaster />
           <Navbar />
           <div className="flex items-start bg-white">
             <Sidebar />
             <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
+              {/* <CompleteProfile /> */}
               {children}
             </main>
           </div>

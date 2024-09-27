@@ -4,9 +4,7 @@ import RAvatar from "@/components/ui/avatar-compose";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -44,7 +42,7 @@ export function VoteTable() {
             {["member", "voted"].map((head) => (
               <TableHead
                 key={head}
-                className="font-medium first-of-type:w-[15.9375rem] first-of-type:pl-[1.875rem] py-[0.875rem] capitalize text-sm text-dove-gray"
+                className="font-medium first-of-type:w-[15.9375rem] first-of-type:pl-[1.875rem] py-[0.875rem] uppercase text-sm text-dove-gray"
               >
                 {head}
               </TableHead>

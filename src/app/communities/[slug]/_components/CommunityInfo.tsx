@@ -1,20 +1,34 @@
 "use client";
 import CopyIcon from "@/components/custom-icons/CopyIcon";
 import ShareIcon from "@/components/custom-icons/ShareIcon";
+import RAvatar from "@/components/ui/avatar-compose";
 import { cn, shortenAddress } from "@/lib/utils";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
-const CommunityInfo = () => {
+interface CommunityInfoProps {
+  name: string;
+  description: string;
+  logo: string;
+  creator: string;
+}
+
+const CommunityInfo = ({
+  description,
+  name,
+  logo,
+  creator,
+}: CommunityInfoProps) => {
   const [show, setShowState] = useState(false);
+
   const shareHandler = async () => {
     if (!navigator.canShare) {
       return;
     }
 
     const shareData = {
-      title: "Cellana Community",
-      url: `${window.location.origin}/`,
+      title: name,
+      url: `${window.location.href}`,
     };
 
     if (!navigator.canShare(shareData)) {
@@ -30,7 +44,7 @@ const CommunityInfo = () => {
 
   const copyHandler = (value: string) => {
     navigator.clipboard.writeText(value);
-    // toast("Address Copied.");
+    toast("Address Copied.");
   };
 
   const showMoreHandler = () => {
@@ -43,17 +57,20 @@ const CommunityInfo = () => {
     <div className="w-full bg-white rounded-xl p-3 lg:p-[1.375rem] border border-alice-blue">
       <div className="flex items-start justify-between mb-[0.9375rem]">
         <div className="flex items-center space-x-[0.5625rem]">
-          <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+          <RAvatar
+            src={logo}
+            className="size-[2.5rem] inline-block bg-athens"
+          />
           <div>
-            <h4 className="font-medium text-mako text-sm">Cellana</h4>
+            <h4 className="font-medium text-mako text-sm capitalize">{name}</h4>
             <span className="flex items-center text-xs text-gray space-x-1">
               <span>Created by</span>
               <button
-                onClick={() => copyHandler("0x1D68893kcjeeaC")}
+                onClick={() => copyHandler(creator)}
                 className="flex items-center space-x-1"
               >
                 <span className="text-mako font-medium">
-                  {shortenAddress("0x1D68893kcjeeaC")}
+                  {shortenAddress(creator)}
                 </span>
                 <CopyIcon />
               </button>
@@ -69,17 +86,11 @@ const CommunityInfo = () => {
       </div>
       <div className="text-xs text-mako">
         <p
-          className={cn("inline", {
-            "line-clamp-5": !show,
+          className={cn("block", {
+            "line-clamp-5 inline": !show,
           })}
         >
-          Cellana is an independent, public goods company who acts as an
-          impartial watchdog for the Aptos ecosystem. Our mission is to provide
-          comprehensive and unbiased analysis and comparative evaluations of
-          Layer 2 solutions . We are committed to the verification and
-          fact-checking of the claims made by each project, with a special focus
-          on the security aspects. What sets Cellana apart is our unwavering
-          commitment to delivering accurate and reliable information....
+          {description}
         </p>
         <button
           onClick={showMoreHandler}

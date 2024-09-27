@@ -14,14 +14,9 @@ interface Props extends React.ComponentProps<"select"> {
   placeholder?: string;
 }
 
-const RSelect = ({
-  className,
-  defaultValue = "",
-  placeholder,
-  options,
-}: Props) => {
+const RSelect = ({ className, value, placeholder, options }: Props) => {
   return (
-    <Select defaultValue={defaultValue as string}>
+    <Select value={value as string}>
       <SelectTrigger className={cn("w-[180px] capitalize", className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

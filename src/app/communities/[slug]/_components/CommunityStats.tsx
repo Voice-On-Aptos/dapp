@@ -27,23 +27,35 @@ const Card = ({ href, title, value }: CardProps) => {
   );
 };
 
-const CommunityStats = () => {
+interface CommunityStatsProps {
+  community: string;
+  members: number;
+  proposals: number;
+  polls: number;
+}
+
+const CommunityStats = ({
+  community,
+  members,
+  proposals,
+  polls,
+}: CommunityStatsProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <Card
-        href="/communities/hello/members"
+        href={`/communities/${community}/members`}
         title="Members"
-        value={formatLargeNumber(300000)}
+        value={formatLargeNumber(members)}
       />
       <Card
-        href="/communities/hello/proposals"
+        href={`/communities/${community}/proposals`}
         title="Proposals"
-        value={formatLargeNumber(40)}
+        value={formatLargeNumber(proposals)}
       />
       <Card
-        href="/communities/hello/polls"
+        href={`/communities/${community}/polls`}
         title="Polls"
-        value={formatLargeNumber(25)}
+        value={formatLargeNumber(polls)}
       />
     </div>
   );

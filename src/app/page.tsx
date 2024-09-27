@@ -1,5 +1,6 @@
 import PostCard from "@/components/shared/PostCard";
 import RSelect from "@/components/ui/select-input";
+import Feeds from "./_components/Feeds";
 
 export default function Page() {
   return (
@@ -9,19 +10,13 @@ export default function Page() {
           Voice Feed
         </h1>
         <RSelect
-          defaultValue="hot"
+          value="hot"
           options={["hot", "latest", "most liked"]}
           className="w-[4.9375rem] text-sm text-dove-gray border border-white-smoke-4 rounded-lg"
         />
       </header>
       <section>
-        <div className="space-y-3 max-w-[43.625rem]">
-          {Array(6)
-            .fill("")
-            .map((_, index) => (
-              <PostCard key={index} />
-            ))}
-        </div>
+        <Feeds />
       </section>
     </>
   );

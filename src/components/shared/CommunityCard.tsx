@@ -1,27 +1,41 @@
+"use client";
+import { formatLargeNumber } from "@/lib/utils";
+import { Community } from "@/types/community";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
 import React from "react";
+import RAvatar from "../ui/avatar-compose";
 
-const CommunityCard = () => {
+const CommunityCard = ({ data }: { data: Community }) => {
+  const { account } = useWallet();
+
   return (
     <div className="bg-white py-4 px-[1.375rem] rounded-xl border border-white-smoke-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center space-x-[0.5625rem]">
-          <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+          <RAvatar
+            src={data?.logo?.url}
+            className="size-[2.5rem] inline-block rounded-full bg-athens"
+          />
           <div>
-            <h4 className="font-medium text-mako text-sm">Cellana</h4>
-            <h5 className="text-xs text-gray">1.4M Holders</h5>
+            <h4 className="font-medium text-mako text-sm capitalize">
+              {data?.name}
+            </h4>
+            <h5 className="text-xs text-gray">
+              {formatLargeNumber(data?.members?.length)}{" "}
+              {data?.members?.length > 1 ? "Holders" : "Holder"}
+            </h5>
           </div>
         </div>
         <Link
-          href="/communities/hello"
+          href={`/communities/${data?._id}`}
           className="bg-accent px-4 py-2.5 hover:bg-teal block text-white font-medium text-sm rounded-lg"
         >
-          Join
+          {data?.creator?.address === account?.address ? "View" : "Join"}
         </Link>
       </div>
-      <p className="text-sm text-gray line-clamp-3">
-        Welcome to the Transhumanism Blab, hosted by the International
-        Biohacking Community. 
+      <p className="text-sm text-gray line-clamp-3 first-letter:capitalize">
+        {data?.description}
       </p>
     </div>
   );

@@ -1,47 +1,79 @@
-import { cn } from "@/lib/utils";
+"use client";
+import useCountdown from "@/hooks/use-countdown";
+import { cn, timeAgo } from "@/lib/utils";
+import { Proposal } from "@/types/proposals";
 import Link from "next/link";
 import React from "react";
+import RAvatar from "../ui/avatar-compose";
 
-const ProposalCard = ({ isClosed }: { isClosed?: boolean }) => {
+const ProposalCard = ({
+  isClosed,
+  data,
+}: {
+  isClosed?: boolean;
+  data: Proposal;
+}) => {
+  const { days, hours, minutes } = useCountdown(data?.endDate);
+  const status = () => {
+    const currentDate = new Date().getTime();
+    const endDate = new Date(data?.endDate).getTime();
+    return endDate > currentDate ? "active" : "closed";
+  };
   return (
     <Link
-      href="/communities/hello/proposals/hey"
+      href={`/communities/${data?.community?._id}/proposals/${data?._id}`}
       className="border border-alice-blue rounded-lg p-5"
     >
       <div className="flex items-center justify-between mb-18">
         <div className="flex items-center space-x-[0.625rem]">
-          <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+          {data?.author?.profilePhoto ? (
+            <RAvatar
+              src={data?.author?.profilePhoto?.url}
+              className="size-[2.5rem]"
+            />
+          ) : (
+            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+          )}
           <span>
-            <h4 className="text-mako font-medium text-sm">Meenash</h4>
-            <h5 className="text-xs text-gray">18 mins ago</h5>
+            <h4 className="text-mako font-medium text-sm capitalize">
+              {data?.author?.username}
+            </h4>
+            <h5 className="text-xs text-gray">
+              {timeAgo(new Date(data?.startDate))}
+            </h5>
           </span>
         </div>
         <span
           className={cn(
             "flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]",
             {
-              "bg-red-100 text-red-600": isClosed,
+              "bg-red-100 text-red-600": isClosed || status() === "closed",
             }
           )}
         >
           <span
             className={cn("rounded-full bg-emerald size-2 inline-block", {
-              "bg-red-500": isClosed,
+              "bg-red-500": isClosed || status() === "closed",
             })}
           ></span>
-          <span>{isClosed ? "Closed" : "Active"}</span>
+          <span className="inline-block capitalize">
+            {isClosed ? "Closed" : status()}
+          </span>
         </span>
       </div>
       <h2 className="font-medium text-sm mb-[0.4375rem] text-mako">
-        Increase Liquidity Pool Token Reserve by 1.5% before the next bull run.
+        {data?.title}
       </h2>
-      <p className="text-xs text-mako">
-        Egestas feugiat posuere vel diam egestas tortor eget magna elementum.
-        Odio blandit sit egestas tellus. ...
-      </p>
+      <p className="text-xs text-mako">{data?.description}</p>
       <span className="mt-5 flex items-center space-x-[0.375rem] text-xs text-mako">
         <span>Proposal ends in:</span>
-        <span className="text-sm font-medium">6d 12h 3m</span>
+        {days === 0 && hours === 0 && minutes === 0 ? (
+          <span className="text-sm font-medium">Ended</span>
+        ) : (
+          <span className="text-sm font-medium">
+            {days}d {hours}h {minutes}m
+          </span>
+        )}
       </span>
     </Link>
   );
