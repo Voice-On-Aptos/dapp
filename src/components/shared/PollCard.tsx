@@ -1,15 +1,15 @@
 "use client";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
+import { Poll } from "@/types/poll";
 import Link from "next/link";
 import React, { useState } from "react";
 import { VoiceCircleIcon } from "../custom-icons/VoiceIcon";
+import RAvatar from "../ui/avatar-compose";
 import VotedCastedPopup from "./VotedCastedPopup";
 
-const options = ["yes", "no"];
-
-const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
+const PollCard = ({ data }: { data: Poll }) => {
   const [choice, setChoice] = useState("");
   const [showPopup, setShowPopupState] = useState(false);
 
@@ -18,10 +18,22 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
       <div className="border border-alice-blue rounded-lg p-5">
         <div className="flex items-center justify-between mb-18">
           <div className="flex items-center space-x-[0.625rem]">
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+            {data?.author?.profilePhoto ? (
+              <RAvatar
+                src={data?.author?.profilePhoto?.url}
+                className="size-[2.5rem]"
+              />
+            ) : (
+              <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+            )}
             <span>
-              <h4 className="text-mako font-medium text-sm">Meenash</h4>
-              <h5 className="text-xs text-gray">18 mins ago</h5>
+              <h4 className="text-mako font-medium text-sm">
+                {" "}
+                {data?.author?.username}
+              </h4>
+              <h5 className="text-xs text-gray">
+                {timeAgo(new Date(data?.createdAt))}
+              </h5>
             </span>
           </div>
           <div>
@@ -29,26 +41,30 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
               className={cn(
                 "flex items-center justify-center space-x-2 text-xs text-apple bg-beige rounded-full py-1 px-[0.875rem]",
                 {
-                  "bg-red-100 text-red-600": isClosed,
+                  "bg-red-100 text-red-600": data?.status === "closed",
                 }
               )}
             >
               <span
                 className={cn("rounded-full bg-emerald size-2 inline-block", {
-                  "bg-red-500": isClosed,
+                  "bg-red-500": data?.status === "closed",
                 })}
               ></span>
-              <span>{isClosed ? "Closed" : "Active"}</span>
+              <span className="capitalize">{data?.status}</span>
             </span>
             <span className="flex items-center mt-[0.4375rem] text-s10 space-x-1 text-shark">
               <VoiceCircleIcon />
-              <span>4 Voice Power</span>
+              <span>
+                {data?.community?.poll?.minimum_voice_power} Voice Power
+              </span>
             </span>
           </div>
         </div>
         <div>
           <span className="flex items-center justify-between mb-[0.4375rem]">
-            <h5 className="text-mako font-medium text-sm">Do we have to go?</h5>
+            <h5 className="text-mako font-medium text-sm first-letter:capitalize">
+              {data?.question}
+            </h5>
             <span className="text-s10 text-mist">choose one</span>
           </span>
 
@@ -60,7 +76,7 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
             }}
             disabled={!!choice}
           >
-            {options.map((option, index) => (
+            {data?.options?.map((option, index) => (
               <div
                 key={index}
                 className={cn(
@@ -88,12 +104,12 @@ const PollCard = ({ isClosed }: { isClosed?: boolean }) => {
           </RadioGroup>
         </div>
         <div className="mt-18 flex items-center justify-between">
-          <span className="mt-5 flex items-center space-x-[0.375rem] text-xs text-mako">
-            <span>Poll ends in:</span>
-            <span className="text-sm font-medium">6d 12h 3m</span>
-          </span>
+          {/* <span className="flex items-center space-x-[0.375rem] text-xs text-mako">
+          <span>Poll created</span>
+            <span className="text-sm font-medium">   {timeAgo(new Date(data?.createdAt))}</span>
+          </span> */}
           <Link
-            href="/communities/hello/polls/hey"
+            href={`/communities/${data?.community?._id}/polls/${data?._id}`}
             className="underline text-xs text-mako"
           >
             View votes

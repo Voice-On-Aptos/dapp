@@ -5,14 +5,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { communities } from "@/lib/static-data";
+import useUser from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
+import { UserCommunityProps } from "@/types/user";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { LuPlus } from "react-icons/lu";
 import { HomeIcon, HomeIconOutline } from "../custom-icons/HomeIcon";
 import NotificationIcon from "../custom-icons/NotificationIcon";
+import RAvatar from "../ui/avatar-compose";
 
 const routes = [
   {
@@ -68,6 +70,7 @@ const NavLink = ({
 };
 
 const Sidebar = ({ className }: { className?: string }) => {
+  const { user } = useUser();
   return (
     <aside
       className={cn(
@@ -85,40 +88,52 @@ const Sidebar = ({ className }: { className?: string }) => {
             href={route?.href}
           />
         ))}
-        <NavLink
+        {/* <NavLink
           className="lg:hidden"
           Icon={<NotificationIcon />}
           activeIcon={<NotificationIcon />}
           label={"Notifications"}
           href={"/notifications"}
-        />
+        /> */}
       </ul>
       <Accordion type="multiple">
         <AccordionItem
           value="item-1"
-          className="border-b-0 border-t border-white-smoke-3 pt-2 mb-5"
+          className={cn("border-b-0 border-t border-white-smoke-3 pt-2 mb-5", {
+            hidden: user?.communities?.length === 0 || !user,
+          })}
         >
           <AccordionTrigger className="text-xs text-mako px-4 py-[0.625rem] hover:no-underline">
             RECENTLY BROWSED
           </AccordionTrigger>
           <AccordionContent className="space-y-[0.625rem]">
-            {communities.slice(0, 3).map((community) => (
-              <Link
-                key={community.name}
-                href={`/communities/${community.name
-                  .toLowerCase()
-                  .replace(/ /g, "-")}`}
-                className="text-sm px-4 py-[0.625rem] hover:bg-azure rounded-md text-mako flex items-center space-x-2"
-              >
-                <span className="inline-block rounded-full size-6 bg-azure"></span>
-                <span> {community.name}</span>
-              </Link>
-            ))}
+            {user?.communities
+              ?.slice(-3)
+              .reverse()
+              ?.map((community: UserCommunityProps) => (
+                <Link
+                  key={community._id}
+                  href={`/communities/${community?._id}`}
+                  className="text-sm px-4 hover:bg-azure rounded-md py-[0.625rem] text-mako flex items-center space-x-2"
+                >
+                  {community?.logo?.url ? (
+                    <RAvatar
+                      src={community?.logo?.url}
+                      className="inline-block rounded-full size-6 bg-azure"
+                    />
+                  ) : (
+                    <span className="inline-block rounded-full size-6 bg-azure"></span>
+                  )}
+                  <span className="capitalize">{community.name}</span>
+                </Link>
+              ))}
           </AccordionContent>
         </AccordionItem>
         <AccordionItem
           value="item-2"
-          className="border-b-0 border-t border-white-smoke-3 pt-2"
+          className={cn("border-b-0 border-t border-white-smoke-3 pt-2", {
+            hidden: user?.communities?.length === 0 || !user,
+          })}
         >
           <AccordionTrigger className="text-xs text-mako px-4 py-[0.625rem] hover:no-underline">
             ALL COMMUNITIES
@@ -132,16 +147,21 @@ const Sidebar = ({ className }: { className?: string }) => {
               <span>Create community</span>
             </Link>
             <div className="space-y-[0.625rem]">
-              {communities.map((community) => (
+              {user?.communities?.map((community: UserCommunityProps) => (
                 <Link
-                  key={community.name}
-                  href={`/communities/${community.name
-                    .toLowerCase()
-                    .replace(/ /g, "-")}`}
+                  key={community._id}
+                  href={`/communities/${community?._id}`}
                   className="text-sm px-4 hover:bg-azure rounded-md py-[0.625rem] text-mako flex items-center space-x-2"
                 >
-                  <span className="inline-block rounded-full size-6 bg-azure"></span>
-                  <span> {community.name}</span>
+                  {community?.logo?.url ? (
+                    <RAvatar
+                      src={community?.logo?.url}
+                      className="inline-block rounded-full size-6 bg-azure"
+                    />
+                  ) : (
+                    <span className="inline-block rounded-full size-6 bg-azure"></span>
+                  )}
+                  <span className="capitalize">{community.name}</span>
                 </Link>
               ))}
             </div>

@@ -47,7 +47,7 @@ export const InputFieldWithSelect = ({
           disabled={disabled}
           value={`${value} ${Number(value) > 1 ? "months" : "month"}`}
           onChange={selectHandler}
-          options={["1 month", "2 months", "3 months", "5 months", "6 months"]}
+          options={["2 months", "3 months", "4 months", "5 months", "6 months"]}
           className="border-none outline-none !p-0 w-full h-0 shadow-none justify-end"
         />
       </div>

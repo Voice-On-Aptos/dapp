@@ -1,8 +1,11 @@
 "use client";
 import CopyIcon from "@/components/custom-icons/CopyIcon";
+import WalletConnectButton from "@/components/shared/WalletConnectButton";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
+import useUser from "@/hooks/use-user";
 import { cn, shortenAddress } from "@/lib/utils";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
@@ -25,7 +28,7 @@ const AddressCard = ({ href, title, value }: AddressCardProps) => {
       className="w-full bg-white text-mako p-3 lg:p-[0.875rem] border-t border-athens py-18 flex items-start justify-between"
     >
       <div className="flex items-start space-x-[0.625rem]">
-        <span className="size-[1.125rem] inline-block rounded-full bg-athens"></span>
+        {/* <span className="size-[1.125rem] inline-block rounded-full bg-athens"></span> */}
         <span>
           <h4 className="text-mako mb-2 font-medium uppercase text-xs">
             {title}
@@ -48,14 +51,23 @@ interface CommunityCriteriaProps {
   disableJoin?: boolean;
   creator: string;
   token_address: string;
+  criterias: string[];
+  members: string[];
 }
 
 const CommunityCriteria = ({
+  members,
   disableJoin,
   creator,
   token_address,
+  criterias,
 }: CommunityCriteriaProps) => {
-  const joined = false;
+  const { account, connected } = useWallet();
+  const { isLoading, user } = useUser();
+  const member = isLoading
+    ? false
+    : members?.find((member) => member === user?._id);
+  const joined = member ? true : false;
   const [joinCommunity, setJoinCommunityState] = useState(false);
 
   return (
@@ -65,36 +77,34 @@ const CommunityCriteria = ({
           COMMUNITY CRITERIA
         </h2>
         <ul className="mb-18 list-decimal pl-4 list-outside space-y-3 text-dove-gray text-xs">
-          <li>
-            Purus scelerisque diam scelerisque ut nisl. Elit sed accumsan hac
-            ornare dignissim gravida eu nunc.
-          </li>
-          <li>
-            Convallis mauris ac ultricies faucibus. Quam est euismod quam ac.
-            Sollicitudin duis elit dolor ornare diam enim sed diam. Facilisi
-            nunc egestas urna in enim et vel lorem.
-          </li>
-          <li>
-            Sollicitudin duis elit dolor ornare diam enim sed diam. Facilisi
-            nunc egestas urna in enim et vel lorem.
-          </li>
+          {criterias.map((criteria, index) => (
+            <li key={index} className="first-letter:capitalize">
+              {criteria}
+            </li>
+          ))}
         </ul>
-        <div className="mb-6">
+        <div>
           <AddressCard href="#" title="Token Address" value={token_address} />
           <AddressCard href="#" title="CREATOR ADDRESS" value={creator} />
         </div>
-        <button
-          disabled={disableJoin}
-          onClick={() => setJoinCommunityState(true)}
-          className={cn(
-            "bg-accent px-4 py-2.5 w-full disabled:opacity-0 disabled:cursor-not-allowed hover:bg-teal block text-white font-medium text-sm rounded-lg",
-            {
-              "bg-dove-gray": joined,
-            }
-          )}
-        >
-          {joined ? "Leave Community" : "Join Community"}
-        </button>
+        {creator === account?.address ? null : connected ? (
+          <button
+            disabled={disableJoin}
+            onClick={() => setJoinCommunityState(true)}
+            className={cn(
+              "bg-accent px-4 py-2.5 w-full mt-6 disabled:opacity-0 disabled:cursor-not-allowed hover:bg-teal block text-white font-medium text-sm rounded-lg",
+              {
+                "bg-dove-gray": joined,
+              }
+            )}
+          >
+            {joined ? "Leave Community" : "Join Community"}
+          </button>
+        ) : (
+          <span className="flex items-center justify-center w-full *:!w-fit mt-6">
+            <WalletConnectButton />
+          </span>
+        )}
       </div>
       <Modal
         isOpen={joinCommunity}

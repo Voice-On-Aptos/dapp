@@ -13,16 +13,22 @@ interface CommunityInfoProps {
   creator: string;
 }
 
-const CommunityInfo = ({description, name, logo, creator}: CommunityInfoProps) => {
+const CommunityInfo = ({
+  description,
+  name,
+  logo,
+  creator,
+}: CommunityInfoProps) => {
   const [show, setShowState] = useState(false);
+
   const shareHandler = async () => {
     if (!navigator.canShare) {
       return;
     }
 
     const shareData = {
-      title: "Cellana Community",
-      url: `${window.location.origin}/`,
+      title: name,
+      url: `${window.location.href}`,
     };
 
     if (!navigator.canShare(shareData)) {
@@ -51,9 +57,12 @@ const CommunityInfo = ({description, name, logo, creator}: CommunityInfoProps) =
     <div className="w-full bg-white rounded-xl p-3 lg:p-[1.375rem] border border-alice-blue">
       <div className="flex items-start justify-between mb-[0.9375rem]">
         <div className="flex items-center space-x-[0.5625rem]">
-          <RAvatar src={logo} className="size-[2.5rem] inline-block bg-athens" />
+          <RAvatar
+            src={logo}
+            className="size-[2.5rem] inline-block bg-athens"
+          />
           <div>
-            <h4 className="font-medium text-mako text-sm">{name}</h4>
+            <h4 className="font-medium text-mako text-sm capitalize">{name}</h4>
             <span className="flex items-center text-xs text-gray space-x-1">
               <span>Created by</span>
               <button
@@ -81,7 +90,7 @@ const CommunityInfo = ({description, name, logo, creator}: CommunityInfoProps) =
             "line-clamp-5 inline": !show,
           })}
         >
-       {description}
+          {description}
         </p>
         <button
           onClick={showMoreHandler}

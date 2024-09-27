@@ -1,13 +1,15 @@
 import Link from "next/link";
 import React from "react";
 import CommunityCard from "./CommunityCard";
+import { Community } from "@/types/community";
 
 interface Props {
   title: string;
   href: string;
+  data: Community[];
 }
 
-const CommunityGroup = ({ title, href }: Props) => {
+const CommunityGroup = ({ title, href, data }: Props) => {
   return (
     <div>
       <span className="flex items-center justify-between text-mako mb-18">
@@ -18,11 +20,9 @@ const CommunityGroup = ({ title, href }: Props) => {
       </span>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-18 gap-x-[0.875rem]">
         {/* Community cards */}
-        {Array(12)
-          .fill("")
-          .map((_, index) => (
-            <CommunityCard key={index} />
-          ))}
+        {data?.map((community) => (
+          <CommunityCard key={community?._id} data={community} />
+        ))}
       </div>
     </div>
   );

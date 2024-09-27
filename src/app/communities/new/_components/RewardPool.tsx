@@ -13,7 +13,7 @@ export const RewardPool = () => {
     value: 0,
     balance: 0,
     icon: data?.logo ? URL.createObjectURL(data?.logo) : "",
-    name: "CELL",
+    name: data?.name || "",
   });
 
   const handleValueChange = (name: string, value: number, balance = 0) => {

@@ -30,6 +30,10 @@
     width: 0;
     height: 0;
   }
+
+  .error-message {
+    @apply text-scarlet bg-red-100
+  }
 }
 
 @layer base {

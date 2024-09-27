@@ -2,6 +2,12 @@ import { HomeIconOutline } from "@/components/custom-icons/HomeIcon";
 import RAvatar from "@/components/ui/avatar-compose";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import RPopover from "@/components/ui/popover-compose";
+import {
+  getCommunity,
+  getCommunityPosts,
+  getCommunityStatistics,
+} from "@/services/community";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -14,7 +20,7 @@ import CommunityRewardPool from "./_components/CommunityRewardPool";
 import CommunityStats from "./_components/CommunityStats";
 import CreatePost from "./_components/CreatePost";
 
-function page({
+async function page({
   params,
 }: {
   params: {
@@ -22,11 +28,18 @@ function page({
   };
 }) {
   const slug = params?.slug;
-  if (!slug) {
+
+  const [community, statistics, posts] = await Promise.all([
+    getCommunity(slug),
+    getCommunityStatistics(slug),
+    getCommunityPosts(slug),
+  ]);
+
+  if (!community?._id) {
     notFound();
   }
 
-  const community_name = slug;
+  const community_name = community?.name || slug;
 
   return (
     <>
@@ -36,7 +49,7 @@ function page({
 
           <div className="flex items-center space-x-3">
             <Link
-              href="/communities/hello/engagement"
+              href={`/communities/${community?._id}/engagement`}
               title="My Engagement"
               className="flex items-center space-x-2 border text-xs lg:text-sm font-medium border-gainsboro-2 text-mako rounded-lg px-4 py-[0.625rem]"
             >
@@ -56,9 +69,9 @@ function page({
               }
               contentClassName="border border-athens bg-white space-y-2 rounded-lg py-[0.625rem] px-[0.375rem] max-w-[8.3125rem] drop-shadow-popover"
             >
-              <CreatePost />
+              <CreatePost communityId={slug} />
               <Link
-                href="/communities/hello/proposals?create"
+                href={`/communities/${community?._id}/proposals`}
                 className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
               >
                 <span>
@@ -67,7 +80,7 @@ function page({
                 <span>Proposal</span>
               </Link>
               <Link
-                href="/communities/hello/polls?create"
+                href={`/communities/${community?._id}/polls`}
                 className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
               >
                 <span>
@@ -79,30 +92,40 @@ function page({
           </div>
         </div>
       </header>
-      <section className="max-w-[62.125rem] bg-white-smoke-4 overflow-hidden relative rounded-lg my-[0.875rem] min-h-[11.9375rem]"></section>
+      <section className="max-w-[62.125rem] bg-white-smoke-4 overflow-hidden relative rounded-lg my-[0.875rem] min-h-[11.9375rem]">
+        {community?.banner?.url ? (
+          <Image
+            alt="Banner"
+            fill
+            src={community?.banner?.url}
+            className="object-cover object-center"
+          />
+        ) : null}
+      </section>
       <section className="lg:flex lg:items-start lg:space-x-[0.875rem]">
         <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
           <CommunityInfo
-            name={"Cellena"}
-            description={`Cellana is an independent, public goods company who acts as an
-          impartial watchdog for the Aptos ecosystem. Our mission is to provide
-          comprehensive and unbiased analysis and comparative evaluations of
-          Layer 2 solutions . We are committed to the verification and
-          fact-checking of the claims made by each project, with a special focus
-          on the security aspects. What sets Cellana apart is our unwavering
-          commitment to delivering accurate and reliable information....`}
-            logo={""}
-            creator={"0x912CE59eerg4548"}
+            name={community?.name || ""}
+            description={community?.description || ""}
+            logo={community?.logo?.url || ""}
+            creator={community?.creator?.address || ""}
           />
-          <CommunityStats members={0} proposals={0} polls={0} />
-          <CommunityPosts />
+          <CommunityStats
+            community={community?._id || ""}
+            members={statistics?.totalMembers || 0}
+            proposals={statistics?.totalProposals || 0}
+            polls={statistics?.totalPolls || 0}
+          />
+          <CommunityPosts data={posts?.posts?.data} />
         </div>
         <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
           <CommunityCriteria
-            token_address={"0x912CE59eerg4548"}
-            creator={"0x912CE59eerg4548"}
+            members={community?.members || []}
+            criterias={community?.criterias || []}
+            token_address={community?.token_address}
+            creator={community?.creator?.address}
           />
-          <CommunityRewardPool amount={0} />
+          <CommunityRewardPool amount={community?.token_to_distribute || 0} />
         </div>
       </section>
     </>

@@ -48,16 +48,17 @@ const Navbar = () => {
         <div className="hidden lg:flex space-x-4 items-center justify-between">
           <span className="flex items-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">
             <VoiceIcon />
-            <span className="text-base font-medium text-mako">159</span>
+            <span className="text-base font-medium text-mako">0</span>
             <span className="text-sm text-dove-gray font-normal">
               Voice Power
             </span>
           </span>
-          <span className="border-x border-athens px-4">
+          <span className="border-l border-athens inline-block py-4" />
+          {/* <span className="border-x border-athens px-4">
             <span className="flex items-center justify-center px-[0.5625rem] py-[0.625rem] border border-athens rounded-lg text-dove-gray">
               <NotificationIcon />
             </span>
-          </span>
+          </span> */}
           {connected ? <AccountMenu /> : <WalletConnectButton />}
         </div>
 

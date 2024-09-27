@@ -1,25 +1,56 @@
 "use client";
+import { createPost } from "@/actions/post";
 import GalleryAddIcon from "@/components/custom-icons/GalleryAddIcon";
 import { HomeIconOutline } from "@/components/custom-icons/HomeIcon";
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
 import Modal from "@/components/ui/modal";
+import useCommunity from "@/hooks/use-community";
+import useIsMember from "@/hooks/use-is-member";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
-const CreatePost = () => {
+const CreatePost = ({ communityId }: { communityId: string }) => {
   const [creatingPost, setCreatingPostState] = useState(false);
   const [content, setContent] = useState("");
+  const [isLoading, setLoadingState] = useState(false);
+  const { community } = useCommunity(communityId);
+  const { isMember, address, user } = useIsMember(community);
+
+  async function onSubmit() {
+    setLoadingState(true);
+    const response = await createPost(address!, {
+      content,
+      community: communityId,
+      author: user?._id,
+    });
+
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      setLoadingState(false);
+      return;
+    }
+    toast("Successfully created a new post");
+    setContent("");
+    setLoadingState(false);
+    setCreatingPostState(false);
+  }
+
   return (
     <>
-      <button
-        onClick={() => setCreatingPostState(true)}
-        className="w-full flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
-      >
-        <span>
-          <HomeIconOutline />
-        </span>
-        <span>Post</span>
-      </button>
+      {isMember ? (
+        <button
+          onClick={() => setCreatingPostState(true)}
+          className="w-full flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
+        >
+          <span>
+            <HomeIconOutline />
+          </span>
+          <span>Post</span>
+        </button>
+      ) : null}
       <Modal
         title="Create a Post"
         isOpen={creatingPost}
@@ -32,7 +63,9 @@ const CreatePost = () => {
               <VoiceCircleIcon />
             </span>
             <span>
-              Creating a post costs <strong>3</strong> Voice Power
+              Creating a post costs{" "}
+              <strong>{community?.post?.minimum_voice_power}</strong> Voice
+              Power
             </span>
           </span>
           <div className="mb-7">
@@ -55,7 +88,7 @@ const CreatePost = () => {
                 {content.length}/1000
               </span>
             </div>
-            <span className="flex items-center w-fit">
+            {/* <span className="flex items-center w-fit">
               <input
                 type="file"
                 accept="images/*"
@@ -69,14 +102,16 @@ const CreatePost = () => {
                 <GalleryAddIcon />
                 <span>Add images</span>
               </label>
-            </span>
+            </span> */}
           </div>
           <button
+            onClick={onSubmit}
+            disabled={isLoading}
             className={cn(
-              "bg-accent px-4 py-2.5 w-fit ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+              "bg-accent disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 w-fit ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
             )}
           >
-            {"Post"}
+            {isLoading ? "Posting..." : "Post"}
           </button>
         </div>
       </Modal>

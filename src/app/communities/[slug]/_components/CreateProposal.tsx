@@ -1,4 +1,5 @@
 "use client";
+import { createProposal } from "@/actions/proposal";
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
 import { DateInput } from "@/components/ui/date-input";
 import {
@@ -13,11 +14,15 @@ import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import useCommunity from "@/hooks/use-community";
+import useIsMember from "@/hooks/use-is-member";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
+import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { LuPlus } from "react-icons/lu";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -39,13 +44,15 @@ const formSchema = z.object({
 });
 
 const FormButton = () => {
+  const { pending } = useFormStatus();
   return (
     <button
+      disabled={pending}
       className={cn(
-        "bg-accent px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+        "bg-accent px-4 py-2.5 w-full disabled:opacity-50 disabled:cursor-not-allowed ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
       )}
     >
-      {"Create Proposal"}
+      {pending ? "Creating Proposal..." : "Create Proposal"}
     </button>
   );
 };
@@ -64,10 +71,12 @@ const types = [
   },
 ];
 
-const CreateProposal = () => {
+const CreateProposal = ({ communityId }: { communityId: string }) => {
   const [creatingProposal, setCreatingProposalState] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [options, setOptions] = useState<string[]>([]);
+  const { community } = useCommunity(communityId);
+  const { isMember, address, user } = useIsMember(community);
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -92,10 +101,26 @@ const CreateProposal = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit() {
+    const data = form.getValues();
+
+    const response = await createProposal(address!, {
+      ...data,
+      startDate: data?.start_date,
+      endDate: data?.end_date,
+      options,
+      community: communityId,
+      author: user?._id,
+    });
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      return;
+    }
+    toast("Successfully created a new proposal");
+    form.reset();
+    setCreatingProposalState(false);
   }
 
   const title = form.watch("title");
@@ -103,14 +128,16 @@ const CreateProposal = () => {
 
   return (
     <>
-      <button
-        onClick={() => setCreatingProposalState(true)}
-        title="Create proposal"
-        className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
-      >
-        <LuPlus size={18} />
-        <span>Create proposal</span>
-      </button>
+      {isMember ? (
+        <button
+          onClick={() => setCreatingProposalState(true)}
+          title="Create proposal"
+          className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
+        >
+          <LuPlus size={18} />
+          <span>Create proposal</span>
+        </button>
+      ) : null}
       <Modal
         isOpen={creatingProposal}
         closeHandler={() => setCreatingProposalState(false)}
@@ -123,11 +150,13 @@ const CreateProposal = () => {
               <VoiceCircleIcon />
             </span>
             <span>
-              Creating a proposal costs <strong>3</strong> Voice Power
+              Creating a proposal costs{" "}
+              <strong>{community?.proposal?.minimum_voice_power}</strong> Voice
+              Power
             </span>
           </span>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form action={onSubmit}>
               <div
                 className={cn("mb-7 space-y-5 overflow-hidden", {
                   "scale-0 h-0 mb-0 space-y-0": currentStep > 0,

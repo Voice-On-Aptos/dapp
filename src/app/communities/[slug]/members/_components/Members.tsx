@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
+import Pagination from "@/components/shared/Pagination";
 import RAvatar from "@/components/ui/avatar-compose";
 import {
   Table,
@@ -13,44 +14,24 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import RetractVoice from "./RetractVoice";
+import { UserProps } from "@/types/user";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 
-const data = [
-  {
-    username: "cherrysee",
-    applauds: 100,
-    voicePower: 50,
-  },
-  {
-    username: "billy:)",
-    applauds: 100,
-    voicePower: 10,
-  },
-  {
-    username: "ceecii",
-    applauds: 100,
-    voicePower: 50,
-    rewardAvailable: true,
-  },
-  {
-    username: "phillip",
-    applauds: 100,
-    voicePower: 20,
-  },
-  {
-    username: "greg",
-    applauds: 100,
-    voicePower: 5,
-  },
-];
+const TRow = ({
+  index,
+  member,
+  community,
+}: {
+  index: number;
+  community: string;
+  member: UserProps;
+}) => {
+  const { account } = useWallet();
 
-interface TRowProps {
-  username: string;
-  applauds: number;
-  voicePower: number;
-  rewardAvailable?: boolean;
-}
+  const lended = member.lenders.find(
+    (lender) => lender?.by?.address === account?.address
+  );
 
-const TRow = ({ member }: { member: TRowProps }) => {
   return (
     <TableRow>
       <TableCell className="p-[0.875rem]">
@@ -60,21 +41,25 @@ const TRow = ({ member }: { member: TRowProps }) => {
         </span>
       </TableCell>
       <TableCell className="text-sm capitalize text-mako text-center">
-        👏 {member?.applauds}
+        👏 -
       </TableCell>
       <TableCell className="text-sm capitalize text-mako">
         <span className="flex items-center justify-center space-x-2">
           <VoiceCircleIcon />
-          <span>{member?.voicePower}</span>
+          <span>
+            {member?.lenders.reduce((total, lend) => {
+              return total + lend?.voicePower;
+            }, 0)}
+          </span>
         </span>
       </TableCell>
       <TableCell className="text-sm capitalize text-mako">
         <span className="flex items-center space-x-2">
-          {member?.rewardAvailable ? (
+          {lended ? (
             <>
               <RetractVoice />
               <Link
-                href="/communities/hello/members/1"
+                href={`/communities/${community}/members/${index}`}
                 className="rounded-md border border-gainsboro px-[1.0625rem] py-[0.5625rem] shadow-btn"
               >
                 View rewards
@@ -91,7 +76,13 @@ const TRow = ({ member }: { member: TRowProps }) => {
   );
 };
 
-const Members = () => {
+const Members = ({
+  community,
+  data,
+}: {
+  community: string;
+  data: UserProps[];
+}) => {
   return (
     <div className="rounded-xl bg-white border whitespace-nowrap overflow-auto border-alice-blue max-w-[62.125rem]">
       <Table>
@@ -110,28 +101,19 @@ const Members = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((member, index) => (
-            <TRow key={index} member={member} />
+          {data?.map((member, index) => (
+            <TRow
+              index={index}
+              community={community}
+              key={member?._id}
+              member={member}
+            />
           ))}
         </TableBody>
       </Table>
-      <div className="border-t border-alice-blue pt-[0.6875rem] pb-4 px-4 lg:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <span className="text-xs lg:text-sm text-slate-grey flex items-center space-x-2">
-          <span>Page</span>
-          <span className="border border-gainsboro px-[1.0625rem] py-[0.5625rem] shadow-btn rounded-md">
-            1
-          </span>
-          <span>of 10</span>
-        </span>
-        <span className="flex items-center space-x-2 text-xs text-slate-grey lg:text-sm">
-          <button className="rounded-md border border-gainsboro px-[1.0625rem] py-[0.5625rem] shadow-btn">
-            Prev
-          </button>
-          <button className="rounded-md border border-gainsboro px-[1.0625rem] py-[0.5625rem] shadow-btn">
-            Next
-          </button>
-        </span>
-      </div>
+      <Suspense>
+        <Pagination />
+      </Suspense>
     </div>
   );
 };

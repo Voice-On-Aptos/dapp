@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface DataProps {
+export interface DataProps {
   name: string;
   description: string;
   token_address: string;

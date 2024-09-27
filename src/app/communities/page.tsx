@@ -1,11 +1,22 @@
-import CommunityCard from "@/components/shared/CommunityCard";
 import CommunityGroup from "@/components/shared/CommunityGroup";
+import {
+  getAllCommunities,
+  getNewCommunities,
+  getPopularCommunities,
+} from "@/services/community";
 import Link from "next/link";
 import React from "react";
 import { BiSolidInfoCircle } from "react-icons/bi";
 import { LuPlus } from "react-icons/lu";
 
-function page() {
+async function page() {
+  const [popularCommunities, newCommunities, allCommunities] =
+    await Promise.all([
+      getPopularCommunities(),
+      getNewCommunities(),
+      getAllCommunities(),
+    ]);
+
   return (
     <>
       <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
@@ -31,18 +42,27 @@ function page() {
         </div>
       </header>
       <section className="max-w-[62.125rem] mt-6 space-y-[2.75rem]">
-        <CommunityGroup
-          title="Popular Communities"
-          href="/communities/categories/popular"
-        />
-        <CommunityGroup
-          title="New Communities"
-          href="/communities/categories/new"
-        />
-        <CommunityGroup
-          title="All Communities"
-          href="/communities/categories/all"
-        />
+        {popularCommunities?.data ? (
+          <CommunityGroup
+            title="Popular Communities"
+            href="/communities/categories/popular"
+            data={popularCommunities?.data}
+          />
+        ) : null}
+        {newCommunities?.data ? (
+          <CommunityGroup
+            title="New Communities"
+            href="/communities/categories/new"
+            data={newCommunities?.data}
+          />
+        ) : null}
+        {allCommunities?.data ? (
+          <CommunityGroup
+            title="All Communities"
+            href="/communities/categories/all"
+            data={allCommunities?.data}
+          />
+        ) : null}
       </section>
     </>
   );

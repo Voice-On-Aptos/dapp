@@ -1,4 +1,5 @@
 "use client";
+import { createPoll } from "@/actions/poll";
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -11,11 +12,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import useCommunity from "@/hooks/use-community";
+import useIsMember from "@/hooks/use-is-member";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
+import { useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { LuPlus } from "react-icons/lu";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -26,21 +31,26 @@ const formSchema = z.object({
 });
 
 const FormButton = () => {
+  const { pending } = useFormStatus();
   return (
     <button
+      disabled={pending}
       className={cn(
-        "bg-accent px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+        "bg-accent disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
       )}
     >
-      {"Create Poll"}
+      {pending ? "Creating Poll..." : "Create Poll"}
     </button>
   );
 };
 
-const CreatePoll = () => {
+const CreatePoll = ({ communityId }: { communityId: string }) => {
   const [options, setOptions] = useState<string[]>([]);
   const [optionsCount, setOptionsCount] = useState(2);
   const [creatingPoll, setCreatingPollState] = useState(false);
+
+  const { community } = useCommunity(communityId);
+  const { isMember, address, user } = useIsMember(community);
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -64,22 +74,39 @@ const CreatePoll = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit() {
+    const data = form.getValues();
+
+    const response = await createPoll(address!, {
+      ...data,
+      multiple: data?.multiple || false,
+      options,
+      community: communityId,
+      author: user?._id,
+    });
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      return;
+    }
+    toast("Successfully created a new poll");
+    form.reset();
+    setCreatingPollState(false);
   }
 
   return (
     <>
-      <button
-        title="Create poll"
-        onClick={() => setCreatingPollState(true)}
-        className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
-      >
-        <LuPlus size={18} />
-        <span>Create poll</span>
-      </button>
+      {isMember ? (
+        <button
+          title="Create poll"
+          onClick={() => setCreatingPollState(true)}
+          className="flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 border border-dark-gray rounded-lg px-4 py-[0.625rem]"
+        >
+          <LuPlus size={18} />
+          <span>Create poll</span>
+        </button>
+      ) : null}
       <Modal
         isOpen={creatingPoll}
         closeHandler={() => setCreatingPollState(false)}
@@ -88,7 +115,7 @@ const CreatePoll = () => {
       >
         <div className="mt-7 ">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form action={onSubmit}>
               <div className="mb-18 space-y-5">
                 <FormField
                   control={form.control}
@@ -152,8 +179,10 @@ const CreatePoll = () => {
                   <VoiceCircleIcon />
                 </span>
                 <span>
-                  Create a poll with <strong>3</strong> Voice Power or{" "}
-                  <strong>2</strong> months voice age
+                  Create a poll with{" "}
+                  <strong>{community?.poll?.minimum_voice_power}</strong> Voice
+                  Power or <strong>{community?.poll?.minimum_voice_age}</strong>{" "}
+                  months voice age
                 </span>
               </span>
               <FormButton />

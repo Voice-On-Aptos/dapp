@@ -10,7 +10,10 @@ const RAvatar = ({
 }) => {
   return (
     <Avatar className={cn("size-4", className)}>
-      <AvatarImage src={src} className="object-cover object-center" />
+      <AvatarImage
+        src={src ?? "https://avatar.iran.liara.run/public"}
+        className="object-cover object-center"
+      />
       <AvatarFallback className="text-s10">VoA</AvatarFallback>
     </Avatar>
   );

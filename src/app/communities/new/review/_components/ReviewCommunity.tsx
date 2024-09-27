@@ -1,4 +1,5 @@
 "use client";
+import { createCommunity } from "@/actions/community";
 import CommunityCriteria from "@/app/communities/[slug]/_components/CommunityCriteria";
 import CommunityInfo from "@/app/communities/[slug]/_components/CommunityInfo";
 import CommunityPosts from "@/app/communities/[slug]/_components/CommunityPosts";
@@ -7,37 +8,120 @@ import CommunityStats from "@/app/communities/[slug]/_components/CommunityStats"
 import GoBack from "@/components/shared/GoBack";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
+import useUser from "@/hooks/use-user";
 import { cn } from "@/lib/utils";
 import useCreateCommunityStore from "@/store/community.store";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "sonner";
 
 const CreateCommunity = () => {
   const [creatingCommunity, setCreatingCommunityState] = useState(false);
   const [createdCommunity, setCreatedCommunity] = useState(false);
+  const { account } = useWallet();
+  const address = account?.address || "";
+  const { data } = useCreateCommunityStore();
+  const { user } = useUser();
+  const [communityId, setCommunityId] = useState("");
+  const router = useRouter();
 
-  const handleClick = () => {
+  const uploadBanner = async () => {
+    const formData = new FormData();
+    formData.append("file", data?.banner as Blob);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${address}`,
+        },
+        body: formData,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to upload banner");
+    }
+
+    return await response.json();
+  };
+
+  const uploadLogo = async () => {
+    const formData = new FormData();
+    formData.append("file", data?.logo as Blob);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/upload`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${address}`,
+        },
+        body: formData,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to upload logo");
+    }
+
+    return await response.json();
+  };
+
+  const createHandler = async () => {
     setCreatedCommunity(false);
     setCreatingCommunityState(true);
-    setTimeout(() => {
+
+    try {
+      const banner = await uploadBanner();
+      const logo = await uploadLogo();
+
+      const response = await createCommunity(address, {
+        ...data,
+        distribution_date: data?.distribution_date?.toISOString(),
+        banner,
+        logo,
+        creator: user?._id,
+      });
+
+      if (response?.message) {
+        toast.error(response?.message, {
+          className: "error-message",
+        });
+        setCreatingCommunityState(false);
+        return;
+      }
+      setCommunityId(response?._id);
+      toast("Successfully created a new community");
       setCreatedCommunity(true);
-    }, 3000);
+    } catch (error) {
+      toast.error(
+        typeof error === "string" ? error : "Failed to create community",
+        {
+          className: "error-message",
+        }
+      );
+      setCreatingCommunityState(false);
+    }
   };
   return (
     <>
-      <button
-        onClick={handleClick}
-        className={cn(
-          "bg-accent px-4 py-2.5 w-full max-w-[12.5625rem] hover:bg-teal block text-white font-medium text-sm rounded-lg"
-        )}
-      >
-        {"Create Community"}
-      </button>
+      {user?._id ? (
+        <button
+          onClick={createHandler}
+          className={cn(
+            "bg-accent self-end lg:self-auto px-4 py-2.5 w-full max-w-[12.5625rem] hover:bg-teal block text-white font-medium text-sm rounded-lg"
+          )}
+        >
+          Create Community
+        </button>
+      ) : null}
       <Modal
         isOpen={creatingCommunity}
-        closeHandler={() => setCreatingCommunityState(false)}
+        closeHandler={() => {
+          router.push("/communities");
+          setCreatingCommunityState(false);
+        }}
       >
         <div className="flex items-center text-center flex-col">
           <RAvatar className="size-8 lg:size-[3.5rem] mb-[0.875rem]" />
@@ -52,7 +136,7 @@ const CreateCommunity = () => {
         </div>
         {createdCommunity ? (
           <Link
-            href="/communities/hello"
+            href={communityId ? `/communities/${communityId}` : "/communities"}
             className="bg-accent px-4 text-center py-2.5 mt-7 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
           >
             View Community
@@ -95,11 +179,13 @@ const ReviewCommunity = () => {
             logo={data?.logo ? URL.createObjectURL(data?.logo) : ""}
             creator={account?.address || ""}
           />
-          <CommunityStats members={0} proposals={0} polls={0} />
+          <CommunityStats community="" members={0} proposals={0} polls={0} />
           <CommunityPosts />
         </div>
         <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
           <CommunityCriteria
+            criterias={[]}
+            members={[]}
             disableJoin
             token_address={data?.token_address || ""}
             creator={account?.address || ""}

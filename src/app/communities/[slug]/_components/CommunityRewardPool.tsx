@@ -2,16 +2,15 @@ import RChart from "@/components/shared/RChart";
 import { currencyFormatter } from "@/lib/utils";
 import React from "react";
 
-const chartData = [
-  { name: "Amount spent", amount: 5000, fill: "#FD8282" },
-  { name: "Amount left", amount: 25000, fill: "#00BCD4" },
-];
-
 interface CommunityRewardPoolProps {
-  amount: number
+  amount: number;
 }
 
-const CommunityRewardPool = ({amount}: CommunityRewardPoolProps) => {
+const CommunityRewardPool = ({ amount }: CommunityRewardPoolProps) => {
+  const chartData = [
+    { name: "Amount left", amount, fill: "#00BCD4" },
+    { name: "Amount spent", amount: 0, fill: "#FD8282" },
+  ];
   return (
     <div className="w-full bg-white rounded-lg text-mako p-3 pb-6 lg:p-4 lg:pb-8 border border-alice-blue">
       <h3 className="text-shark text-xs font-bold mb-[0.375rem]">

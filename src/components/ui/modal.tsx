@@ -24,7 +24,7 @@ const Modal = ({ isOpen, closeHandler, title, className, children }: Props) => {
         ? createPortal(
             <div
               className={cn(
-                "fixed top-0 left-0 !m-0 h-dvh w-screen bg-wood-smoke/90 z-[10000] scale-0 opacity-0 overflow-hidden flex items-center justify-center",
+                "fixed top-0 left-0 !m-0 h-dvh w-screen bg-wood-smoke/90 z-50 scale-0 opacity-0 overflow-hidden flex items-center justify-center",
                 {
                   "scale-100 opacity-100": isOpen,
                 }
