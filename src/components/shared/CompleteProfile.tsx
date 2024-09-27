@@ -11,7 +11,7 @@ const CompleteProfile = () => {
   return (
     <>
       {user?._id ? null : account?.address && !isLoading && !isError ? (
-        <div className="mb-3 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-xs lg:text-sm text-gamboge">
+        <div className="my-3 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-xs lg:text-sm text-gamboge">
           <BiSolidInfoCircle size={24} />
           <p>
             Complete your{" "}

@@ -80,7 +80,7 @@ export default function RootLayout({
           <div className="flex items-start bg-white">
             <Sidebar />
             <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
-              <CompleteProfile />
+              {/* <CompleteProfile /> */}
               {children}
             </main>
           </div>

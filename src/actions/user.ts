@@ -20,7 +20,9 @@ export async function updateUser(address: string, payload: Partial<UserProps>) {
       body: JSON.stringify(payload),
     });
 
-    if (response.status != 201 && response.status != 200) {
+    console.log(response);
+
+    if (response.status != 200) {
       throw new Error(`Failed to update user: ${response.statusText}`);
     }
 
