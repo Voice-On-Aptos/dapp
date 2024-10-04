@@ -10,6 +10,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { toast } from "sonner";
+import JoinOrLeaveCommunity from "./JoinOrLeaveCommunity";
+import { ConfigProps } from "@/types/community";
 
 interface AddressCardProps {
   href: string;
@@ -53,6 +55,8 @@ interface CommunityCriteriaProps {
   token_address: string;
   criterias: string[];
   members: string[];
+  communityId: string;
+  config: ConfigProps;
 }
 
 const CommunityCriteria = ({
@@ -61,15 +65,9 @@ const CommunityCriteria = ({
   creator,
   token_address,
   criterias,
+  communityId,
+  config,
 }: CommunityCriteriaProps) => {
-  const { account, connected } = useWallet();
-  const { isLoading, user } = useUser();
-  const member = isLoading
-    ? false
-    : members?.find((member) => member === user?._id);
-  const joined = member ? true : false;
-  const [joinCommunity, setJoinCommunityState] = useState(false);
-
   return (
     <>
       <div className="w-full bg-white rounded-lg text-mako p-3 pb-6 lg:p-4 lg:pb-8 border border-alice-blue">
@@ -87,76 +85,14 @@ const CommunityCriteria = ({
           <AddressCard href="#" title="Token Address" value={token_address} />
           <AddressCard href="#" title="CREATOR ADDRESS" value={creator} />
         </div>
-        {creator === account?.address ? null : connected ? (
-          <button
-            disabled={disableJoin}
-            onClick={() => setJoinCommunityState(true)}
-            className={cn(
-              "bg-accent px-4 py-2.5 w-full mt-6 disabled:opacity-0 disabled:cursor-not-allowed hover:bg-teal block text-white font-medium text-sm rounded-lg",
-              {
-                "bg-dove-gray": joined,
-              }
-            )}
-          >
-            {joined ? "Leave Community" : "Join Community"}
-          </button>
-        ) : (
-          <span className="flex items-center justify-center w-full *:!w-fit mt-6">
-            <WalletConnectButton />
-          </span>
-        )}
+        <JoinOrLeaveCommunity
+          members={members}
+          creator={creator}
+          disableJoin={disableJoin || false}
+          community={communityId}
+          config={config}
+        />
       </div>
-      <Modal
-        isOpen={joinCommunity}
-        closeHandler={() => setJoinCommunityState(false)}
-      >
-        <div className="mt-[0.3125rem]">
-          <span className="flex text-center mb-7 items-center justify-center flex-col">
-            <span className="flex items-center -space-x-3 mb-[0.875rem]">
-              <RAvatar className="size-8 lg:size-[3.25rem]" />
-              <RAvatar
-                className="size-8 lg:size-[3.25rem]"
-                src="/images/logo-dark.png"
-              />
-            </span>
-            <h4 className="text-lg lg:text-s20 font-medium text-mirage mb-[0.375rem]">
-              No Voice Power
-            </h4>
-            <p className="text-xs text-tundora lg:text-sm">
-              You do not have voice token for this project.
-            </p>
-          </span>
-          <div>
-            <h5 className="font-medium text-xs lg:text-sm text-mirage mb-[0.5625rem]">
-              Why you need a voice token
-            </h5>
-            <ul className="p-4 rounded-2xl mb-7 bg-alabaster space-y-[0.875rem]">
-              {Array(3)
-                .fill("")
-                .map((why, index) => (
-                  <li
-                    key={index}
-                    className="text-sm text-tundora flex items-start space-x-2"
-                  >
-                    <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
-                    <p>
-                      Purus scelerisque diam scelerisque ut nisl. Elit sed
-                      accumsan hac ornare dignissim gravida eu nunc.
-                    </p>
-                  </li>
-                ))}
-            </ul>
-            <Link
-              href="/communities/hello/swap"
-              className={cn(
-                "bg-accent px-4 py-2.5 w-full text-center hover:bg-teal block text-white font-medium text-sm rounded-lg"
-              )}
-            >
-              {"Get voice token"}
-            </Link>
-          </div>
-        </div>
-      </Modal>
     </>
   );
 };

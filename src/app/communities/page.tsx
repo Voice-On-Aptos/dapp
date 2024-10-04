@@ -1,4 +1,5 @@
 import CommunityGroup from "@/components/shared/CommunityGroup";
+import EmptyState from "@/components/shared/EmptyState";
 import {
   getAllCommunities,
   getNewCommunities,
@@ -42,26 +43,31 @@ async function page() {
         </div>
       </header>
       <section className="max-w-[62.125rem] mt-6 space-y-[2.75rem]">
-        {popularCommunities?.data ? (
+        {popularCommunities?.data?.length > 0 ? (
           <CommunityGroup
             title="Popular Communities"
             href="/communities/categories/popular"
             data={popularCommunities?.data}
           />
         ) : null}
-        {newCommunities?.data ? (
+        {newCommunities?.data?.length > 0 ? (
           <CommunityGroup
             title="New Communities"
             href="/communities/categories/new"
             data={newCommunities?.data}
           />
         ) : null}
-        {allCommunities?.data ? (
+        {allCommunities?.data?.length > 0 ? (
           <CommunityGroup
             title="All Communities"
             href="/communities/categories/all"
             data={allCommunities?.data}
           />
+        ) : null}
+        {popularCommunities?.data?.length === 0 &&
+        newCommunities?.data?.length === 0 &&
+        allCommunities?.data?.length === 0 ? (
+          <EmptyState />
         ) : null}
       </section>
     </>

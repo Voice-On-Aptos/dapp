@@ -96,11 +96,14 @@ const Sidebar = ({ className }: { className?: string }) => {
           href={"/notifications"}
         /> */}
       </ul>
-      <Accordion type="multiple">
+      <Accordion type="multiple" defaultValue={["item-1", "item-2"]}>
         <AccordionItem
           value="item-1"
           className={cn("border-b-0 border-t border-white-smoke-3 pt-2 mb-5", {
-            hidden: user?.communities?.length === 0 || !user,
+            hidden:
+              typeof user === "string" ||
+              user?.communities?.length === 0 ||
+              !user,
           })}
         >
           <AccordionTrigger className="text-xs text-mako px-4 py-[0.625rem] hover:no-underline">
@@ -132,7 +135,7 @@ const Sidebar = ({ className }: { className?: string }) => {
         <AccordionItem
           value="item-2"
           className={cn("border-b-0 border-t border-white-smoke-3 pt-2", {
-            hidden: user?.communities?.length === 0 || !user,
+            hidden: typeof user === "string" || !user,
           })}
         >
           <AccordionTrigger className="text-xs text-mako px-4 py-[0.625rem] hover:no-underline">

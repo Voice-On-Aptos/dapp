@@ -124,6 +124,13 @@ async function page({
             criterias={community?.criterias || []}
             token_address={community?.token_address}
             creator={community?.creator?.address}
+            config={{
+              post: community?.post || null,
+              proposal: community?.proposal || null,
+              poll: community?.poll || null,
+              comment: community?.comment || null,
+            }}
+            communityId={community?._id}
           />
           <CommunityRewardPool amount={community?.token_to_distribute || 0} />
         </div>

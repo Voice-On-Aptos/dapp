@@ -21,6 +21,7 @@ export async function getPopularCommunities(page = 1, limit: number = 30) {
     const response = await fetch(
       `${process.env.API_BASE_URL}/community/popular?page=${page}&limit=${limit}`
     );
+
     return await response.json();
   } catch (error) {
     return null;
@@ -46,7 +47,14 @@ export async function getNewCommunities(page = 1, limit: number = 30) {
 
 export async function getCommunity(id: string) {
   try {
-    const response = await fetch(`${process.env.API_BASE_URL}/community/${id}`);
+    const response = await fetch(
+      `${process.env.API_BASE_URL}/community/${id}`,
+      {
+        next: {
+          tags: ["community"],
+        },
+      }
+    );
     return await response.json();
   } catch (error) {
     return null;

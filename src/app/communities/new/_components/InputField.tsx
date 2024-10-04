@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 
 interface InputProps {
+  name?: string;
   label?: string;
   value: string | number;
   onChangeHandler?: (value: number) => void;
@@ -21,10 +22,8 @@ export const InputFieldWithSelect = ({
   className,
   disabled,
 }: InputProps) => {
-  const selectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value
-      ?.replace("months", "")
-      ?.replace("month", "");
+  const selectHandler = (value: string) => {
+    value = value?.replace("months", "")?.replace("month", "");
     onChangeHandler?.(Number(value));
   };
 
@@ -46,8 +45,15 @@ export const InputFieldWithSelect = ({
         <RSelect
           disabled={disabled}
           value={`${value} ${Number(value) > 1 ? "months" : "month"}`}
-          onChange={selectHandler}
-          options={["2 months", "3 months", "4 months", "5 months", "6 months"]}
+          onValueChange={selectHandler}
+          options={[
+            "1 month",
+            "2 months",
+            "3 months",
+            "4 months",
+            "5 months",
+            "6 months",
+          ]}
           className="border-none outline-none !p-0 w-full h-0 shadow-none justify-end"
         />
       </div>
@@ -63,6 +69,7 @@ export const InputField = ({
   icon = "/svgs/voice-icon.svg",
   disabled,
   tooltip,
+  name,
 }: InputProps) => {
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.valueAsNumber;
@@ -88,7 +95,9 @@ export const InputField = ({
       >
         <span className="flex w-full items-center space-x-2">
           <RAvatar src={icon} className="size-5 lg:size-6" />
-          <span className="text-sm text-mako inline-block">Voice Power</span>
+          <span className="text-sm text-mako inline-block">
+            {name ? name : "Voice Power"}
+          </span>
         </span>
         <input
           min={0}

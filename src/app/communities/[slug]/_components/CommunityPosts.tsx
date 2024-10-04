@@ -10,7 +10,7 @@ const CommunityPosts = ({ data }: { data?: Post[] }) => {
         Posts
       </h3>
       <div className="space-y-[0.9375rem]">
-        {data ? (
+        {data && data?.length > 0 ? (
           data?.map((post, index) => <PostCard key={post?._id} data={post} />)
         ) : (
           <EmptyState />

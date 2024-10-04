@@ -126,7 +126,7 @@ const CreateCommunity = () => {
         <div className="flex items-center text-center flex-col">
           <RAvatar className="size-8 lg:size-[3.5rem] mb-[0.875rem]" />
           <h4 className="text-mako text-lg lg:text-s20 font-medium">
-            {createdCommunity ? "Community Created" : "Creating"}
+            {createdCommunity ? "Community Created" : "Creating..."}
           </h4>
           {createdCommunity ? null : (
             <p className="text-xs lg:text-sm mt-1 text-mako">
@@ -184,7 +184,7 @@ const ReviewCommunity = () => {
         </div>
         <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
           <CommunityCriteria
-            criterias={[]}
+            criterias={data?.criterias || []}
             members={[]}
             disableJoin
             token_address={data?.token_address || ""}
