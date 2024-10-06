@@ -1,9 +1,9 @@
 "use client";
-import { updateUser } from "@/actions/user";
+
 import RAvatar from "@/components/ui/avatar-compose";
 import { Combobox } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import useUser from "@/hooks/use-user";
+import useUser, { useUpdateUserProfile } from "@/hooks/use-user";
 import { cn, shortenAddress } from "@/lib/utils";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { Country } from "country-state-city";
@@ -26,6 +26,7 @@ const Profile = () => {
   const [country, setCountry] = React.useState("");
   const { user, isLoading } = useUser();
   const [updating, setUpdating] = useState(false);
+  const updateUserProfile = useUpdateUserProfile();
 
   useEffect(() => {
     if (user) {
@@ -37,22 +38,23 @@ const Profile = () => {
 
   const updateUserHandler = async () => {
     setUpdating(true);
-    const response = await updateUser(account?.address!, {
-      email,
-      username,
-      address: account?.address || "",
-      country,
-    });
-    if (response?.message) {
-      toast.error(response?.message, {
-        className: "error-message",
+    try {
+      await updateUserProfile(account?.address!, {
+        email,
+        username,
+        address: account?.address || "",
+        country,
       });
 
-      return;
+      toast("Successfully updated profile");
+    } catch (error: any) {
+      toast.error(error || "Failed to update profile", {
+        className: "error-message",
+      });
+    } finally {
+      setUpdating(false);
+      setEditState(false);
     }
-    setUpdating(false);
-    setEditState(false);
-    toast("Successfully updated profile");
   };
 
   return (
@@ -77,20 +79,31 @@ const Profile = () => {
           </div>
         </div>
         {connected && !isLoading ? (
-          <button
-            disabled={updating}
-            onClick={() => {
-              if (!edit) setEditState(!edit);
-              if (edit) {
-                updateUserHandler();
-              }
-            }}
-            className={cn(
-              "bg-accent px-4 py-2.5 w-fit disabled:opacity-50 disabled:cursor-not-allowed ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
-            )}
-          >
-            {edit ? (updating ? "Updating..." : "Update") : "Edit"}
-          </button>
+          <span className="flex items-center space-x-4">
+            {edit ? (
+              <button
+                disabled={updating}
+                className="text-scarlet text-sm font-medium"
+                onClick={() => setEditState(false)}
+              >
+                Cancel
+              </button>
+            ) : null}
+            <button
+              disabled={updating}
+              onClick={() => {
+                if (!edit) setEditState(!edit);
+                if (edit) {
+                  updateUserHandler();
+                }
+              }}
+              className={cn(
+                "bg-accent px-4 py-2.5 w-fit disabled:opacity-50 disabled:cursor-not-allowed ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+              )}
+            >
+              {edit ? (updating ? "Updating..." : "Update") : "Edit"}
+            </button>
+          </span>
         ) : null}
       </div>
       <div className="border divide-y lg:pr-[8.75rem] divide-ghost-white space-y-5 border-alice-blue bg-white p-4 rounded-xl">
@@ -101,6 +114,7 @@ const Profile = () => {
           <Input
             type="email"
             disabled={!edit}
+            autoFocus={!edit}
             className="border-alice-blue border shadow-none w-full rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
             placeholder="Email"
             value={email}

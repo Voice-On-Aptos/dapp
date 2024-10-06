@@ -12,11 +12,18 @@ import React from "react";
 interface Props extends React.ComponentProps<"select"> {
   options: string[];
   placeholder?: string;
+  onValueChange?: (value: string) => void;
 }
 
-const RSelect = ({ className, value, placeholder, options }: Props) => {
+const RSelect = ({
+  className,
+  value,
+  placeholder,
+  onValueChange,
+  options,
+}: Props) => {
   return (
-    <Select value={value as string}>
+    <Select value={value as string} onValueChange={onValueChange}>
       <SelectTrigger className={cn("w-[180px] capitalize", className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

@@ -51,6 +51,7 @@ export const Configuration = ({ nextHandler }: StepProps) => {
             icon={data?.logo ? URL.createObjectURL(data?.logo) : ""}
             tooltip=""
             label="What is the token to voice power rate?"
+            name={"Token"}
             value={voice_power_rate}
             onChangeHandler={(value) => {
               set_voice_power_rate(value);

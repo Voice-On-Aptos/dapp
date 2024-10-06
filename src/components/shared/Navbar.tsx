@@ -73,7 +73,7 @@ const Navbar = () => {
             <div className="px-8 flex flex-col items-center space-y-3">
               <span className="flex items-center w-full justify-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]">
                 <VoiceIcon />
-                <span className="text-base font-medium text-mako">159</span>
+                <span className="text-base font-medium text-mako">0</span>
                 <span className="text-sm text-dove-gray font-normal">
                   Voice Power
                 </span>

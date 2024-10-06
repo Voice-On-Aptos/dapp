@@ -1,7 +1,7 @@
-import CompleteProfile from "@/components/shared/CompleteProfile";
 import Navbar from "@/components/shared/Navbar";
 import Sidebar from "@/components/shared/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import UserFetcher from "@/components/UserFetcher";
 import AptosWalletProvider from "@/providers/aptos-wallet";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -80,8 +80,7 @@ export default function RootLayout({
           <div className="flex items-start bg-white">
             <Sidebar />
             <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
-              {/* <CompleteProfile /> */}
-              {children}
+              <UserFetcher>{children}</UserFetcher>
             </main>
           </div>
         </AptosWalletProvider>

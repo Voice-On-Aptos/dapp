@@ -40,6 +40,13 @@ export interface Logo {
   id: string;
 }
 
+export interface ConfigProps {
+  post: Post,
+  comment: Comment,
+  proposal: Proposal,
+  poll: Poll,
+}
+
 export interface Post {
   minimum_voice_power: number;
   minimum_voice_age: number;
