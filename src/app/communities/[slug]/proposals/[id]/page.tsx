@@ -1,12 +1,13 @@
 import GoBack from "@/components/shared/GoBack";
+import { getProposal } from "@/services/proposal";
 import { notFound } from "next/navigation";
 import React from "react";
-import VotesCasted from "./_components/VotesCasted";
 import Analytics from "./_components/Analytics";
-import Votes from "./_components/Votes";
 import ProposalInfo from "./_components/ProposalInfo";
+import Votes from "./_components/Votes";
+import VotesCasted from "./_components/VotesCasted";
 
-function page({
+async function page({
   params,
 }: {
   params: {
@@ -14,8 +15,9 @@ function page({
   };
 }) {
   const id = params?.id;
+  const proposal = await getProposal(id);
 
-  if (!id) {
+  if (!proposal?._id) {
     notFound();
   }
 
@@ -26,12 +28,19 @@ function page({
       </header>
       <section className="lg:flex lg:items-start lg:space-x-18 max-w-[62.125rem]">
         <div className="w-full lg:max-w-[34.875rem] space-y-[0.875rem]">
-          <ProposalInfo />
-          <VotesCasted />
+          <ProposalInfo data={proposal} />
+          <VotesCasted votes={proposal?.votes} />
         </div>
         <div className="w-full lg:max-w-[26.125rem] lg:space-y-[0.875rem] sticky top-4">
-          <Votes />
-          <Analytics />
+          <Votes
+            id={proposal?._id || ""}
+            options={proposal?.options || []}
+            type={proposal?.type || "basic"}
+            endDate={proposal?.endDate}
+            proposalConfig={proposal?.community?.proposal}
+            votes={proposal?.votes}
+          />
+          <Analytics votes={proposal?.votes} />
         </div>
       </section>
     </>

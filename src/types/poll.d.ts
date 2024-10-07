@@ -1,8 +1,9 @@
 import { Community } from "./community";
-import { UserProps } from "./user";
+import { ProfilePhoto, UserProps } from "./user";
 
 export interface PollsRoot {
   name: string;
+  logo: ProfilePhoto;
   polls: Polls;
 }
 

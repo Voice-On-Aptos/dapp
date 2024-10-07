@@ -45,3 +45,36 @@ export async function createProposal(
     return { error: "Failed to create proposal" };
   }
 }
+
+export async function voteOnProposal(
+  id: string,
+  address: string,
+  payload: { userId: string; vote: string }
+) {
+  try {
+    const response = await fetch(
+      `${process.env.API_BASE_URL}/proposal/${id}/vote`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${address}`,
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (response.status != 200) {
+      throw new Error(`Failed to vote on proposal: ${response.statusText}`);
+    }
+
+    revalidateTag("proposal");
+    return await response.json();
+  } catch (error) {
+    if (typeof error === "string") {
+      return { error };
+    }
+
+    return { error: "Failed to vote on proposal" };
+  }
+}

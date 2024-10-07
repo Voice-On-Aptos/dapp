@@ -1,4 +1,5 @@
 "use client";
+import useUser from "@/hooks/use-user";
 import { formatLargeNumber, timeAgo } from "@/lib/utils";
 import { Post } from "@/types/post";
 import Link from "next/link";
@@ -9,7 +10,6 @@ import InfoIcon from "../custom-icons/InfoIcon";
 import MessageIcon from "../custom-icons/MessageIcon";
 import { VoiceOutlineIcon } from "../custom-icons/VoiceIcon";
 import RAvatar from "../ui/avatar-compose";
-import useUser from "@/hooks/use-user";
 
 const PostCard = ({ data }: { data: Post }) => {
   const { user } = useUser();
@@ -17,17 +17,13 @@ const PostCard = ({ data }: { data: Post }) => {
     <div className="bg-white border rounded-xl border-alice-blue p-4">
       <div className="flex items-center justify-between mb-18">
         <div className="flex items-center space-x-[0.5625rem]">
-          {data?.author?.profilePhoto ? (
-            <RAvatar
-              src={data?.author?.profilePhoto?.url}
-              className="size-[2.5rem]"
-            />
-          ) : (
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
-          )}
+          <RAvatar
+            src={data?.author?.profilePhoto?.url}
+            className="size-[2.5rem]"
+          />
           <div>
             <span className="flex items-center space-x-1">
-              <span className="font-medium text-mako text-sm">
+              <span className="font-medium text-mako text-sm first-letter:capitalize">
                 {data?.author?.username}
               </span>
               <span className="text-s10 bg-old-lace text-golden-rod px-[0.625rem] py-0.5 rounded-3xl">
@@ -44,7 +40,11 @@ const PostCard = ({ data }: { data: Post }) => {
             href={`/communities/${data?.community?._id}`}
             className="text-xs text-mako border border-athens rounded-3xl p-[0.3125rem] pr-[0.625rem] flex items-center space-x-[0.375rem]"
           >
-            <span className="inline-block rounded-full size-[1.375rem] bg-azure"></span>
+            <RAvatar
+              src={data?.community?.logo?.url}
+              className="size-[1.375rem]"
+            />
+
             <span>{data?.community?.name}</span>
           </Link>
           <MdMoreHoriz size={16} />

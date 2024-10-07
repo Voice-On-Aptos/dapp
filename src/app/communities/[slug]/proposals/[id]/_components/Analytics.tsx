@@ -1,14 +1,22 @@
 import RChart from "@/components/shared/RChart";
-import { currencyFormatter } from "@/lib/utils";
+import { VoteProps } from "@/types/proposals";
 import React from "react";
 
-const chartData = [
-  { name: "for", amount: 5000, fill: "#FF9800" },
-  { name: "against", amount: 2000, fill: "#4CAF50" },
-  { name: "abstain", amount: 1000, fill: "#FF0606" },
-];
+const Analytics = ({ votes }: { votes: VoteProps[] }) => {
+  const forVotes = votes.filter((vote) => vote?.vote?.toLowerCase() === "for");
+  const againstVotes = votes.filter(
+    (vote) => vote?.vote?.toLowerCase() === "against"
+  );
+  const abstainVotes = votes.filter(
+    (vote) => vote?.vote?.toLowerCase() === "abstain"
+  );
 
-const Analytics = () => {
+  const chartData = [
+    { name: "for", amount: forVotes.length, fill: "#FF9800" },
+    { name: "against", amount: againstVotes.length, fill: "#4CAF50" },
+    { name: "abstain", amount: abstainVotes.length, fill: "#FF0606" },
+  ];
+
   return (
     <div className="rounded-xl bg-white p-4 pb-8 border border-alice-blue">
       <h3 className="text-shark text-xs uppercase font-bold mb-[0.375rem]">
@@ -28,10 +36,8 @@ const Analytics = () => {
                 }}
                 className={`size-[0.375rem] mb-0.5 inline-block mr-2 rounded-full`}
               />
-              <span className="capitalize">{data?.name}</span>{" "}
-              <span className="font-bold text-shark">
-                {currencyFormatter(data?.amount)}
-              </span>
+              <span className="capitalize">{data?.name}:</span>{" "}
+              <span className="font-bold text-shark">{data?.amount}</span>
             </li>
           ))}
         </ul>

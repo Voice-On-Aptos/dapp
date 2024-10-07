@@ -9,6 +9,7 @@ import { PollsRoot } from "@/types/poll";
 import { notFound } from "next/navigation";
 import React, { Suspense } from "react";
 import CreatePoll from "../_components/CreatePoll";
+import RAvatar from "@/components/ui/avatar-compose";
 
 async function page({
   params,
@@ -49,7 +50,10 @@ async function page({
           />
 
           <div className="flex items-center space-x-3">
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+            <RAvatar
+              src={community?.logo?.url}
+              className="size-[2.5rem] inline-block rounded-full bg-athens"
+            />
             <h5 className="text-2xl lg:text-s32 font-medium flex items-center space-x-2">
               <span>
                 {formatLargeNumber(community?.polls?.data?.length || 0)}

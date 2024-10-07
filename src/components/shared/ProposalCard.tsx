@@ -26,20 +26,16 @@ const ProposalCard = ({
     >
       <div className="flex items-center justify-between mb-18">
         <div className="flex items-center space-x-[0.625rem]">
-          {data?.author?.profilePhoto ? (
-            <RAvatar
-              src={data?.author?.profilePhoto?.url}
-              className="size-[2.5rem]"
-            />
-          ) : (
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
-          )}
+          <RAvatar
+            src={data?.author?.profilePhoto?.url}
+            className="size-[2.5rem] bg-athens"
+          />
           <span>
             <h4 className="text-mako font-medium text-sm capitalize">
               {data?.author?.username}
             </h4>
             <h5 className="text-xs text-gray">
-              {timeAgo(new Date(data?.startDate))}
+              {timeAgo(new Date(data?.createdAt))}
             </h5>
           </span>
         </div>
@@ -64,7 +60,9 @@ const ProposalCard = ({
       <h2 className="font-medium text-sm mb-[0.4375rem] text-mako">
         {data?.title}
       </h2>
-      <p className="text-xs text-mako">{data?.description}</p>
+      <p className="text-xs text-mako whitespace-pre-wrap">
+        {data?.description}
+      </p>
       <span className="mt-5 flex items-center space-x-[0.375rem] text-xs text-mako">
         <span>Proposal ends in:</span>
         {days === 0 && hours === 0 && minutes === 0 ? (

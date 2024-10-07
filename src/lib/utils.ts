@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { formatDistanceToNow } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import { format } from "date-fns";
+import { fromZonedTime } from "date-fns-tz";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,6 +29,16 @@ export const formatDate = (date: Date | undefined) => {
     day: "2-digit",
   });
 };
+
+export function formatDateToCustomString(
+  dateStr: string,
+  timeZone: string = "Europe/London"
+): string {
+  const zonedDate = fromZonedTime(new Date(dateStr), timeZone);
+
+  // Format the date using the required pattern
+  return format(zonedDate, "EEE, MMM do yyyy . hh:mma 'UTC+1'");
+}
 
 export const timeAgo = (date: Date): string => {
   return `${formatDistanceToNow(date, { addSuffix: true })}`;
