@@ -68,7 +68,7 @@ export async function createCommunity(
     if (typeof error === "string") {
       return { error };
     }
-    console.log(error);
+    // console.log(error);
     return { error: "Failed to create community" };
   }
 }

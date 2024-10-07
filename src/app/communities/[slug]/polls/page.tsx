@@ -36,7 +36,6 @@ async function page({
   if (!slug || !community?.name) {
     notFound();
   }
-  console.log({ community });
 
   return (
     <>

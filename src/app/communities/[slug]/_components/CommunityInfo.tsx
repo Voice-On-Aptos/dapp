@@ -49,7 +49,6 @@ const CommunityInfo = ({
 
   const showMoreHandler = () => {
     // Implement show more functionality here
-    console.log("Show more clicked");
     setShowState(!show);
   };
 

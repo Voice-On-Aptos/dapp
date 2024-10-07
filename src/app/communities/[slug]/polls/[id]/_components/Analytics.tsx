@@ -1,12 +1,31 @@
 import RChart from "@/components/shared/RChart";
+import { getRandomColor } from "@/lib/utils";
+import { VoteProps } from "@/types/proposals";
 import React from "react";
 
-const chartData = [
-  { name: "Yes", amount: 5000, fill: "#FD8282" },
-  { name: "No", amount: 2000, fill: "#00BCD4" },
-];
+interface Result {
+  name: string;
+  amount: number;
+  fill: string;
+}
 
-const Analytics = () => {
+const Analytics = ({ votes }: { votes: VoteProps[] }) => {
+  const chartData = votes.reduce((acc: Result[], currentVote: VoteProps) => {
+    const existingVote = acc.find((v) => v.name === currentVote.vote);
+
+    if (existingVote) {
+      existingVote.amount++;
+    } else {
+      acc.push({
+        name: currentVote.vote,
+        amount: 1,
+        fill: getRandomColor(), // Generate a random color for each new option
+      });
+    }
+
+    return acc;
+  }, []);
+
   return (
     <div className="rounded-xl bg-white p-4 pb-8 border border-alice-blue">
       <h3 className="text-shark text-xs uppercase font-bold mb-[0.375rem]">
@@ -26,7 +45,7 @@ const Analytics = () => {
                 }}
                 className={`size-[0.375rem] mb-0.5 inline-block mr-2 rounded-full`}
               />
-              {data?.name}{" "}
+              {data?.name}:{" "}
               <span className="font-bold text-shark">{data?.amount}</span>
             </li>
           ))}

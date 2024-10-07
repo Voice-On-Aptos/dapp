@@ -31,7 +31,7 @@ export function VoteTable({ data }: { data: VoteProps[] }) {
         </TableHeader>
         <TableBody>
           {data.map((member, index) => (
-            <TableRow key={index}>
+            <TableRow key={member?._id}>
               <TableCell>
                 <span className="flex items-center pl-[1.5rem] text-sm text-mako space-x-2">
                   <RAvatar
