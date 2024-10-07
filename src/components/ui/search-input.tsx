@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CiSearch } from "react-icons/ci";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -14,7 +14,6 @@ export default function Search({
 }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
-  const pathname = usePathname();
 
   const handleSearch = useDebouncedCallback((term: string) => {
     // console.log(`Searching... ${term}`);
@@ -27,7 +26,7 @@ export default function Search({
     } else {
       params.delete("query");
     }
-    replace(`${pathname}?${params.toString()}`);
+    replace(`/search?${params.toString()}`);
   }, 300);
 
   return (

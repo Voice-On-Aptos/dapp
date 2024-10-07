@@ -3,8 +3,11 @@ import RSelect from "@/components/ui/select-input";
 import Feeds from "./_components/Feeds";
 import CompleteProfile from "@/components/shared/CompleteProfile";
 import React from "react";
+import { getFeed } from "@/services/feed";
 
-export default function Page() {
+export default async function Page() {
+  const feed = await getFeed();
+
   return (
     <>
       <CompleteProfile />
@@ -12,14 +15,14 @@ export default function Page() {
         <h1 className="text-2xl font-medium mb-[0.875rem] text-mako">
           Voice Feed
         </h1>
-        <RSelect
+        {/* <RSelect
           value="hot"
           options={["hot", "latest", "most liked"]}
           className="w-[4.9375rem] text-sm text-dove-gray border border-white-smoke-4 rounded-lg"
-        />
+        /> */}
       </header>
       <section>
-        <Feeds />
+        <Feeds data={feed} />
       </section>
     </>
   );

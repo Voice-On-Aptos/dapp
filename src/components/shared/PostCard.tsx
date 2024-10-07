@@ -47,7 +47,7 @@ const PostCard = ({ data }: { data: Post }) => {
 
             <span>{data?.community?.name}</span>
           </Link>
-          <MdMoreHoriz size={16} />
+          {/* <MdMoreHoriz size={16} /> */}
         </div>
       </div>
       {/* rich text content */}
@@ -87,7 +87,7 @@ const PostCard = ({ data }: { data: Post }) => {
         <div className="border-t border-gallery/[68%] pt-[0.625rem] flex items-center space-x-2">
           <div className="flex items-center rounded-3xl min-w-[14.6875rem] py-[0.21875rem] px-[0.3125rem] space-x-[0.375rem] text-sm text-mako border border-athens">
             <RAvatar
-              src={user?.profilePhoto?.url || ""}
+              src={user?.profilePhoto?.url}
               className="size-[1.375rem]"
             />
             <input
