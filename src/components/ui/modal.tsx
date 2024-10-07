@@ -38,9 +38,8 @@ const Modal = ({ isOpen, closeHandler, title, className, children }: Props) => {
               >
                 <header className="flex items-center justify-between">
                   <h5 className="text-lg lg:text-s20 font-medium">{title}</h5>
-                  <button onClick={closeHandler}>
-                    <IoClose size={24} />
-                  </button>
+
+                  <IoClose size={24} onClick={closeHandler} role="button" />
                 </header>
                 {children}
               </div>

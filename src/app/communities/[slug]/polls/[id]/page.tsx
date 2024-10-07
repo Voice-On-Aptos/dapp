@@ -1,4 +1,5 @@
 import GoBack from "@/components/shared/GoBack";
+import { getPoll } from "@/services/poll";
 import { notFound } from "next/navigation";
 import React from "react";
 import Analytics from "./_components/Analytics";
@@ -6,7 +7,7 @@ import PollInfo from "./_components/PollInfo";
 import Votes from "./_components/Votes";
 import VotesCasted from "./_components/VotesCasted";
 
-function page({
+async function page({
   params,
 }: {
   params: {
@@ -14,8 +15,9 @@ function page({
   };
 }) {
   const id = params?.id;
+  const poll = await getPoll(id);
 
-  if (!id) {
+  if (!poll?._id) {
     notFound();
   }
 
@@ -26,12 +28,18 @@ function page({
       </header>
       <section className="lg:flex lg:items-start lg:space-x-18 max-w-[62.125rem]">
         <div className="w-full lg:max-w-[34.875rem] space-y-[0.875rem]">
-          <PollInfo />
-          <VotesCasted />
+          <PollInfo data={poll} />
+          <VotesCasted votes={poll?.votes || []} />
         </div>
         <div className="w-full lg:max-w-[26.125rem] lg:space-y-[0.875rem] sticky top-4">
-          <Votes />
-          <Analytics />
+          <Votes
+            id={poll?._id}
+            options={poll?.options || []}
+            status={poll?.status || ""}
+            votes={poll?.votes || []}
+            pollConfig={poll?.community?.poll}
+          />
+          <Analytics votes={poll?.votes || []} />
         </div>
       </section>
     </>

@@ -1,10 +1,13 @@
 "use client";
+import { voteOnPoll } from "@/actions/poll";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import useUser from "@/hooks/use-user";
 import { cn, timeAgo } from "@/lib/utils";
 import { Poll } from "@/types/poll";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { VoiceCircleIcon } from "../custom-icons/VoiceIcon";
 import RAvatar from "../ui/avatar-compose";
 import VotedCastedPopup from "./VotedCastedPopup";
@@ -12,23 +15,49 @@ import VotedCastedPopup from "./VotedCastedPopup";
 const PollCard = ({ data }: { data: Poll }) => {
   const [choice, setChoice] = useState("");
   const [showPopup, setShowPopupState] = useState(false);
+  const [pending, setPending] = useState(false);
+  const { user } = useUser();
+
+  const voted = !!choice;
+
+  useEffect(() => {
+    if (user && data) {
+      const votedFor = data?.votes.find((vote) => vote?.by === user?._id)?.vote;
+      if (votedFor) setChoice(votedFor);
+    }
+  }, [user, data]);
+
+  const voteHandler = async (vote: string) => {
+    setPending(true);
+    setShowPopupState(true);
+
+    const response = await voteOnPoll(data?._id, user?.address!, {
+      userId: user?._id,
+      vote,
+    });
+
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      return;
+    }
+
+    toast("Successfully voted poll");
+    setPending(false);
+  };
 
   return (
     <>
       <div className="border border-alice-blue rounded-lg p-5">
         <div className="flex items-center justify-between mb-18">
           <div className="flex items-center space-x-[0.625rem]">
-            {data?.author?.profilePhoto ? (
-              <RAvatar
-                src={data?.author?.profilePhoto?.url}
-                className="size-[2.5rem]"
-              />
-            ) : (
-              <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
-            )}
+            <RAvatar
+              src={data?.author?.profilePhoto?.url}
+              className="size-[2.5rem]"
+            />
             <span>
-              <h4 className="text-mako font-medium text-sm">
-                {" "}
+              <h4 className="text-mako font-medium text-sm first-letter:capitalize">
                 {data?.author?.username}
               </h4>
               <h5 className="text-xs text-gray">
@@ -72,9 +101,9 @@ const PollCard = ({ data }: { data: Poll }) => {
             value={choice}
             onValueChange={(value) => {
               setChoice(value);
-              setShowPopupState(true); // Open popup after selecting a choice
+              voteHandler(value); // Open popup after selecting a choice
             }}
-            disabled={!!choice}
+            disabled={!!choice || voted || !user || data?.status === "closed"}
           >
             {data?.options?.map((option, index) => (
               <div
@@ -87,6 +116,9 @@ const PollCard = ({ data }: { data: Poll }) => {
                 )}
               >
                 <RadioGroupItem
+                  disabled={
+                    !!choice || voted || !user || data?.status === "closed"
+                  }
                   value={option}
                   id={index.toString()}
                   className={cn({
@@ -117,6 +149,7 @@ const PollCard = ({ data }: { data: Poll }) => {
         </div>
       </div>
       <VotedCastedPopup
+        content={pending ? "Casting your vote..." : ""}
         buttonText="Back to Poll"
         isOpen={showPopup}
         closeHandler={() => setShowPopupState(false)}

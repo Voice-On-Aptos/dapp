@@ -65,11 +65,11 @@ const TRow = ({
                 View rewards
               </Link>
             </>
-          ) : (
+          ) : account?.address !== member?.address ? (
             <button className="rounded-md border border-gainsboro px-[1.0625rem] py-[0.5625rem] shadow-btn">
               Lend Voice
             </button>
-          )}
+          ) : null}
         </span>
       </TableCell>
     </TableRow>

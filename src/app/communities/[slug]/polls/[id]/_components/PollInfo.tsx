@@ -1,21 +1,26 @@
 import RAvatar from "@/components/ui/avatar-compose";
-import { cn } from "@/lib/utils";
+import { cn, formatDateToCustomString } from "@/lib/utils";
+import { Poll } from "@/types/poll";
 import React from "react";
 
-const PollInfo = () => {
-  const isClosed = false;
+const PollInfo = ({ data }: { data: Poll }) => {
+  const isClosed = data?.status === "closed";
+
   return (
     <div className="rounded-xl bg-white p-4 lg:p-6 border border-alice-blue">
       <div className="mb-4 flex items-start space-x-3 justify-between">
         <div>
           <h3 className="mb-[0.625rem] text-mako text-sm lg:text-base font-medium">
-            Do we have to go?
+            {data?.question}
           </h3>
           <span className="flex items-end space-x-[0.5625rem]">
             <span className="text-s10 text-mist">by</span>
             <span className="flex items-center text-xs text-mako space-x-[0.375rem]">
-              <RAvatar className="size-4" />
-              <span>Meenash</span>
+              <RAvatar
+                src={data?.author?.profilePhoto?.url}
+                className="size-4 bg-athens"
+              />
+              <span>{data?.author?.username}</span>
             </span>
           </span>
         </div>
@@ -41,17 +46,17 @@ const PollInfo = () => {
         </h4>
         <div className="rounded-lg bg-haze/[44%] p-4 space-y-3">
           <span className="flex items-center space-x-4">
-            <span className="text-xs text-mist">Start Date</span>
+            <span className="text-xs text-mist">Date</span>
             <span className="text-sm text-mako">
-              Tue, Sept 20th 2024 . 10:00AM UTC+1
+              {formatDateToCustomString(data?.createdAt)}
             </span>
           </span>
-          <span className="flex items-center space-x-4">
+          {/* <span className="flex items-center space-x-4">
             <span className="text-xs text-mist">End Date</span>
             <span className="text-sm text-mako">
               Tue, Sept 20th 2024 . 10:00AM UTC+1
             </span>
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

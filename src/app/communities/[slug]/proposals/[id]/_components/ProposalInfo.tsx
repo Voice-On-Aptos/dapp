@@ -1,22 +1,32 @@
 import RAvatar from "@/components/ui/avatar-compose";
-import { cn } from "@/lib/utils";
+import { cn, formatDateToCustomString } from "@/lib/utils";
+import { Proposal } from "@/types/proposals";
 import React from "react";
 
-const ProposalInfo = () => {
-  const isClosed = false;
+const ProposalInfo = ({ data }: { data: Proposal }) => {
+  const status = () => {
+    const currentDate = new Date().getTime();
+    const endDate = new Date(data?.endDate).getTime();
+    return endDate > currentDate ? "active" : "closed";
+  };
+
+  const isClosed = status() === "closed";
+
   return (
     <div className="rounded-xl bg-white p-4 lg:p-6 border border-alice-blue">
       <div className="flex items-start space-x-3 justify-between">
         <div>
           <h3 className="mb-[0.625rem] text-mako text-sm lg:text-base font-medium">
-            Increase Liquidity Pool Token Reserve by 1.5% before the next bull
-            run.
+            {data?.title}
           </h3>
           <span className="flex items-end space-x-[0.5625rem]">
             <span className="text-s10 text-mist">by</span>
             <span className="flex items-center text-xs text-mako space-x-[0.375rem]">
-              <RAvatar className="size-4" />
-              <span>Meenash</span>
+              <RAvatar
+                src={data?.author?.profilePhoto?.url}
+                className="size-4 bg-athens"
+              />
+              <span>{data?.author?.username}</span>
             </span>
           </span>
         </div>
@@ -36,12 +46,8 @@ const ProposalInfo = () => {
           <span>{isClosed ? "Closed" : "Active"}</span>
         </span>
       </div>
-      <p className="mt-5 mb-6 text-xs text-mako">
-        Egestas feugiat posuere vel diam egestas tortor eget magna elementum.
-        Odio blandit sit egestas tellus Nulla interdum odio lectus quis donec
-        nulla egestas lectus at. Risus sollicitudin venenatis vitae natoque ut
-        netus. Sit sed a sagittis vel nibh viverra dui odio. Urna auctor mauris
-        eu et pellentesque erat. Imperdiet dui viverra sit phasellus.
+      <p className="mt-5 mb-6 text-xs text-mako whitespace-pre-wrap">
+        {data?.description}
       </p>
       <div>
         <h4 className="uppercase text-xs text-shark mb-3 font-bold">
@@ -51,13 +57,13 @@ const ProposalInfo = () => {
           <span className="flex items-center space-x-4">
             <span className="text-xs text-mist">Start Date</span>
             <span className="text-sm text-mako">
-              Tue, Sept 20th 2024 . 10:00AM UTC+1
+              {formatDateToCustomString(data?.startDate)}
             </span>
           </span>
           <span className="flex items-center space-x-4">
             <span className="text-xs text-mist">End Date</span>
             <span className="text-sm text-mako">
-              Tue, Sept 20th 2024 . 10:00AM UTC+1
+              {formatDateToCustomString(data?.endDate)}
             </span>
           </span>
         </div>

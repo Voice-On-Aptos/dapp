@@ -11,31 +11,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { VoteProps } from "@/types/proposals";
 
-const data = [
-  {
-    username: "cherrysee",
-    voted: "yes",
-  },
-  {
-    username: "billy:)",
-    voted: "no",
-  },
-  {
-    username: "ceecii",
-    voted: "yes",
-  },
-  {
-    username: "phillip",
-    voted: "no",
-  },
-  {
-    username: "greg",
-    voted: "yes",
-  },
-];
-
-export function VoteTable() {
+export function VoteTable({ data }: { data: VoteProps[] }) {
   return (
     <div className="border border-alice-blue rounded-lg">
       <Table>
@@ -53,15 +31,18 @@ export function VoteTable() {
         </TableHeader>
         <TableBody>
           {data.map((member, index) => (
-            <TableRow key={index}>
+            <TableRow key={member?._id}>
               <TableCell>
                 <span className="flex items-center pl-[1.5rem] text-sm text-mako space-x-2">
-                  <RAvatar className="size-8" />
-                  <span>@{member?.username}</span>
+                  <RAvatar
+                    src={member?.by?.profilePhoto?.url}
+                    className="size-8"
+                  />
+                  <span>@{member?.by?.username}</span>
                 </span>
               </TableCell>
               <TableCell className="text-sm capitalize text-mako">
-                {member?.voted}
+                {member?.vote}
               </TableCell>
             </TableRow>
           ))}
@@ -71,13 +52,13 @@ export function VoteTable() {
   );
 }
 
-const VotesCasted = () => {
+const VotesCasted = ({ votes }: { votes: VoteProps[] }) => {
   return (
     <div className="rounded-xl bg-white p-4 lg:p-6 border border-alice-blue">
       <h3 className="text-shark text-xs uppercase font-bold mb-3">
         VOTES Casted
       </h3>
-      <VoteTable />
+      <VoteTable data={votes} />
     </div>
   );
 };

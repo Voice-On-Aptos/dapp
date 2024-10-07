@@ -1,3 +1,4 @@
+import RAvatar from "@/components/ui/avatar-compose";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import { formatLargeNumber } from "@/lib/utils";
 import { getCommunityMembers } from "@/services/community";
@@ -31,8 +32,10 @@ async function page({
           />
 
           <div className="flex items-center space-x-3">
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
-
+            <RAvatar
+              src={community?.logo?.url}
+              className="size-[2.5rem] inline-block rounded-full bg-athens"
+            />
             <h5 className="text-2xl lg:text-s32 font-medium">
               {formatLargeNumber(community?.members?.length || 0)}{" "}
               <span className="text-gray text-sm lg:text-base font-normal">
@@ -42,7 +45,7 @@ async function page({
           </div>
         </div>
       </header>
-      <Members community={slug} data={community?.member || []} />
+      <Members community={slug} data={community?.members || []} />
     </>
   );
 }

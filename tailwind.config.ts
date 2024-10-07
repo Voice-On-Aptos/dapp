@@ -68,6 +68,7 @@ const config: Config = {
         concrete: "#F0F1F2",
         "rose-white": "#FFF9F7",
         scarlet: "#FF2F00",
+        salmon: "#F07C62",
       },
       fontSize: {
         s9: ["0.5625rem", "0.67rem"],

@@ -74,7 +74,11 @@ const types = [
 const CreateProposal = ({ communityId }: { communityId: string }) => {
   const [creatingProposal, setCreatingProposalState] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [options, setOptions] = useState<string[]>([]);
+  const [options, setOptions] = useState<string[]>([
+    "for",
+    "against",
+    "abstain",
+  ]);
   const { community } = useCommunity(communityId);
   const { isMember, address, user } = useIsMember(community);
 
@@ -276,7 +280,8 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
                           id={`${index + 1}`}
                           value={options?.[index] || ""}
                           onChange={optionHandler}
-                          className="border-alice-blue border shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
+                          readOnly
+                          className="border-alice-blue border capitalize shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
                           placeholder="Add Option"
                         />
                       ))}

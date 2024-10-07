@@ -2,6 +2,7 @@ import EmptyState from "@/components/shared/EmptyState";
 import Pagination from "@/components/shared/Pagination";
 import ProposalCard from "@/components/shared/ProposalCard";
 import Tabs from "@/components/shared/Tabs";
+import RAvatar from "@/components/ui/avatar-compose";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import { formatLargeNumber } from "@/lib/utils";
 import { getCommunityProposals } from "@/services/community";
@@ -48,7 +49,10 @@ async function page({
           />
 
           <div className="flex items-center space-x-3">
-            <span className="size-[2.5rem] inline-block rounded-full bg-athens"></span>
+            <RAvatar
+              src={community?.logo?.url}
+              className="size-[2.5rem] inline-block rounded-full bg-athens"
+            />
             <h5 className="text-2xl lg:text-s32 font-medium flex items-center space-x-2">
               <span>
                 {formatLargeNumber(community?.proposals?.data?.length || 0)}

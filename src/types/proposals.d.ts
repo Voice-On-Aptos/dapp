@@ -3,6 +3,7 @@ import { UserProps } from "./user";
 
 export interface Root {
   name: string;
+  logo: ProfilePhoto;
   proposals: Proposals;
 }
 
@@ -16,6 +17,7 @@ export interface Proposals {
 export interface Proposal {
   _id: string;
   title: string;
+  type: string;
   description: string;
   options: string[];
   startDate: string;
@@ -27,4 +29,10 @@ export interface Proposal {
   createdAt: string;
   updatedAt: string;
   __v: number;
+}
+
+export interface VoteProps {
+    by: UserProps,
+    vote: string,
+    _id:string
 }
