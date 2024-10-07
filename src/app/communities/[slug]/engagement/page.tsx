@@ -86,7 +86,7 @@ function page({
         </div>
       </header>
       <section className="max-w-[62.125rem]">
-        {type === "proposals" ? (
+        {/* {type === "proposals" ? (
           <div className="grid md:grid-cols-2 gap-4 bg-white border border-white-smoke-4 rounded-lg p-4">
             {Array(12)
               .fill("")
@@ -110,7 +110,7 @@ function page({
                 <PostCard key={index} />
               ))}
           </div>
-        )}
+        )} */}
       </section>
     </>
   );

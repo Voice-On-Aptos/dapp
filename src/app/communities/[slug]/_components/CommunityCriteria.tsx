@@ -56,7 +56,7 @@ interface CommunityCriteriaProps {
   criterias: string[];
   members: string[];
   communityId: string;
-  config: ConfigProps;
+  config: ConfigProps | null;
 }
 
 const CommunityCriteria = ({

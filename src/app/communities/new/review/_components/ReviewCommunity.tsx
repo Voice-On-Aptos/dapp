@@ -189,6 +189,8 @@ const ReviewCommunity = () => {
             disableJoin
             token_address={data?.token_address || ""}
             creator={account?.address || ""}
+            communityId=""
+            config={null}
           />
           <CommunityRewardPool amount={data?.token_to_distribute || 0} />
         </div>
