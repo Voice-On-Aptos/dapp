@@ -17,7 +17,7 @@ interface Props {
   members: string[];
   creator: string;
   disableJoin: boolean;
-  config: ConfigProps;
+  config: ConfigProps | null;
 }
 
 const JoinOrLeaveCommunity = ({
@@ -135,48 +135,55 @@ const JoinOrLeaveCommunity = ({
             </p>
           </span>
           <div>
-            <h5 className="font-medium text-xs lg:text-sm text-mirage mb-[0.5625rem]">
-              Why you need a voice token
-            </h5>
-            <ul className="p-4 rounded-2xl mb-7 bg-alabaster space-y-[0.875rem]">
-              <li className="text-sm text-tundora flex items-start space-x-2">
-                <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
-                <p>
-                  Creating a post costs{" "}
-                  <strong>{config?.post?.minimum_voice_power}</strong> Voice
-                  Power or <strong>{config?.post?.minimum_voice_age}</strong>{" "}
-                  voice age
-                </p>
-              </li>
-              <li className="text-sm text-tundora flex items-start space-x-2">
-                <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
-                <p>
-                  Creating a comment costs{" "}
-                  <strong>{config?.comment?.minimum_voice_power}</strong> Voice
-                  Power or <strong>{config?.comment?.minimum_voice_age}</strong>{" "}
-                  voice age
-                </p>
-              </li>
-              <li className="text-sm text-tundora flex items-start space-x-2">
-                <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
-                <p>
-                  Creating a proposal costs{" "}
-                  <strong>{config?.proposal?.minimum_voice_power}</strong> Voice
-                  Power or{" "}
-                  <strong>{config?.proposal?.minimum_voice_age}</strong> voice
-                  age
-                </p>
-              </li>
-              <li className="text-sm text-tundora flex items-start space-x-2">
-                <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
-                <p>
-                  Creating a poll costs{" "}
-                  <strong>{config?.poll?.minimum_voice_power}</strong> Voice
-                  Power or <strong>{config?.poll?.minimum_voice_age}</strong>{" "}
-                  voice age
-                </p>
-              </li>
-            </ul>
+            {config ? (
+              <>
+                <h5 className="font-medium text-xs lg:text-sm text-mirage mb-[0.5625rem]">
+                  Why you need a voice token
+                </h5>
+                <ul className="p-4 rounded-2xl mb-7 bg-alabaster space-y-[0.875rem]">
+                  <li className="text-sm text-tundora flex items-start space-x-2">
+                    <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
+                    <p>
+                      Creating a post costs{" "}
+                      <strong>{config?.post?.minimum_voice_power}</strong> Voice
+                      Power or{" "}
+                      <strong>{config?.post?.minimum_voice_age}</strong> voice
+                      age
+                    </p>
+                  </li>
+                  <li className="text-sm text-tundora flex items-start space-x-2">
+                    <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
+                    <p>
+                      Creating a comment costs{" "}
+                      <strong>{config?.comment?.minimum_voice_power}</strong>{" "}
+                      Voice Power or{" "}
+                      <strong>{config?.comment?.minimum_voice_age}</strong>{" "}
+                      voice age
+                    </p>
+                  </li>
+                  <li className="text-sm text-tundora flex items-start space-x-2">
+                    <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
+                    <p>
+                      Creating a proposal costs{" "}
+                      <strong>{config?.proposal?.minimum_voice_power}</strong>{" "}
+                      Voice Power or{" "}
+                      <strong>{config?.proposal?.minimum_voice_age}</strong>{" "}
+                      voice age
+                    </p>
+                  </li>
+                  <li className="text-sm text-tundora flex items-start space-x-2">
+                    <span className="bg-mako rounded-full inline-block min-w-4 lg:min-w-6 size-4 lg:size-6"></span>
+                    <p>
+                      Creating a poll costs{" "}
+                      <strong>{config?.poll?.minimum_voice_power}</strong> Voice
+                      Power or{" "}
+                      <strong>{config?.poll?.minimum_voice_age}</strong> voice
+                      age
+                    </p>
+                  </li>
+                </ul>
+              </>
+            ) : null}
             <Link
               href={`/communities/${community}/swap`}
               className={cn(
