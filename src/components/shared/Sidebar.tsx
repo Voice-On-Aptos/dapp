@@ -52,7 +52,7 @@ const NavLink = ({
   return (
     <li
       className={cn(
-        "text-sm px-4 py-[0.781rem] rounded-md hover:bg-azure",
+        "text-sm text-mako px-4 py-[0.781rem] rounded-md hover:bg-azure",
         className,
         {
           "text-accent bg-azure": isActive,

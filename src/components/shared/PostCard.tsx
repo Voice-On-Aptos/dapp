@@ -1,10 +1,14 @@
 "use client";
+import { applaudPost, commentOnPost } from "@/actions/post";
 import useUser from "@/hooks/use-user";
-import { formatLargeNumber, timeAgo } from "@/lib/utils";
+import { cn, formatLargeNumber, timeAgo } from "@/lib/utils";
 import { Post } from "@/types/post";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { IoIosSend } from "react-icons/io";
 import { MdMoreHoriz } from "react-icons/md";
+import { toast } from "sonner";
 import { ClapIcon, ClapOutlineIcon } from "../custom-icons/ClapIcon";
 import InfoIcon from "../custom-icons/InfoIcon";
 import MessageIcon from "../custom-icons/MessageIcon";
@@ -12,7 +16,79 @@ import { VoiceOutlineIcon } from "../custom-icons/VoiceIcon";
 import RAvatar from "../ui/avatar-compose";
 
 const PostCard = ({ data }: { data: Post }) => {
+  const { connected } = useWallet();
   const { user } = useUser();
+  const [pending, setPending] = useState(false);
+  const [applauded, setApplauded] = useState(false);
+  const [applauds, setApplauds] = useState(data?.applauds?.length || 0);
+
+  const [commenting, setCommenting] = useState(false);
+
+  //comment
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      if (data?.applauds?.includes(user?._id)) {
+        setApplauded(true);
+      }
+    }
+  }, [user, data]);
+
+  const applaudHandler = async () => {
+    if (!connected) {
+      toast.error("Please connect wallet", {
+        className: "error-message",
+      });
+      return;
+    }
+
+    setPending(true);
+    const response = await applaudPost(data?._id, user?.address!, {
+      userId: user?._id,
+    });
+
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      return;
+    }
+
+    toast("Successfully applauded post");
+    setPending(false);
+    setApplauded(true);
+    setApplauds((prev) => prev + 1);
+  };
+
+  const commentHandler = async () => {
+    if (!connected) {
+      toast.error("Please connect wallet", {
+        className: "error-message",
+      });
+      return;
+    }
+
+    setCommenting(true);
+    const response = await commentOnPost(data?._id, user?.address!, {
+      author: user?._id,
+      community: data?.community?._id,
+      content: comment,
+      parentId: data?._id,
+    });
+
+    if (response?.message) {
+      toast.error(response?.message, {
+        className: "error-message",
+      });
+      return;
+    }
+
+    toast("Successfully commented on post");
+    setCommenting(false);
+    setComment("");
+  };
+
   return (
     <div className="bg-white border rounded-xl border-alice-blue p-4">
       <div className="flex items-center justify-between mb-18">
@@ -50,22 +126,18 @@ const PostCard = ({ data }: { data: Post }) => {
           {/* <MdMoreHoriz size={16} /> */}
         </div>
       </div>
-      {/* rich text content */}
-      <div className="mb-[0.9375rem]">
-        <p className="text-sm text-mako">{data?.content}</p>
-        {/* <span className="mt-18 flex items-center space-x-[0.375rem] text-s10 text-mako">
-          <span>Proposal ends in:</span>
-          <span className="text-xs font-medium">6d 12h 3m</span>
-        </span> */}
-      </div>
-      {/* rich text content end */}
+      <Link href={`/posts/${data?._id}`} className="block">
+        {/* rich text content */}
+        <div className="mb-[0.9375rem]">
+          <p className="text-sm text-mako whitespace-pre-wrap">
+            {data?.content}
+          </p>
+        </div>
 
-      {/* stats and interaction */}
-      <div>
         <div className="bg-white-smoke-5/[58%] mb-[0.625rem] flex items-center space-x-[0.875rem] px-2 py-0.5 rounded-lg">
           <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
             <ClapIcon />
-            <span>{data?.applauds?.length}</span>
+            <span>{applauds}</span>
           </span>
           <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
             <VoiceOutlineIcon className="text-sun-glow" />
@@ -75,43 +147,73 @@ const PostCard = ({ data }: { data: Post }) => {
             <MessageIcon />
             <span>{data?.comments || 0}</span>
           </span>
-          <div className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
-            {/* <span className="flex flex-row-reverse items-center -space-x-1">
+          {/* <div className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
+            <span className="flex flex-row-reverse items-center -space-x-1">
               <RAvatar className="-ml-1" />
               <RAvatar />
               <RAvatar />
-            </span> */}
+            </span>
             <span>Seen by {formatLargeNumber(data?.seenBy?.length)}</span>
-          </div>
+          </div> */}
         </div>
-        <div className="border-t border-gallery/[68%] pt-[0.625rem] flex items-center space-x-2">
-          <div className="flex items-center rounded-3xl min-w-[14.6875rem] py-[0.21875rem] px-[0.3125rem] space-x-[0.375rem] text-sm text-mako border border-athens">
-            <RAvatar
-              src={user?.profilePhoto?.url}
-              className="size-[1.375rem]"
-            />
+      </Link>
+      <div className="border-t border-gallery/[68%] pt-[0.625rem] flex items-center flex-wrap gap-2">
+        <div className="flex items-center rounded-3xl min-w-[14.6875rem] py-[0.21875rem] px-[0.3125rem] space-x-[0.375rem] text-sm text-mako border border-athens">
+          <RAvatar src={user?.profilePhoto?.url} className="size-[1.375rem]" />
+          <div className="relative w-full">
             <input
+              disabled={commenting}
+              value={comment}
+              onChange={(event) => {
+                const value = event.target.value;
+                setComment(value);
+              }}
               placeholder="Add a comment..."
               className="text-xs text-mako outline-none w-full"
             />
+            <button
+              disabled={!comment || commenting || !user}
+              onClick={commentHandler}
+              className={cn(
+                "absolute right-0 grid disabled:opacity-50 disabled:cursor-not-allowed place-items-center transition-transform duration-75 top-1/2 -translate-y-1/2 rounded-full size-6 bg-accent text-white",
+                {
+                  "scale-0": !comment,
+                }
+              )}
+            >
+              {commenting ? (
+                <span className="border-2 rounded-full block border-white border-r-transparent animate-spin size-3"></span>
+              ) : (
+                <IoIosSend size={16} />
+              )}
+            </button>
           </div>
-          <button className="flex items-center rounded-3xl py-[0.3125rem] pr-4 pl-2 space-x-[0.375rem] text-xs text-mako border border-athens">
-            <ClapOutlineIcon />
-            <span>Applaud</span>
-          </button>
-          <button className="flex items-center rounded-3xl py-[0.3125rem] pr-4 pl-2 space-x-[0.375rem] text-xs text-mako border border-athens">
-            <VoiceOutlineIcon />
-            <span>Lend voice</span>
-          </button>
         </div>
-        <span className="flex items-center space-x-0.5 mt-1 text-s9 text-mako">
-          <InfoIcon />
+        <button
+          onClick={applaudHandler}
+          disabled={pending || applauded || !user}
+          className="disabled:opacity-50 disabled:cursor-not-allowed flex items-center rounded-3xl py-[0.3125rem] pr-4 pl-2 space-x-[0.375rem] text-xs text-mako border border-athens"
+        >
+          <ClapOutlineIcon />
           <span>
-            Comment limited to only {data?.community?.post?.minimum_voice_power}{" "}
-            voice power holders
+            {pending ? "Applauding..." : applauded ? "Applauded" : "Applaud"}
           </span>
-        </span>
+        </button>
+        <button
+          disabled
+          className="flex disabled:cursor-not-allowed items-center rounded-3xl py-[0.3125rem] pr-4 pl-2 space-x-[0.375rem] text-xs text-mako border border-athens"
+        >
+          <VoiceOutlineIcon />
+          <span>Lend voice</span>
+        </button>
       </div>
+      <span className="flex items-center space-x-0.5 mt-2 text-s10 text-mako">
+        <InfoIcon />
+        <span>
+          Comment limited to only {data?.community?.post?.minimum_voice_power}{" "}
+          voice power holders
+        </span>
+      </span>
     </div>
   );
 };

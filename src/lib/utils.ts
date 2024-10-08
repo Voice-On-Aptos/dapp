@@ -1,8 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
-import { formatDistanceToNow } from "date-fns";
-import { twMerge } from "tailwind-merge";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { fromZonedTime } from "date-fns-tz";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -63,7 +62,8 @@ export function formatBytes(
 }
 
 export function shortenAddress(address: string) {
-  if (address.length < 10) {
+  if (!address) return null;
+  if (address?.length < 10) {
     // If the address is too short to be shortened, return it as is
     return address;
   }

@@ -6,10 +6,15 @@ import useFeed from "@/hooks/use-feed";
 import React from "react";
 
 const Feeds = ({ data }: { data: any }) => {
-  const { feed } = useFeed(data);
+  const { isLoading, feed } = useFeed(data);
 
   return (
     <>
+      {isLoading ? (
+        <div className="border flex items-center justify-center mt-4 mb-4 lg:mt-5 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
+          <span className="border-2 border-accent rounded-full size-4 lg:size-8 border-r-transparent animate-spin block"></span>
+        </div>
+      ) : null}
       <div className="space-y-3 max-w-[43.625rem]">
         {feed?.map((feed: any, index: number) => {
           if (feed?.type === "post") {

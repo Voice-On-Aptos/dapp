@@ -27,14 +27,26 @@ function Default({ community, type }: { community: string; type: string }) {
 
   useEffect(() => {
     if (engagements) {
+      if (type === "posts") {
+        setData(engagements?.data?.filter((d: any) => d?.type === "post"));
+        return;
+      }
+      if (type === "proposals") {
+        setData(engagements?.data?.filter((d: any) => d?.type === "proposal"));
+        return;
+      }
+      if (type === "polls") {
+        setData(engagements?.data?.filter((d: any) => d?.type === "poll"));
+        return;
+      }
       setData(engagements?.data || []);
     }
-  }, [engagements]);
+  }, [engagements, type]);
 
   if (isLoading || pending) {
     return (
       <div className="border flex items-center justify-center mt-4 lg:mt-5 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
-        <span className="border border-accent rounded-full size-8 lg:size-12 border-r-transparent animate-spin block"></span>
+        <span className="border-2 border-accent rounded-full size-4 lg:size-8 border-r-transparent animate-spin block"></span>
       </div>
     );
   }

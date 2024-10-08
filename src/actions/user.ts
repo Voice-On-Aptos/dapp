@@ -20,7 +20,7 @@ export async function updateUser(address: string, payload: Partial<UserProps>) {
       body: JSON.stringify(payload),
     });
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to update user: ${response.statusText}`);
     }
 
@@ -48,7 +48,7 @@ export async function joinCommunity(address: string, communityId: string) {
       }
     );
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to join community: ${response.statusText}`);
     }
     revalidateTag("community");
@@ -75,7 +75,7 @@ export async function leaveCommunity(address: string, communityId: string) {
       }
     );
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to leave community: ${response.statusText}`);
     }
 
@@ -100,7 +100,7 @@ export async function updateProfilePhoto(address: string, payload: FormData) {
       body: JSON.stringify(payload),
     });
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to update profile photo: ${response.statusText}`);
     }
 
@@ -125,7 +125,7 @@ export async function deleteProfilePhoto(address: string, id: string) {
       body: JSON.stringify({ id }),
     });
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to delete profile photo: ${response.statusText}`);
     }
 
