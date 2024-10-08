@@ -21,7 +21,7 @@ export async function createPoll(address: string, payload: CreatePollProps) {
       body: JSON.stringify(payload),
     });
 
-    if (response.status != 201) {
+    if (response.status !== 201) {
       throw new Error(`Failed to create poll: ${response.statusText}`);
     }
 
@@ -55,7 +55,7 @@ export async function voteOnPoll(
       }
     );
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to vote on poll: ${response.statusText}`);
     }
 

@@ -64,7 +64,7 @@ export async function voteOnProposal(
       }
     );
 
-    if (response.status != 200) {
+    if (response.status !== 200) {
       throw new Error(`Failed to vote on proposal: ${response.statusText}`);
     }
 

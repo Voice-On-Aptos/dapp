@@ -1,13 +1,22 @@
 "use client";
+import useUser from "@/hooks/use-user";
 import { formatLargeNumber } from "@/lib/utils";
 import { Community } from "@/types/community";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 import RAvatar from "../ui/avatar-compose";
 
 const CommunityCard = ({ data }: { data: Community }) => {
+  const { user } = useUser();
   const { account } = useWallet();
+
+  const isAMember = useMemo(() => {
+    if (user) {
+      return data?.members?.find((member) => member === user?._id);
+    }
+    return false;
+  }, [user, data]);
 
   return (
     <div className="bg-white py-4 px-[1.375rem] rounded-xl border border-white-smoke-4">
@@ -31,7 +40,9 @@ const CommunityCard = ({ data }: { data: Community }) => {
           href={`/communities/${data?._id}`}
           className="bg-accent px-4 py-2.5 hover:bg-teal block text-white font-medium text-sm rounded-lg"
         >
-          {data?.creator?.address === account?.address ? "View" : "Join"}
+          {data?.creator?.address === account?.address || isAMember
+            ? "View"
+            : "Join"}
         </Link>
       </div>
       <p className="text-sm text-gray line-clamp-3 first-letter:capitalize">

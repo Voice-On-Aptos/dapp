@@ -57,7 +57,7 @@ export async function createCommunity(
       }
     );
 
-    if (response.status != 201) {
+    if (response.status !== 201) {
       throw new Error(`Failed to create community: ${response.statusText}`);
     }
 

@@ -22,7 +22,7 @@ const ProposalCard = ({
   return (
     <Link
       href={`/communities/${data?.community?._id}/proposals/${data?._id}`}
-      className="border border-alice-blue rounded-lg p-5"
+      className="border border-alice-blue rounded-lg p-5 bg-white block"
     >
       <div className="flex items-center justify-between mb-18">
         <div className="flex items-center space-x-[0.625rem]">

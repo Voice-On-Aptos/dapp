@@ -10,7 +10,7 @@ const CompleteProfile = () => {
   const { user, isLoading, isError } = useUser();
   return (
     <>
-      {user?._id ? null : account?.address && !isLoading ? (
+      {user?._id ? null : account?.address && isError && !isLoading ? (
         <div className="my-3 flex items-start lg:items-center space-x-3 border border-sun-glow bg-serenade rounded-lg py-4 px-5 text-xs lg:text-sm text-gamboge">
           <BiSolidInfoCircle size={24} />
           <p>

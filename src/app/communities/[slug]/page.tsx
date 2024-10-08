@@ -19,6 +19,7 @@ import CommunityPosts from "./_components/CommunityPosts";
 import CommunityRewardPool from "./_components/CommunityRewardPool";
 import CommunityStats from "./_components/CommunityStats";
 import CreatePost from "./_components/CreatePost";
+import UserEngagements from "./_components/UserEngagements";
 
 async function page({
   params,
@@ -44,18 +45,11 @@ async function page({
   return (
     <>
       <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
-        <div className="border flex items-center justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
+        <div className="border flex md:items-center space-y-3 md:space-y-0 flex-col md:flex-row justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb activePath={community_name} />
 
           <div className="flex items-center space-x-3">
-            <Link
-              href={`/communities/${community?._id}/engagement`}
-              title="My Engagement"
-              className="flex items-center space-x-2 border text-xs lg:text-sm font-medium border-gainsboro-2 text-mako rounded-lg px-4 py-[0.625rem]"
-            >
-              <RAvatar />
-              <span>My Engagement</span>
-            </Link>
+            <UserEngagements community={community?._id} />
             <RPopover
               trigger={
                 <button

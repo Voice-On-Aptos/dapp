@@ -14,7 +14,10 @@ const useUser = () => {
   const address = account?.address || "";
   const { data, error, isLoading } = useSWR(
     address ? [`/user`, address] : null,
-    ([url]) => fetcher(url, address)
+    ([url]) => fetcher(url, address),
+    {
+      revalidateOnMount: false,
+    }
   );
 
   return {

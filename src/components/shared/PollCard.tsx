@@ -49,7 +49,7 @@ const PollCard = ({ data }: { data: Poll }) => {
 
   return (
     <>
-      <div className="border border-alice-blue rounded-lg p-5">
+      <div className="border bg-white border-alice-blue rounded-lg p-5">
         <div className="flex items-center justify-between mb-18">
           <div className="flex items-center space-x-[0.625rem]">
             <RAvatar
