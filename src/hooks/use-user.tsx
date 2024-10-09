@@ -17,6 +17,7 @@ const useUser = () => {
     ([url]) => fetcher(url, address),
     {
       revalidateOnMount: false,
+      revalidateOnFocus: false,
     }
   );
 

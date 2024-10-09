@@ -52,7 +52,7 @@ export async function applaudPost(
       }
     );
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to applaud post: ${response.statusText}`);
     }
 
@@ -90,7 +90,7 @@ export async function commentOnPost(
       }
     );
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to comment post: ${response.statusText}`);
     }
 

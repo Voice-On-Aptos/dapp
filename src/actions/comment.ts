@@ -20,7 +20,7 @@ export async function applaudComment(
       }
     );
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to applaud comment: ${response.statusText}`);
     }
 
@@ -54,7 +54,7 @@ export async function replyComment(
       body: JSON.stringify(payload),
     });
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to reply to comment: ${response.statusText}`);
     }
 
@@ -87,7 +87,7 @@ export async function applaudReply(
       }
     );
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to applaud reply: ${response.statusText}`);
     }
 

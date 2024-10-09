@@ -55,7 +55,7 @@ export async function voteOnPoll(
       }
     );
 
-    if (response.status !== 200) {
+    if (!response.ok) {
       throw new Error(`Failed to vote on poll: ${response.statusText}`);
     }
 
