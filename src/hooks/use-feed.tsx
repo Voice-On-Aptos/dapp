@@ -9,6 +9,7 @@ const useFeed = (fallbackData: any) => {
   const { data, error, isLoading } = useSWR(`/feed`, (url) => fetcher(url), {
     fallbackData,
     revalidateOnMount: false,
+    revalidateOnFocus: false,
   });
 
   return {

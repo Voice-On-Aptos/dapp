@@ -134,9 +134,7 @@ const Sidebar = ({ className }: { className?: string }) => {
         </AccordionItem>
         <AccordionItem
           value="item-2"
-          className={cn("border-b-0 border-t border-white-smoke-3 pt-2", {
-            hidden: typeof user === "string" || !user,
-          })}
+          className={cn("border-b-0 border-t border-white-smoke-3 pt-2")}
         >
           <AccordionTrigger className="text-xs text-mako px-4 py-[0.625rem] hover:no-underline">
             ALL COMMUNITIES
