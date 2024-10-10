@@ -11,10 +11,12 @@ import { shortenAddress } from "@/lib/utils";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { VscDebugDisconnect } from "react-icons/vsc";
 import { toast } from "sonner";
 import CopyIcon from "../custom-icons/CopyIcon";
 import { HomeIconOutline } from "../custom-icons/HomeIcon";
 import RAvatar from "../ui/avatar-compose";
+import { HiOutlineUserCircle } from "react-icons/hi2";
 
 const AccountMenu = () => {
   const { account, disconnect } = useWallet();
@@ -59,7 +61,7 @@ const AccountMenu = () => {
                 className="flex items-center space-x-2 px-2 w-full py-[0.375rem] text-xs text-mako"
               >
                 <span>
-                  <HomeIconOutline />
+                  <HiOutlineUserCircle size={18} />
                 </span>
                 <span>Profile</span>
               </Link>
@@ -95,7 +97,7 @@ const AccountMenu = () => {
                 className="flex items-center space-x-2 px-2 w-full py-[0.375rem] text-xs text-mako"
               >
                 <span>
-                  <HomeIconOutline />
+                  <VscDebugDisconnect size={18} />
                 </span>
                 <span>Disconnect wallet</span>
               </button>

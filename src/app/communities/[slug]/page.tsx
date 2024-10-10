@@ -1,4 +1,6 @@
+import DocumentIcon from "@/components/custom-icons/DocumentIcon";
 import { HomeIconOutline } from "@/components/custom-icons/HomeIcon";
+import PollIcon from "@/components/custom-icons/PollIcon";
 import RAvatar from "@/components/ui/avatar-compose";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import RPopover from "@/components/ui/popover-compose";
@@ -45,7 +47,7 @@ async function page({
   return (
     <>
       <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
-        <div className="border flex md:items-center space-y-3 md:space-y-0 flex-col md:flex-row justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
+        <div className="border flex md:items-center space-y-4 md:space-y-0 flex-col md:flex-row justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb activePath={community_name} />
 
           <div className="flex items-center space-x-3">
@@ -54,7 +56,7 @@ async function page({
               trigger={
                 <button
                   title="Create"
-                  className="bg-azure-2 flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 rounded-lg px-4 py-[0.625rem]"
+                  className="border border-accent flex items-center text-xs lg:text-sm font-medium text-mako space-x-2 rounded-lg px-4 py-[0.625rem]"
                 >
                   <LuPlus size={18} />
                   <span>Create</span>
@@ -69,7 +71,7 @@ async function page({
                 className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
               >
                 <span>
-                  <HomeIconOutline />
+                  <DocumentIcon />
                 </span>
                 <span>Proposal</span>
               </Link>
@@ -78,7 +80,7 @@ async function page({
                 className="flex items-center space-x-2 px-2 hover:bg-azure py-[0.375rem] text-xs text-mako"
               >
                 <span>
-                  <HomeIconOutline />
+                  <PollIcon />
                 </span>
                 <span>Poll</span>
               </Link>

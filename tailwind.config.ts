@@ -44,6 +44,8 @@ const config: Config = {
         "dove-gray": "#727375",
         azure: "#EEFBFC",
         "azure-2": "#E7F8F9",
+        "azure-3": "#EBFAF9",
+        cadet: "#609696",
         "alice-blue": "#EDF2F7",
         "old-lace": "#FFF4DF",
         "golden-rod": "#DB950D",

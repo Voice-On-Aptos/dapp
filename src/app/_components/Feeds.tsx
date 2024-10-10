@@ -16,19 +16,20 @@ const Feeds = ({ data }: { data: any }) => {
         </div>
       ) : null}
       <div className="space-y-3 max-w-[43.625rem]">
-        {feed?.map((feed: any, index: number) => {
-          if (feed?.type === "post") {
-            return <PostCard key={index} data={feed?.data} />;
-          }
-          if (feed?.type === "poll") {
-            return <PollCard key={index} data={feed?.data} />;
-          }
+        {typeof feed === "object" &&
+          feed?.map((feed: any, index: number) => {
+            if (feed?.type === "post") {
+              return <PostCard key={index} data={feed?.data} />;
+            }
+            if (feed?.type === "poll") {
+              return <PollCard key={index} data={feed?.data} />;
+            }
 
-          if (feed?.type === "proposal") {
-            return <ProposalCard key={index} data={feed?.data} />;
-          }
-          return <></>;
-        })}
+            if (feed?.type === "proposal") {
+              return <ProposalCard key={index} data={feed?.data} />;
+            }
+            return <></>;
+          })}
       </div>
     </>
   );

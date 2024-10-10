@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import useCommunity from "@/hooks/use-community";
+import { useGeneratePoll } from "@/hooks/use-generate";
 import useIsMember from "@/hooks/use-is-member";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,6 +52,8 @@ const CreatePoll = ({ communityId }: { communityId: string }) => {
 
   const { community } = useCommunity(communityId);
   const { isMember, address, user } = useIsMember(community);
+
+  const { isPending, data, isSuccess } = useGeneratePoll();
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

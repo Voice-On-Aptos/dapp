@@ -1,5 +1,5 @@
 "use client";
-import RAvatar from "@/components/ui/avatar-compose";
+import ChartIcon from "@/components/custom-icons/ChartIcon";
 import useUser from "@/hooks/use-user";
 import Link from "next/link";
 import React from "react";
@@ -18,7 +18,7 @@ const UserEngagements = ({ community }: Props) => {
           title="My Engagement"
           className="flex items-center space-x-2 border text-xs lg:text-sm font-medium border-gainsboro-2 text-mako rounded-lg px-4 py-[0.625rem]"
         >
-          <RAvatar />
+          <ChartIcon />
           <span>My Engagement</span>
         </Link>
       ) : null}

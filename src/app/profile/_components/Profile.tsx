@@ -25,8 +25,7 @@ const Profile = () => {
   const [username, setUsername] = useState("");
   const [country, setCountry] = React.useState("");
   const { user, isLoading } = useUser();
-  const [updating, setUpdating] = useState(false);
-  const updateUserProfile = useUpdateUserProfile();
+  const { updateUserProfile, isPending: updating } = useUpdateUserProfile();
 
   useEffect(() => {
     if (user) {
@@ -37,22 +36,23 @@ const Profile = () => {
   }, [user]);
 
   const updateUserHandler = async () => {
-    setUpdating(true);
     try {
-      await updateUserProfile(account?.address!, {
-        email,
-        username,
-        address: account?.address || "",
-        country,
+      await updateUserProfile({
+        address: account?.address!,
+        payload: {
+          email,
+          username,
+          address: account?.address || "",
+          country,
+        },
       });
 
       toast("Successfully updated profile");
     } catch (error: any) {
-      toast.error(error || "Failed to update profile", {
+      toast.error(error?.message || "Failed to update profile", {
         className: "error-message",
       });
     } finally {
-      setUpdating(false);
       setEditState(false);
     }
   };
