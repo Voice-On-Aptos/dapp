@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const fetcher = (url: string, address: string) =>
-  fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
+  fetch(`https://voice-on-aptos.lm.r.appspot.com/api/v1${url}`, {
     headers: {
       Authorization: `Bearer ${address}`,
     },
@@ -18,7 +18,7 @@ export const useGeneratePost = () => {
     mutationKey: ["generate-post-content"],
     mutationFn: async () => {
       try {
-        const response = await fetcher("/ai/generate/post", address);
+        const response = await fetcher("/generate/post", address);
         return response;
       } catch (error) {
         throw new Error("Failed to generate post content");
@@ -40,7 +40,7 @@ export const useGenerateProposal = () => {
     mutationKey: ["generate-proposal-content"],
     mutationFn: async () => {
       try {
-        const response = await fetcher("/ai/generate/proposal", address);
+        const response = await fetcher("/generate/proposal", address);
         return response;
       } catch (error) {
         throw new Error("Failed to generate proposal content");
@@ -62,7 +62,7 @@ export const useGeneratePoll = () => {
     mutationKey: ["generate-poll-content"],
     mutationFn: async () => {
       try {
-        const response = await fetcher("/ai/generate/poll", address);
+        const response = await fetcher("/generate/poll", address);
         return response;
       } catch (error) {
         throw new Error("Failed to generate poll content");

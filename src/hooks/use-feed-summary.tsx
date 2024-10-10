@@ -3,7 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 
 const fetcher = (url: string) =>
-  fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`).then((r) => r.json());
+  fetch(`https://voice-on-aptos.lm.r.appspot.com/api/v1${url}`).then((r) =>
+    r.json()
+  );
 
 const useFeedSummarizer = (enabled: boolean = false) => {
   return useQuery({
