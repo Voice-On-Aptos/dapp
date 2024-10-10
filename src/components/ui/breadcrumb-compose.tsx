@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
 import React from "react";
 
 interface PathProps {
@@ -24,11 +25,10 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink
-            href={basePath?.href || "/communities"}
-            className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
-          >
-            {basePath?.label ?? "Communities"}
+          <BreadcrumbLink className="text-base lg:text-s20 capitalize text-dark-gray font-medium">
+            <Link href={basePath?.href || "/communities"}>
+              {basePath?.label ?? "Communities"}
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator className="text-base lg:text-s20 text-dark-gray font-medium">
@@ -38,11 +38,8 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
         {prevPaths?.map((path, index) => (
           <React.Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                href={path?.href}
-                className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
-              >
-                {path?.label}
+              <BreadcrumbLink className="text-base lg:text-s20 capitalize text-dark-gray font-medium">
+                <Link href={path?.href}>{path?.label}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator className="text-base lg:text-s20 font-medium text-dark-gray">

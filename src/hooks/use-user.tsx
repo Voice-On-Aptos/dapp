@@ -13,7 +13,7 @@ const useUser = () => {
   const { account } = useWallet();
   const address = account?.address || "";
 
-  const { data, error, isLoading } = useQuery({
+  const { data, isError, error, isLoading } = useQuery({
     queryKey: [`user`, address],
     queryFn: () => fetcher("/user", address),
     enabled: !!address,
@@ -22,7 +22,8 @@ const useUser = () => {
   return {
     user: data,
     isLoading,
-    isError: error,
+    isError,
+    error,
   };
 };
 

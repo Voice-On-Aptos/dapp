@@ -101,7 +101,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
 
       form.setValue("token_address", text);
     } catch (error) {
-      console.log("Failed to read clipboard");
+      // console.log("Failed to read clipboard");
     }
   };
 

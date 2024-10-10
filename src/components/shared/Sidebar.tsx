@@ -15,6 +15,7 @@ import { LuPlus } from "react-icons/lu";
 import { HomeIcon, HomeIconOutline } from "../custom-icons/HomeIcon";
 import NotificationIcon from "../custom-icons/NotificationIcon";
 import RAvatar from "../ui/avatar-compose";
+import { AudioLines } from "lucide-react";
 
 const routes = [
   {
@@ -25,8 +26,8 @@ const routes = [
   },
   {
     label: "Communities",
-    Icon: <HomeIconOutline />,
-    activeIcon: <HomeIcon />,
+    Icon: <AudioLines size={16} />,
+    activeIcon: <AudioLines size={16} />,
     href: "/communities",
   },
 ];
