@@ -5,6 +5,7 @@ import UserFetcher from "@/components/UserFetcher";
 import AptosWalletProvider from "@/providers/aptos-wallet";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import ReactQuery from "../providers/react-query";
 import "./globals.css";
 
 const helvetica_neue = localFont({
@@ -75,14 +76,16 @@ export default function RootLayout({
     <html lang="en">
       <body className={`relative ${helvetica_neue.className}`}>
         <AptosWalletProvider>
-          <Toaster />
-          <Navbar />
-          <div className="flex items-start bg-white">
-            <Sidebar />
-            <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
-              <UserFetcher>{children}</UserFetcher>
-            </main>
-          </div>
+          <ReactQuery>
+            <Toaster />
+            <Navbar />
+            <div className="flex items-start bg-white">
+              <Sidebar />
+              <main className="min-h-dvh w-full pb-10 lg:pb-[3.75rem] px-4 md:px-6 lg:px-12 1xl:px-[5.375rem] bg-white-smoke-2/30">
+                <UserFetcher>{children}</UserFetcher>
+              </main>
+            </div>
+          </ReactQuery>
         </AptosWalletProvider>
       </body>
     </html>

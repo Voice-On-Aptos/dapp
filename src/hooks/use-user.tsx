@@ -1,6 +1,6 @@
 "use client";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import useSWR, { useSWRConfig } from "swr";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const fetcher = (url: string, address: string) =>
   fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
@@ -12,14 +12,12 @@ const fetcher = (url: string, address: string) =>
 const useUser = () => {
   const { account } = useWallet();
   const address = account?.address || "";
-  const { data, error, isLoading } = useSWR(
-    address ? [`/user`, address] : null,
-    ([url]) => fetcher(url, address),
-    {
-      revalidateOnMount: false,
-      revalidateOnFocus: false,
-    }
-  );
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: [`user`, address],
+    queryFn: () => fetcher("/user", address),
+    enabled: !!address,
+  });
 
   return {
     user: data,
@@ -29,36 +27,44 @@ const useUser = () => {
 };
 
 export const useUpdateUserProfile = () => {
-  const { mutate } = useSWRConfig();
+  const queryClient = useQueryClient();
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async ({
+      address,
+      payload,
+    }: {
+      address: string;
+      payload: Record<string, any>;
+    }) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${address}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
-  const updateUserProfile = async (
-    address: string,
-    payload: Record<string, any>
-  ) => {
-    // Send the update request
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/user`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${address}`,
-        },
-        body: JSON.stringify(payload),
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "Failed to update the user profile");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to update the user profile");
-    }
+      const updatedProfile = await response.json();
+      return updatedProfile;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ["user", data?.address],
+      });
+    },
+  });
 
-    const updatedProfile = await response.json();
-
-    // Update the cache with the new profile data
-    mutate([`/user`, address], updatedProfile, false);
-  };
-
-  return updateUserProfile;
+  return { updateUserProfile: mutateAsync, isPending };
 };
 
 export default useUser;

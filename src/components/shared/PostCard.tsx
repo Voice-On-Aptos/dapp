@@ -126,28 +126,23 @@ const PostCard = ({ data }: { data: Post }) => {
           {/* <MdMoreHoriz size={16} /> */}
         </div>
       </div>
-      <Link href={`/posts/${data?._id}`} className="block">
-        {/* rich text content */}
-        <div className="mb-[0.9375rem]">
-          <p className="text-sm text-mako whitespace-pre-wrap">
-            {data?.content}
-          </p>
-        </div>
-
-        <div className="bg-white-smoke-5/[58%] mb-[0.625rem] flex items-center space-x-[0.875rem] px-2 py-0.5 rounded-lg">
-          <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
-            <ClapIcon />
-            <span>{applauds}</span>
-          </span>
-          <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
-            <VoiceOutlineIcon className="text-sun-glow" />
-            <span>{data?.lentVoices?.length}</span>
-          </span>
-          <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
-            <MessageIcon />
-            <span>{data?.comments || 0}</span>
-          </span>
-          {/* <div className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
+      <Link href={`/posts/${data?._id}`} className="block mb-[0.9375rem]">
+        <p className="text-sm text-mako whitespace-pre-wrap">{data?.content}</p>
+      </Link>
+      <div className="bg-white-smoke-5/[58%] mb-[0.625rem] flex items-center space-x-[0.875rem] px-2 py-0.5 rounded-lg">
+        <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
+          <ClapIcon />
+          <span>{applauds}</span>
+        </span>
+        <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
+          <VoiceOutlineIcon className="text-sun-glow" />
+          <span>{data?.lentVoices?.length}</span>
+        </span>
+        <span className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
+          <MessageIcon />
+          <span>{data?.comments || 0}</span>
+        </span>
+        {/* <div className="flex items-center py-[0.46875rem] space-x-1 text-xs text-mako">
             <span className="flex flex-row-reverse items-center -space-x-1">
               <RAvatar className="-ml-1" />
               <RAvatar />
@@ -155,8 +150,8 @@ const PostCard = ({ data }: { data: Post }) => {
             </span>
             <span>Seen by {formatLargeNumber(data?.seenBy?.length)}</span>
           </div> */}
-        </div>
-      </Link>
+      </div>
+
       <div className="border-t border-gallery/[68%] pt-[0.625rem] flex items-center flex-wrap gap-2">
         <div className="flex items-center rounded-3xl min-w-[14.6875rem] py-[0.21875rem] px-[0.3125rem] space-x-[0.375rem] text-sm text-mako border border-athens">
           <RAvatar src={user?.profilePhoto?.url} className="size-[1.375rem]" />

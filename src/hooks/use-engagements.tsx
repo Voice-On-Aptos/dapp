@@ -1,6 +1,6 @@
 "use client";
 
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 
 const fetcher = (url: string, address: string) =>
   fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${url}`, {
@@ -14,16 +14,12 @@ const useUserEngagements = (
   community: string,
   userId: string
 ) => {
-  console.log({ address, community, userId });
-  const { data, error, isLoading } = useSWR(
-    address
-      ? [`/community/${community}/engagements?userId=${userId}`, address]
-      : null,
-    ([url]) => fetcher(url, address),
-    {
-      revalidateOnMount: false,
-    }
-  );
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["engagement", community, userId, address],
+    queryFn: () =>
+      fetcher(`/community/${community}/engagements?userId=${userId}`, address),
+    enabled: !!address && !!community && !!userId,
+  });
 
   return {
     engagements: data,
