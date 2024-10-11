@@ -28,7 +28,7 @@ const GenerateFeedSummary = () => {
       >
         <div className="mt-4">
           {isLoading || isFetching ? (
-            <span className="rounded-[0.125rem] block bg-squeeze min-h-32 animate-pulse"></span>
+            <span className="rounded-[0.125rem] block bg-dove-gray min-h-32 animate-pulse"></span>
           ) : isError ? (
             <p className="text-xs lg:text-sm text-scarlet text-center whitespace-pre-wrap">
               Couldn&apos;t generate feed summary

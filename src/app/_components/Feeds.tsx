@@ -11,7 +11,7 @@ const Feeds = ({ data }: { data: any }) => {
   return (
     <>
       {isLoading || isFetching ? (
-        <div className="border flex items-center justify-center mt-4 mb-4 lg:mt-5 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
+        <div className="border flex items-center max-w-[43.625rem] justify-center mt-4 mb-4 lg:mt-5 max-w-[62.125rem] bg-white border-white-smoke-4 rounded-lg py-6 px-5">
           <span className="border-2 border-accent rounded-full size-4 lg:size-8 border-r-transparent animate-spin block"></span>
         </div>
       ) : null}
