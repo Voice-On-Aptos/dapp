@@ -32,7 +32,7 @@
   }
 
   .error-message {
-    @apply text-scarlet bg-red-100
+    @apply text-scarlet bg-red-100;
   }
 }
 
@@ -57,5 +57,5 @@
 }
 
 .wallet-button {
-  @apply !bg-accent hover:!text-white hover:!bg-teal !rounded-lg !px-4 !py-[0.625rem] !font-medium !text-sm;
+  @apply !bg-accent hover:!text-white !w-full hover:!bg-teal !rounded-lg !px-4 !py-[0.625rem] !font-medium !text-sm;
 }

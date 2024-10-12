@@ -18,7 +18,12 @@ const RDialog = ({ children, trigger, contentClassName = "w-full" }: Props) => {
   return (
     <Dialog>
       <DialogTrigger>{trigger}</DialogTrigger>
-      <DialogContent className={contentClassName}>{children}</DialogContent>
+      <DialogContent className={contentClassName}>
+        <DialogTitle hidden>
+          <DialogHeader>Voice on Aptos</DialogHeader>
+        </DialogTitle>
+        {children}
+      </DialogContent>
     </Dialog>
   );
 };

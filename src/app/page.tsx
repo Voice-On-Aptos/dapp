@@ -2,7 +2,7 @@ import CompleteProfile from "@/components/shared/CompleteProfile";
 import PostCard from "@/components/shared/PostCard";
 import RSelect from "@/components/ui/select-input";
 import { getFeed } from "@/services/feed";
-import React from "react";
+import React, { Suspense } from "react";
 import Feeds from "./_components/Feeds";
 import GenerateFeedSummary from "./_components/GenerateFeedSummary";
 
@@ -23,9 +23,9 @@ export default async function Page() {
         /> */}
         <GenerateFeedSummary />
       </header>
-      <section>
+      <Suspense>
         <Feeds data={feed} />
-      </section>
+      </Suspense>
     </>
   );
 }
