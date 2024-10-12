@@ -5,6 +5,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
+import { BsTelegram } from "react-icons/bs";
 import { IoMenu } from "react-icons/io5";
 import NotificationIcon from "../custom-icons/NotificationIcon";
 import VoiceIcon from "../custom-icons/VoiceIcon";
@@ -51,10 +52,10 @@ const Navbar = () => {
             target="_blank"
             className="flex items-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]"
           >
-            <VoiceIcon />
+            <BsTelegram color="#24A1DE" size={18} />
             {/* <span className="text-base font-medium text-mako">0</span> */}
             <span className="text-sm text-dove-gray font-normal">
-              Join community
+              Join Telegram
             </span>
           </Link>
           <span className="border-l border-athens inline-block py-4" />
@@ -86,10 +87,10 @@ const Navbar = () => {
                 target="_blank"
                 className="flex items-center w-full justify-center space-x-2 border border-athens rounded-lg px-4 py-[0.5625rem]"
               >
-                <VoiceIcon />
+                <BsTelegram color="#24A1DE" size={18} />
                 {/* <span className="text-base font-medium text-mako">0</span> */}
                 <span className="text-sm text-dove-gray font-normal">
-                  Join community
+                  Join Telegram
                 </span>
               </Link>
               {connected ? <AccountMenu /> : <WalletConnectButton />}
