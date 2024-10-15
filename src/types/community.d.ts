@@ -11,7 +11,7 @@ export interface Community {
   _id: string;
   name: string;
   description: string;
-  token_address: string;
+  contract_address: string;
   creator: { address: string };
   twitter: string;
   website: string;
@@ -41,10 +41,10 @@ export interface Logo {
 }
 
 export interface ConfigProps {
-  post: Post,
-  comment: Comment,
-  proposal: Proposal,
-  poll: Poll,
+  post: Post;
+  comment: Comment;
+  proposal: Proposal;
+  poll: Poll;
 }
 
 export interface Post {

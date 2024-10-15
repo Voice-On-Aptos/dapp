@@ -26,8 +26,8 @@ const formSchema = z.object({
   description: z.string().min(2, {
     message: "Description must be at least 2 characters.",
   }),
-  token_address: z.string().min(2, {
-    message: "Token address must be at least 2 characters.",
+  contract_address: z.string().min(2, {
+    message: "Contract address must be at least 2 characters.",
   }),
   twitter: z.string().url().min(2, {
     message: "Twitter must be at least 2 characters.",
@@ -60,7 +60,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
     defaultValues: {
       name: "",
       description: "",
-      token_address: "",
+      contract_address: "",
       twitter: "",
       website: "",
     },
@@ -99,7 +99,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
     try {
       const text = await navigator.clipboard.readText();
 
-      form.setValue("token_address", text);
+      form.setValue("contract_address", text);
     } catch (error) {
       // console.log("Failed to read clipboard");
     }
@@ -175,11 +175,11 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
 
           <FormField
             control={form.control}
-            name="token_address"
+            name="contract_address"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="font-normal text-sm text-mako">
-                  Token address
+                  Contract address
                 </FormLabel>
                 <FormControl>
                   <div className="relative">

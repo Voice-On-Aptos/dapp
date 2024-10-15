@@ -238,7 +238,7 @@ const ReviewCommunity = () => {
             criterias={data?.criterias || []}
             members={[]}
             disableJoin
-            token_address={data?.token_address || ""}
+            contract_address={data?.contract_address || ""}
             creator={account?.address || ""}
             communityId=""
             config={null}

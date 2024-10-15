@@ -118,7 +118,7 @@ async function page({
           <CommunityCriteria
             members={community?.members || []}
             criterias={community?.criterias || []}
-            token_address={community?.token_address}
+            contract_address={community?.contract_address}
             creator={community?.creator?.address}
             config={{
               post: community?.post || null,
