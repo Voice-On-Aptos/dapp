@@ -229,7 +229,12 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
                         </FormLabel>
                         <FormControl>
                           <Textarea
-                            className="border border-alice-blue min-h-[9rem] placeholder:text-gray placeholder:text-xs text-sm text-mako w-full block resize-none p-[0.875rem] rounded-lg"
+                            className={cn(
+                              "border border-alice-blue min-h-[9rem] placeholder:text-gray placeholder:text-xs text-sm text-mako w-full block resize-none p-[0.875rem] rounded-lg",
+                              {
+                                "border-scarlet": content.length > 1000,
+                              }
+                            )}
                             placeholder="Enter description"
                             {...field}
                           />
@@ -360,7 +365,7 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
               {currentStep === 0 ? (
                 <button
                   type="button"
-                  disabled={!title || !content}
+                  disabled={!title || !content || content?.length > 1000}
                   onClick={() => setCurrentStep(1)}
                   className="bg-accent disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
                 >

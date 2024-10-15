@@ -39,11 +39,12 @@ const formSchema = z.object({
   banner: z.array(z.instanceof(File)),
 });
 
-const FormButton = () => {
+const FormButton = ({ disabled }: { disabled: boolean }) => {
   return (
     <button
+      disabled={disabled}
       className={cn(
-        "bg-accent px-4 py-2.5 w-fit lg:px-[2.5rem] ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+        "bg-accent px-4 py-2.5 w-fit lg:px-[2.5rem] disabled:opacity-50 disabled:cursor-not-allowed ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
       )}
     >
       {"Continue"}
@@ -139,7 +140,12 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
                   </FormLabel>
                   <FormControl>
                     <Textarea
-                      className="border border-alice-blue min-h-[9rem] placeholder:text-gray placeholder:text-xs text-sm text-mako w-full block resize-none p-[0.875rem] rounded-lg"
+                      className={cn(
+                        "border border-alice-blue min-h-[9rem] placeholder:text-gray placeholder:text-xs text-sm text-mako w-full block resize-none p-[0.875rem] rounded-lg",
+                        {
+                          "border-scarlet": content.length > 1000,
+                        }
+                      )}
                       placeholder="Briefly describe your project"
                       {...field}
                     />
@@ -301,7 +307,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
           />
         </div>
 
-        <FormButton />
+        <FormButton disabled={content?.length > 1000} />
       </form>
     </Form>
   );
