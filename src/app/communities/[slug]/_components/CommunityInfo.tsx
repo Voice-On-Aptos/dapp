@@ -86,7 +86,7 @@ const CommunityInfo = ({
       <div className="text-xs text-mako">
         <p
           className={cn("block", {
-            "line-clamp-5 truncate inline": !show,
+            "line-clamp-3 break-words inline-block": !show,
           })}
         >
           {description}

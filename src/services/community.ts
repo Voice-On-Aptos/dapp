@@ -7,6 +7,7 @@ export async function getAllCommunities(page = 1, limit: number = 30) {
       {
         next: {
           tags: ["all-communities"],
+          revalidate: 600,
         },
       }
     );
@@ -19,7 +20,12 @@ export async function getAllCommunities(page = 1, limit: number = 30) {
 export async function getPopularCommunities(page = 1, limit: number = 30) {
   try {
     const response = await fetch(
-      `${process.env.API_BASE_URL}/community/popular?page=${page}&limit=${limit}`
+      `${process.env.API_BASE_URL}/community/popular?page=${page}&limit=${limit}`,
+      {
+        next: {
+          revalidate: 600,
+        },
+      }
     );
 
     return await response.json();
@@ -35,6 +41,7 @@ export async function getNewCommunities(page = 1, limit: number = 30) {
       {
         next: {
           tags: ["new-communities"],
+          revalidate: 600,
         },
       }
     );
