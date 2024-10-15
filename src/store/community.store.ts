@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface DataProps {
   name: string;
@@ -37,10 +38,18 @@ type StoreProps = {
   clear: () => void;
 };
 
-const useCreateCommunityStore = create<StoreProps>((set) => ({
-  data: null,
-  update: (value) => set((state) => ({ data: { ...state.data, ...value } })),
-  clear: () => set({ data: null }),
-}));
+const useCreateCommunityStore = create<StoreProps>()(
+  persist(
+    (set) => ({
+      data: null,
+      update: (value) =>
+        set((state) => ({ data: { ...state.data, ...value } })),
+      clear: () => set({ data: null }),
+    }),
+    {
+      name: "Community",
+    }
+  )
+);
 
 export default useCreateCommunityStore;

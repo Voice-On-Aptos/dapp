@@ -1,4 +1,5 @@
 "use client";
+import EmptyState from "@/components/shared/EmptyState";
 import PollCard from "@/components/shared/PollCard";
 import PostCard from "@/components/shared/PostCard";
 import ProposalCard from "@/components/shared/ProposalCard";
@@ -15,22 +16,26 @@ const Feeds = ({ data }: { data: any }) => {
           <span className="border-2 border-accent rounded-full size-4 lg:size-8 border-r-transparent animate-spin block"></span>
         </div>
       ) : null}
-      <div className="space-y-3 max-w-[43.625rem]">
-        {typeof feed === "object" &&
-          feed?.map((feed: any, index: number) => {
-            if (feed?.type === "post") {
-              return <PostCard key={index} data={feed?.data} />;
-            }
-            if (feed?.type === "poll") {
-              return <PollCard key={index} data={feed?.data} />;
-            }
+      {feed?.length > 0 ? (
+        <div className="space-y-3 max-w-[43.625rem]">
+          {typeof feed === "object" &&
+            feed?.map((feed: any, index: number) => {
+              if (feed?.type === "post") {
+                return <PostCard key={index} data={feed?.data} />;
+              }
+              if (feed?.type === "poll") {
+                return <PollCard key={index} data={feed?.data} />;
+              }
 
-            if (feed?.type === "proposal") {
-              return <ProposalCard key={index} data={feed?.data} />;
-            }
-            return <></>;
-          })}
-      </div>
+              if (feed?.type === "proposal") {
+                return <ProposalCard key={index} data={feed?.data} />;
+              }
+              return <></>;
+            })}
+        </div>
+      ) : (
+        <EmptyState />
+      )}
     </>
   );
 };

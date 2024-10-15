@@ -30,7 +30,7 @@ export async function createProposal(
       }
     );
 
-    if (response.status != 201) {
+    if (!response.ok) {
       throw new Error(`Failed to create proposal: ${response.statusText}`);
     }
 

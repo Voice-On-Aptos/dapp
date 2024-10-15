@@ -185,7 +185,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
                   <div className="relative">
                     <Input
                       className="border-alice-blue border shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
-                      placeholder="For e.g; SDFYJHJLO5465689igDHGJJGYJHG"
+                      placeholder="For e.g: 0x8967b71bcc6143d42b5a99e5ee07ec6201a05e1b070c98486a055dd8374114ee"
                       {...field}
                     />
                     <button
