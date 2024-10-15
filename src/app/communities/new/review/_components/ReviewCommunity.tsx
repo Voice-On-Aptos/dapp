@@ -130,10 +130,10 @@ const CreateCommunity = () => {
         setHash(contract_response.hash);
         toast("Successfully created a new community");
 
-        if (!creatingCommunity) setCreatingCommunityState(true);
-
         setCreatedCommunity(true);
-        // update({});
+        if (!creatingCommunity) {
+          router.push(`/communities/${id}`);
+        }
       } else {
         toast.error("Failed to create community on chain", {
           className: "error-message",

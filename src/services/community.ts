@@ -7,7 +7,7 @@ export async function getAllCommunities(page = 1, limit: number = 30) {
       {
         next: {
           tags: ["all-communities"],
-          revalidate: 600,
+          revalidate: 60,
         },
       }
     );
@@ -23,7 +23,7 @@ export async function getPopularCommunities(page = 1, limit: number = 30) {
       `${process.env.API_BASE_URL}/community/popular?page=${page}&limit=${limit}`,
       {
         next: {
-          revalidate: 600,
+          revalidate: 60,
         },
       }
     );
@@ -41,7 +41,7 @@ export async function getNewCommunities(page = 1, limit: number = 30) {
       {
         next: {
           tags: ["new-communities"],
-          revalidate: 600,
+          revalidate: 60,
         },
       }
     );

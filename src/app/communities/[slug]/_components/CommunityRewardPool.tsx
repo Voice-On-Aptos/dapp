@@ -24,7 +24,7 @@ const CommunityRewardPool = ({ amount }: CommunityRewardPoolProps) => {
         <div className="mt-4">
           <h4 className="text-xs text-abbey mb-1">Total Amount</h4>
           <h5 className="font-bold text-shark text-lg lg:text-s20">
-            {currencyFormatter(amount)}
+            {currencyFormatter(amount, 0, "$")}
           </h5>
           <ul className="mt-4 text-xs text-mako space-y-2">
             {chartData?.map((data, index) => (
