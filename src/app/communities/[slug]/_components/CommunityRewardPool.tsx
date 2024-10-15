@@ -37,7 +37,7 @@ const CommunityRewardPool = ({ amount }: CommunityRewardPoolProps) => {
                 />
                 {data?.name}{" "}
                 <span className="font-bold text-shark">
-                  {currencyFormatter(data?.amount)}
+                  {currencyFormatter(data?.amount, 0, "$")}
                 </span>
               </li>
             ))}
