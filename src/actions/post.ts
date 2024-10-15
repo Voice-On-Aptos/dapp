@@ -19,7 +19,7 @@ export async function createPost(address: string, payload: CreatePostProps) {
       body: JSON.stringify(payload),
     });
 
-    if (response.status !== 201) {
+    if (!response.ok) {
       throw new Error(`Failed to create post: ${response.statusText}`);
     }
 

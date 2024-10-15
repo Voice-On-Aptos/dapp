@@ -5,6 +5,7 @@ import CommunityInfo from "@/app/communities/[slug]/_components/CommunityInfo";
 import CommunityPosts from "@/app/communities/[slug]/_components/CommunityPosts";
 import CommunityRewardPool from "@/app/communities/[slug]/_components/CommunityRewardPool";
 import CommunityStats from "@/app/communities/[slug]/_components/CommunityStats";
+import CompleteProfile from "@/components/shared/CompleteProfile";
 import GoBack from "@/components/shared/GoBack";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
@@ -26,7 +27,7 @@ const CreateCommunity = () => {
   const [createdCommunity, setCreatedCommunity] = useState(false);
   const { account, signAndSubmitTransaction } = useWallet();
   const address = account?.address || "";
-  const { data } = useCreateCommunityStore();
+  const { data, update } = useCreateCommunityStore();
   const { user } = useUser();
   const [communityId, setCommunityId] = useState("");
   const [hash, setHash] = useState("");
@@ -88,8 +89,8 @@ const CreateCommunity = () => {
         creator: user?._id,
       });
 
-      if (response?.message) {
-        toast.error(response?.message, {
+      if (response?.message || !response?._id) {
+        toast.error(response?.message || "Failed to create community", {
           className: "error-message",
         });
         setCreatingCommunityState(false);
@@ -129,6 +130,7 @@ const CreateCommunity = () => {
         setHash(contract_response.hash);
         toast("Successfully created a new community");
         setCreatedCommunity(true);
+        update({});
       } else {
         toast.error("Failed to create community on chain", {
           className: "error-message",
@@ -189,7 +191,7 @@ const CreateCommunity = () => {
               href={EXPLORER(`/txn/${hash}`)}
               className="text-accent text-center text-xs lg:text-sm mt-3 underline block"
             >
-              View transaction
+              View transaction on chain
             </Link>
           </>
         ) : null}
@@ -198,55 +200,67 @@ const CreateCommunity = () => {
   );
 };
 
+const generateImageUrl = (data: any) => {
+  try {
+    if (typeof data === "string") return null;
+    return URL.createObjectURL(data);
+  } catch (error) {
+    return null;
+  }
+};
+
 const ReviewCommunity = () => {
   const { data } = useCreateCommunityStore();
   const { account } = useWallet();
   return (
-    <section className="bg-white rounded-lg border border-alice-blue p-4 lg:p-6">
-      <div className="flex flex-col lg:flex-row lg:justify-between mb-4 lg:items-center gap-4">
-        <span className="flex items-center space-x-2 lg:space-x-4">
-          <GoBack />
-          <h3 className="font-medium text-sm text-mako md:text-base lg:text-lg">
-            Review Details
-          </h3>
-        </span>
-        <CreateCommunity />
-      </div>
-      <div className="max-w-[62.125rem] overflow-hidden relative bg-white-smoke-4 rounded-lg my-[0.875rem] min-h-[11.9375rem]">
-        {data?.banner ? (
-          <Image
-            className="object-cover object-center"
-            src={URL.createObjectURL(data?.banner)}
-            alt="banner"
-            fill
-          />
-        ) : null}
-      </div>
-      <div className="lg:flex lg:items-start lg:space-x-[0.875rem]">
-        <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
-          <CommunityInfo
-            name={data?.name || ""}
-            description={data?.description || ""}
-            logo={data?.logo ? URL.createObjectURL(data?.logo) : ""}
-            creator={account?.address || ""}
-          />
-          <CommunityStats community="" members={0} proposals={0} polls={0} />
-          <CommunityPosts />
+    <>
+      <CompleteProfile />
+      <section className="bg-white rounded-lg border border-alice-blue p-4 lg:p-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between mb-4 lg:items-center gap-4">
+          <span className="flex items-center space-x-2 lg:space-x-4">
+            <GoBack />
+            <h3 className="font-medium text-sm text-mako md:text-base lg:text-lg">
+              Review Details
+            </h3>
+          </span>
+          <CreateCommunity />
         </div>
-        <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
-          <CommunityCriteria
-            criterias={data?.criterias || []}
-            members={[]}
-            disableJoin
-            contract_address={data?.contract_address || ""}
-            creator={account?.address || ""}
-            communityId=""
-            config={null}
-          />
-          <CommunityRewardPool amount={data?.token_to_distribute || 0} />
+        <div className="max-w-[62.125rem] overflow-hidden relative bg-white-smoke-4 rounded-lg my-[0.875rem] min-h-[11.9375rem]">
+          {data?.banner ? (
+            <Image
+              className="object-cover object-top"
+              src={generateImageUrl(data?.banner) ?? "/svgs/gradient-bg.svg"}
+              alt="banner"
+              fill
+            />
+          ) : null}
         </div>
-      </div>
-    </section>
+        <div className="lg:flex lg:items-start lg:space-x-[0.875rem]">
+          <div className="w-full lg:max-w-[41.125rem] space-y-[0.875rem]">
+            <CommunityInfo
+              name={data?.name || ""}
+              description={data?.description || ""}
+              logo={generateImageUrl(data?.logo) ?? ""}
+              creator={account?.address || ""}
+            />
+            <CommunityStats community="" members={0} proposals={0} polls={0} />
+            <CommunityPosts />
+          </div>
+          <div className="w-full lg:max-w-[20.125rem] lg:space-y-[0.875rem] sticky top-4">
+            <CommunityCriteria
+              criterias={data?.criterias || []}
+              members={[]}
+              disableJoin
+              contract_address={data?.contract_address || ""}
+              creator={account?.address || ""}
+              communityId=""
+              config={null}
+            />
+            <CommunityRewardPool amount={data?.token_to_distribute || 0} />
+          </div>
+        </div>
+      </section>
+    </>
   );
 };
 

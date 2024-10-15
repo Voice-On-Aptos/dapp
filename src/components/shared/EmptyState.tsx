@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 
-const EmptyState = ({ text = "No activities" }: { text?: string }) => {
+const EmptyState = ({ text = "No activities yet." }: { text?: string }) => {
   return (
     <div className="py-32 flex items-center flex-col justify-center lg:py-[12.5rem]">
       <Image

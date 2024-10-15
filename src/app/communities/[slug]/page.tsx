@@ -1,6 +1,7 @@
 import DocumentIcon from "@/components/custom-icons/DocumentIcon";
 import { HomeIconOutline } from "@/components/custom-icons/HomeIcon";
 import PollIcon from "@/components/custom-icons/PollIcon";
+import CompleteProfile from "@/components/shared/CompleteProfile";
 import RAvatar from "@/components/ui/avatar-compose";
 import RBreadcrumb from "@/components/ui/breadcrumb-compose";
 import RPopover from "@/components/ui/popover-compose";
@@ -46,6 +47,7 @@ async function page({
 
   return (
     <>
+      <CompleteProfile />
       <header className="mt-4 lg:mt-5 max-w-[62.125rem]">
         <div className="border flex md:items-center space-y-4 md:space-y-0 flex-col md:flex-row justify-between border-white-smoke-4 rounded-lg py-6 px-5 bg-white">
           <RBreadcrumb activePath={community_name} />
@@ -94,7 +96,7 @@ async function page({
             alt="Banner"
             fill
             src={community?.banner?.url}
-            className="object-cover object-center"
+            className="object-cover object-top"
           />
         ) : null}
       </section>

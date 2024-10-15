@@ -3,15 +3,16 @@ import CopyIcon from "@/components/custom-icons/CopyIcon";
 import WalletConnectButton from "@/components/shared/WalletConnectButton";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
+import { EXPLORER } from "@/constants";
 import useUser from "@/hooks/use-user";
 import { cn, shortenAddress } from "@/lib/utils";
+import { ConfigProps } from "@/types/community";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import { toast } from "sonner";
 import JoinOrLeaveCommunity from "./JoinOrLeaveCommunity";
-import { ConfigProps } from "@/types/community";
 
 interface AddressCardProps {
   href: string;
@@ -83,11 +84,15 @@ const CommunityCriteria = ({
         </ul>
         <div>
           <AddressCard
-            href="#"
+            href={EXPLORER(`/account/${contract_address}`)}
             title="CONTRACT ADDRESS"
             value={contract_address}
           />
-          <AddressCard href="#" title="CREATOR ADDRESS" value={creator} />
+          <AddressCard
+            href={EXPLORER(`/account/${creator}`)}
+            title="CREATOR ADDRESS"
+            value={creator}
+          />
         </div>
         <JoinOrLeaveCommunity
           members={members}

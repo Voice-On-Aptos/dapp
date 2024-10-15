@@ -21,7 +21,7 @@ export default async function Page() {
           options={["hot", "latest", "most liked"]}
           className="w-[4.9375rem] mt-[0.875rem] text-sm text-dove-gray border border-white-smoke-4 rounded-lg"
         /> */}
-        <GenerateFeedSummary />
+        {feed?.length > 0 ? <GenerateFeedSummary /> : null}
       </header>
       <Suspense>
         <Feeds data={feed} />

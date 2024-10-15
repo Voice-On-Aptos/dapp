@@ -57,13 +57,14 @@ export async function createCommunity(
       }
     );
 
-    if (response.status !== 201) {
+    if (!response.ok) {
       throw new Error(`Failed to create community: ${response.statusText}`);
     }
 
+    const data = await response.json();
     revalidateTag("all-communities");
     revalidateTag("new-communities");
-    return await response.json();
+    return data;
   } catch (error) {
     if (typeof error === "string") {
       return { error };
