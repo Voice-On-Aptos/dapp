@@ -27,7 +27,7 @@ const CreateCommunity = () => {
   const [createdCommunity, setCreatedCommunity] = useState(false);
   const { account, signAndSubmitTransaction } = useWallet();
   const address = account?.address || "";
-  const { data, update } = useCreateCommunityStore();
+  const { data } = useCreateCommunityStore();
   const { user } = useUser();
   const [communityId, setCommunityId] = useState("");
   const [hash, setHash] = useState("");
@@ -133,7 +133,7 @@ const CreateCommunity = () => {
         if (!creatingCommunity) setCreatingCommunityState(true);
 
         setCreatedCommunity(true);
-        update({});
+        // update({});
       } else {
         toast.error("Failed to create community on chain", {
           className: "error-message",

@@ -86,14 +86,16 @@ const CommunityInfo = ({
       <div className="text-xs text-mako">
         <p
           className={cn("block", {
-            "line-clamp-5 inline": !show,
+            "line-clamp-5 truncate inline": !show,
           })}
         >
           {description}
         </p>
         <button
           onClick={showMoreHandler}
-          className="underline inline-block ml-1"
+          className={cn("underline inline-block ml-1", {
+            "ml-0": show,
+          })}
         >
           {show ? "show less" : "see more"}
         </button>
