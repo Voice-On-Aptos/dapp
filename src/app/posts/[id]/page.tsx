@@ -51,6 +51,8 @@ async function page({
               comment: data?.community?.comment || null,
             }}
             communityId={data?.community?._id}
+            website={data?.community?.website || ""}
+            twitter={data?.community?.twitter || ""}
           />
         </div>
       </section>
