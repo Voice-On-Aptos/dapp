@@ -12,10 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
+import { createPollOnChain } from "@/entry-functions/create-poll";
 import useCommunity from "@/hooks/use-community";
 import { useGeneratePoll } from "@/hooks/use-generate";
 import useIsMember from "@/hooks/use-is-member";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn } from "@/lib/utils";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useFormStatus } from "react-dom";
@@ -53,7 +56,7 @@ const CreatePoll = ({ communityId }: { communityId: string }) => {
   const { community } = useCommunity(communityId);
   const { isMember, address, user } = useIsMember(community);
 
-  const { isPending, data, isSuccess } = useGeneratePoll();
+  const { signAndSubmitTransaction } = useWallet();
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -93,9 +96,38 @@ const CreatePoll = ({ communityId }: { communityId: string }) => {
       });
       return;
     }
-    toast("Successfully created a new poll");
-    form.reset();
-    setCreatingPollState(false);
+
+    const id = response?._id;
+
+    // Submit a create_poll entry function transaction
+    const contract_response = await signAndSubmitTransaction(
+      createPollOnChain({
+        community_id: communityId,
+        poll_id: id,
+        question: data?.question,
+        options,
+      })
+    );
+
+    if (!contract_response?.hash) return;
+
+    // Wait for the transaction to be committed to chain
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (committedTransactionResponse.success) {
+      toast("Successfully created a new poll");
+      form.reset();
+      setCreatingPollState(false);
+    } else {
+      toast.error("Failed to create poll on chain", {
+        className: "error-message",
+      });
+      setCreatingPollState(false);
+    }
   }
 
   return (

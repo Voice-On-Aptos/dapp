@@ -54,7 +54,7 @@ export const RewardPool = () => {
         </div>
       </div>
       <button
-        disabled={pending || !value || !endDate}
+        disabled={pending || !value?.value || !endDate}
         onClick={handler}
         className="bg-accent disabled:opacity-50 disabled:cursor-not-allowed px-4 py-2.5 w-fit ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
       >

@@ -287,7 +287,7 @@ export const BasicDetails = ({ nextHandler }: StepProps) => {
                       value={field.value}
                       onValueChange={field.onChange}
                       maxFileCount={1}
-                      maxSize={800 * 400}
+                      maxSize={1280 * 768}
                       // progresses={progresses}
                       // pass the onUpload function here for direct upload
                       // onUpload={uploadFiles}
