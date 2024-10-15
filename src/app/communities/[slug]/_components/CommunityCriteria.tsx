@@ -27,6 +27,7 @@ const AddressCard = ({ href, title, value }: AddressCardProps) => {
   };
   return (
     <Link
+      target="_blank"
       href={href}
       className="w-full bg-white text-mako p-3 lg:p-[0.875rem] border-t border-athens py-18 flex items-start justify-between"
     >
