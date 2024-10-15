@@ -129,6 +129,9 @@ const CreateCommunity = () => {
       if (committedTransactionResponse.success) {
         setHash(contract_response.hash);
         toast("Successfully created a new community");
+
+        if (!creatingCommunity) setCreatingCommunityState(true);
+
         setCreatedCommunity(true);
         update({});
       } else {
@@ -189,6 +192,7 @@ const CreateCommunity = () => {
             </Link>
             <Link
               href={EXPLORER(`/txn/${hash}`)}
+              target="_blank"
               className="text-accent text-center text-xs lg:text-sm mt-3 underline block"
             >
               View transaction on chain
