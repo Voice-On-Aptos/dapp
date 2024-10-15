@@ -186,7 +186,7 @@ const CreateCommunity = () => {
               View Community
             </Link>
             <Link
-              href={EXPLORER(`/tnx/${hash}`)}
+              href={EXPLORER(`/txn/${hash}`)}
               className="text-accent text-center text-xs lg:text-sm mt-3 underline block"
             >
               View transaction
