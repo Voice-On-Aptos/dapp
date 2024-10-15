@@ -18,9 +18,15 @@ interface AddressCardProps {
   href: string;
   title: string;
   value: string;
+  truncate?: boolean;
 }
 
-const AddressCard = ({ href, title, value }: AddressCardProps) => {
+const AddressCard = ({
+  href,
+  title,
+  value,
+  truncate = true,
+}: AddressCardProps) => {
   const copyHandler = () => {
     navigator.clipboard.writeText(value);
     toast("Address Copied.");
@@ -41,7 +47,7 @@ const AddressCard = ({ href, title, value }: AddressCardProps) => {
             onClick={copyHandler}
             className="text-xs text-abbey flex items-center space-x-[0.375rem]"
           >
-            <span>{shortenAddress(value)}</span>
+            <span>{truncate ? shortenAddress(value) : value}</span>
             <CopyIcon />
           </button>
         </span>
@@ -59,6 +65,8 @@ interface CommunityCriteriaProps {
   members: string[];
   communityId: string;
   config: ConfigProps | null;
+  website: string;
+  twitter: string;
 }
 
 const CommunityCriteria = ({
@@ -69,6 +77,8 @@ const CommunityCriteria = ({
   criterias,
   communityId,
   config,
+  website,
+  twitter,
 }: CommunityCriteriaProps) => {
   return (
     <>
@@ -94,6 +104,22 @@ const CommunityCriteria = ({
             title="CREATOR ADDRESS"
             value={creator}
           />
+          {website ? (
+            <AddressCard
+              href={website}
+              title="WEBSITE"
+              value={website}
+              truncate={false}
+            />
+          ) : null}
+          {twitter ? (
+            <AddressCard
+              href={twitter}
+              title="TWITTER"
+              value={twitter}
+              truncate={false}
+            />
+          ) : null}
         </div>
         <JoinOrLeaveCommunity
           members={members}

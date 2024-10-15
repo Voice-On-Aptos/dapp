@@ -62,8 +62,6 @@ export async function createCommunity(
     }
 
     const data = await response.json();
-    revalidateTag("all-communities");
-    revalidateTag("new-communities");
     return data;
   } catch (error) {
     if (typeof error === "string") {

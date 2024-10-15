@@ -129,6 +129,8 @@ async function page({
               comment: community?.comment || null,
             }}
             communityId={community?._id}
+            twitter={community?.twitter}
+            website={community?.website}
           />
           <CommunityRewardPool amount={community?.token_to_distribute || 0} />
         </div>

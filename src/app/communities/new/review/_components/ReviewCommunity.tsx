@@ -113,10 +113,7 @@ const CreateCommunity = () => {
           min_voice_power_poll: data?.poll?.minimum_voice_power || 1,
           min_voice_age_poll: data?.poll?.minimum_voice_power || 1,
         })
-      ).catch((error) => {
-        setCreatingCommunityState(false);
-        return;
-      });
+      );
 
       if (!contract_response?.hash) return;
 
@@ -259,6 +256,8 @@ const ReviewCommunity = () => {
               creator={account?.address || ""}
               communityId=""
               config={null}
+              twitter={data?.twitter || ""}
+              website={data?.website || ""}
             />
             <CommunityRewardPool amount={data?.token_to_distribute || 0} />
           </div>
