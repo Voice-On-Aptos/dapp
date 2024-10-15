@@ -14,9 +14,12 @@ import { Input } from "@/components/ui/input";
 import Modal from "@/components/ui/modal";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { createProposalOnChain } from "@/entry-functions/create-proposal";
 import useCommunity from "@/hooks/use-community";
 import useIsMember from "@/hooks/use-is-member";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn } from "@/lib/utils";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useFormStatus } from "react-dom";
@@ -81,6 +84,7 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
   ]);
   const { community } = useCommunity(communityId);
   const { isMember, address, user } = useIsMember(community);
+  const { signAndSubmitTransaction } = useWallet();
 
   const optionHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -122,9 +126,38 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
       });
       return;
     }
-    toast("Successfully created a new proposal");
-    form.reset();
-    setCreatingProposalState(false);
+
+    const id = response?._id;
+
+    // Submit a create_proposal entry function transaction
+    const contract_response = await signAndSubmitTransaction(
+      createProposalOnChain({
+        community_id: communityId,
+        proposal_id: id,
+        title: data?.title,
+        description: data?.description,
+      })
+    );
+
+    if (!contract_response?.hash) return;
+
+    // Wait for the transaction to be committed to chain
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (committedTransactionResponse.success) {
+      toast("Successfully created a new proposal");
+      form.reset();
+      setCreatingProposalState(false);
+    } else {
+      toast.error("Failed to create proposal on chain", {
+        className: "error-message",
+      });
+      setCreatingProposalState(false);
+    }
   }
 
   const title = form.watch("title");
@@ -247,6 +280,7 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
                                   "border-blue-chill":
                                     field.value === option?.value,
                                 })}
+                                disabled={option?.value === "weighted"}
                               />
                               <div>
                                 <FormLabel
@@ -280,7 +314,7 @@ const CreateProposal = ({ communityId }: { communityId: string }) => {
                           id={`${index + 1}`}
                           value={options?.[index] || ""}
                           onChange={optionHandler}
-                          readOnly
+                          disabled
                           className="border-alice-blue border capitalize shadow-none rounded-lg p-[0.875rem] text-mako text-xs placeholder:text-gray"
                           placeholder="Add Option"
                         />

@@ -4,10 +4,13 @@ import BubbleIcon from "@/components/custom-icons/BubbleIcon";
 import GalleryAddIcon from "@/components/custom-icons/GalleryAddIcon";
 import { VoiceCircleIcon } from "@/components/custom-icons/VoiceIcon";
 import Modal from "@/components/ui/modal";
+import { createPostOnChain } from "@/entry-functions/create-post";
 import useCommunity from "@/hooks/use-community";
 import { useGeneratePost } from "@/hooks/use-generate";
 import useIsMember from "@/hooks/use-is-member";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn } from "@/lib/utils";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import React, { useEffect, useState } from "react";
 import { RiAiGenerate } from "react-icons/ri";
 import { toast } from "sonner";
@@ -18,7 +21,7 @@ const CreatePost = ({ communityId }: { communityId: string }) => {
   const [isLoading, setLoadingState] = useState(false);
   const { community } = useCommunity(communityId);
   const { isMember, address, user } = useIsMember(community);
-
+  const { signAndSubmitTransaction } = useWallet();
   const { data, isPending, mutate, isSuccess } = useGeneratePost();
 
   useEffect(() => {
@@ -42,10 +45,40 @@ const CreatePost = ({ communityId }: { communityId: string }) => {
       setLoadingState(false);
       return;
     }
-    toast("Successfully created a new post");
-    setContent("");
-    setLoadingState(false);
-    setCreatingPostState(false);
+
+    const id = response?._id;
+    // Submit a create_post entry function transaction
+    const contract_response = await signAndSubmitTransaction(
+      createPostOnChain({
+        community_id: communityId,
+        post_id: id,
+        content,
+      })
+    ).catch((error) => {
+      setCreatingPostState(false);
+      return;
+    });
+
+    if (!contract_response?.hash) return;
+
+    // Wait for the transaction to be committed to chain
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (committedTransactionResponse.success) {
+      toast("Successfully created a new post");
+      setContent("");
+      setLoadingState(false);
+      setCreatingPostState(false);
+    } else {
+      toast.error("Failed to create post on chain", {
+        className: "error-message",
+      });
+      setLoadingState(false);
+    }
   }
 
   return (

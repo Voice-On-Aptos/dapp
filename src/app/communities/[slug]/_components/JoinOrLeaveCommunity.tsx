@@ -3,7 +3,10 @@ import { joinCommunity, leaveCommunity } from "@/actions/user";
 import WalletConnectButton from "@/components/shared/WalletConnectButton";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
+import { joinCommunityOnChain } from "@/entry-functions/join-community";
+import { leaveCommunityOnChain } from "@/entry-functions/leave-community";
 import useUser from "@/hooks/use-user";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn } from "@/lib/utils";
 import useCommunityStore from "@/store/communityConfig.store";
 import { ConfigProps } from "@/types/community";
@@ -27,7 +30,7 @@ const JoinOrLeaveCommunity = ({
   community,
   config,
 }: Props) => {
-  const { account, connected } = useWallet();
+  const { account, connected, signAndSubmitTransaction } = useWallet();
   const { isLoading, user } = useUser();
   const member = isLoading
     ? false
@@ -49,6 +52,31 @@ const JoinOrLeaveCommunity = ({
     // }
 
     setPending(true);
+    const contract_response = await signAndSubmitTransaction(
+      joinCommunityOnChain({
+        community_id: community,
+      })
+    ).catch((error) => {
+      setPending(false);
+      return;
+    });
+
+    if (!contract_response?.hash) return;
+
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (!committedTransactionResponse.success) {
+      toast.error("Failed to join community on chain", {
+        className: "error-message",
+      });
+      setPending(false);
+      return;
+    }
+
     const response = await joinCommunity(address!, community);
 
     if (response?.error) {
@@ -66,6 +94,32 @@ const JoinOrLeaveCommunity = ({
 
   const leaveCommunityHandler = async () => {
     setPending(true);
+
+    const contract_response = await signAndSubmitTransaction(
+      leaveCommunityOnChain({
+        community_id: community,
+      })
+    ).catch((error) => {
+      setPending(false);
+      return;
+    });
+
+    if (!contract_response?.hash) return;
+
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (!committedTransactionResponse.success) {
+      toast.error("Failed to leave community on chain", {
+        className: "error-message",
+      });
+      setPending(false);
+      return;
+    }
+
     const response = await leaveCommunity(address!, community);
 
     if (response?.error) {

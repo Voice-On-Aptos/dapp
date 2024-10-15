@@ -25,7 +25,10 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink className="text-base lg:text-s20 capitalize text-dark-gray font-medium">
+          <BreadcrumbLink
+            asChild
+            className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
+          >
             <Link href={basePath?.href || "/communities"}>
               {basePath?.label ?? "Communities"}
             </Link>
@@ -38,7 +41,10 @@ const RBreadcrumb = ({ basePath, prevPaths, activePath }: Props) => {
         {prevPaths?.map((path, index) => (
           <React.Fragment key={index}>
             <BreadcrumbItem>
-              <BreadcrumbLink className="text-base lg:text-s20 capitalize text-dark-gray font-medium">
+              <BreadcrumbLink
+                asChild
+                className="text-base lg:text-s20 capitalize text-dark-gray font-medium"
+              >
                 <Link href={path?.href}>{path?.label}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>

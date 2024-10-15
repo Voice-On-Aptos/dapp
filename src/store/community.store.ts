@@ -3,7 +3,7 @@ import { create } from "zustand";
 export interface DataProps {
   name: string;
   description: string;
-  token_address: string;
+  contract_address: string;
   twitter: string;
   website: string;
   criterias: string[];

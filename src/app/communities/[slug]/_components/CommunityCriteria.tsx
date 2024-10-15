@@ -52,7 +52,7 @@ const AddressCard = ({ href, title, value }: AddressCardProps) => {
 interface CommunityCriteriaProps {
   disableJoin?: boolean;
   creator: string;
-  token_address: string;
+  contract_address: string;
   criterias: string[];
   members: string[];
   communityId: string;
@@ -63,7 +63,7 @@ const CommunityCriteria = ({
   members,
   disableJoin,
   creator,
-  token_address,
+  contract_address,
   criterias,
   communityId,
   config,
@@ -82,7 +82,11 @@ const CommunityCriteria = ({
           ))}
         </ul>
         <div>
-          <AddressCard href="#" title="Token Address" value={token_address} />
+          <AddressCard
+            href="#"
+            title="CONTRACT ADDRESS"
+            value={contract_address}
+          />
           <AddressCard href="#" title="CREATOR ADDRESS" value={creator} />
         </div>
         <JoinOrLeaveCommunity

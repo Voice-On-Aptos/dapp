@@ -8,7 +8,10 @@ import CommunityStats from "@/app/communities/[slug]/_components/CommunityStats"
 import GoBack from "@/components/shared/GoBack";
 import RAvatar from "@/components/ui/avatar-compose";
 import Modal from "@/components/ui/modal";
+import { EXPLORER } from "@/constants";
+import { createCommunityOnChain } from "@/entry-functions/create-community";
 import useUser from "@/hooks/use-user";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn } from "@/lib/utils";
 import useCreateCommunityStore from "@/store/community.store";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -21,11 +24,12 @@ import { toast } from "sonner";
 const CreateCommunity = () => {
   const [creatingCommunity, setCreatingCommunityState] = useState(false);
   const [createdCommunity, setCreatedCommunity] = useState(false);
-  const { account } = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const address = account?.address || "";
   const { data } = useCreateCommunityStore();
   const { user } = useUser();
   const [communityId, setCommunityId] = useState("");
+  const [hash, setHash] = useState("");
   const router = useRouter();
 
   const uploadBanner = async () => {
@@ -91,9 +95,46 @@ const CreateCommunity = () => {
         setCreatingCommunityState(false);
         return;
       }
-      setCommunityId(response?._id);
-      toast("Successfully created a new community");
-      setCreatedCommunity(true);
+
+      const id = response?._id;
+      setCommunityId(id);
+
+      // Submit a create_community entry function transaction
+      const contract_response = await signAndSubmitTransaction(
+        createCommunityOnChain({
+          community_id: id,
+          min_voice_power_post: data?.post?.minimum_voice_power || 1,
+          min_voice_age_post: data?.post?.minimum_voice_age || 1,
+          min_voice_power_comment: data?.comment?.minimum_voice_power || 1,
+          min_voice_age_comment: data?.comment?.minimum_voice_power || 1,
+          min_voice_power_proposal: data?.proposal?.minimum_voice_power || 1,
+          min_voice_age_proposal: data?.proposal?.minimum_voice_power || 1,
+          min_voice_power_poll: data?.poll?.minimum_voice_power || 1,
+          min_voice_age_poll: data?.poll?.minimum_voice_power || 1,
+        })
+      ).catch((error) => {
+        setCreatingCommunityState(false);
+        return;
+      });
+
+      if (!contract_response?.hash) return;
+
+      // Wait for the transaction to be committed to chain
+      const committedTransactionResponse =
+        await aptosClient().waitForTransaction({
+          transactionHash: contract_response?.hash,
+        });
+
+      if (committedTransactionResponse.success) {
+        setHash(contract_response.hash);
+        toast("Successfully created a new community");
+        setCreatedCommunity(true);
+      } else {
+        toast.error("Failed to create community on chain", {
+          className: "error-message",
+        });
+        setCreatingCommunityState(false);
+      }
     } catch (error) {
       toast.error(
         typeof error === "string" ? error : "Failed to create community",
@@ -135,12 +176,22 @@ const CreateCommunity = () => {
           )}
         </div>
         {createdCommunity ? (
-          <Link
-            href={communityId ? `/communities/${communityId}` : "/communities"}
-            className="bg-accent px-4 text-center py-2.5 mt-7 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
-          >
-            View Community
-          </Link>
+          <>
+            <Link
+              href={
+                communityId ? `/communities/${communityId}` : "/communities"
+              }
+              className="bg-accent px-4 text-center py-2.5 mt-7 w-full ml-auto mr-0 hover:bg-teal block text-white font-medium text-sm rounded-lg"
+            >
+              View Community
+            </Link>
+            <Link
+              href={EXPLORER(`/txn/${hash}`)}
+              className="text-accent text-center text-xs lg:text-sm mt-3 underline block"
+            >
+              View transaction
+            </Link>
+          </>
         ) : null}
       </Modal>
     </>
@@ -187,7 +238,7 @@ const ReviewCommunity = () => {
             criterias={data?.criterias || []}
             members={[]}
             disableJoin
-            token_address={data?.token_address || ""}
+            contract_address={data?.contract_address || ""}
             creator={account?.address || ""}
             communityId=""
             config={null}

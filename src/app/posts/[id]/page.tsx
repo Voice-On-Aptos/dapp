@@ -42,7 +42,7 @@ async function page({
           <CommunityCriteria
             members={data?.community?.members || []}
             criterias={data?.community?.criterias || []}
-            token_address={data?.community?.token_address}
+            contract_address={data?.community?.contract_address}
             creator={data?.community?.creator?.address}
             config={{
               post: data?.community?.post || null,

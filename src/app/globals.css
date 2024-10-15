@@ -32,7 +32,7 @@
   }
 
   .error-message {
-    @apply text-scarlet bg-red-100;
+    @apply !text-scarlet !bg-red-100;
   }
 }
 
@@ -45,6 +45,10 @@
   *::after,
   *::before {
     @apply transition-all duration-75;
+  }
+
+  html {
+    @apply text-mako;
   }
 
   input[type="number"]::-webkit-inner-spin-button,

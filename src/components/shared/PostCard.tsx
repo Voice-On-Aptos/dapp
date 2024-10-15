@@ -1,6 +1,9 @@
 "use client";
 import { applaudPost, commentOnPost } from "@/actions/post";
+import { createApplaudOnChain } from "@/entry-functions/create-applaud";
+import { createCommentOnChain } from "@/entry-functions/create-comment";
 import useUser from "@/hooks/use-user";
+import { aptosClient } from "@/lib/aptos-client";
 import { cn, formatLargeNumber, timeAgo } from "@/lib/utils";
 import { Post } from "@/types/post";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -16,7 +19,7 @@ import { VoiceOutlineIcon } from "../custom-icons/VoiceIcon";
 import RAvatar from "../ui/avatar-compose";
 
 const PostCard = ({ data }: { data: Post }) => {
-  const { connected } = useWallet();
+  const { connected, signAndSubmitTransaction } = useWallet();
   const { user } = useUser();
   const [pending, setPending] = useState(false);
   const [applauded, setApplauded] = useState(false);
@@ -44,6 +47,38 @@ const PostCard = ({ data }: { data: Post }) => {
     }
 
     setPending(true);
+
+    // Submit a create_comment entry function transaction
+    const contract_response = await signAndSubmitTransaction(
+      createApplaudOnChain({
+        community_id: data?.community?._id,
+        post_id: data?._id,
+        applaud_id: Date.now().toString(),
+      })
+    ).catch((error) => {
+      toast.error(error || "Failed to applaud on chain", {
+        className: "error-message",
+      });
+      setCommenting(false);
+      return;
+    });
+
+    if (!contract_response?.hash) return;
+
+    // Wait for the transaction to be committed to chain
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (!committedTransactionResponse.success) {
+      toast.error("Failed to applaud on chain", {
+        className: "error-message",
+      });
+      setCommenting(false);
+    }
+
     const response = await applaudPost(data?._id, user?.address!, {
       userId: user?._id,
     });
@@ -84,9 +119,43 @@ const PostCard = ({ data }: { data: Post }) => {
       return;
     }
 
-    toast("Successfully commented on post");
-    setCommenting(false);
-    setComment("");
+    const id = response?._id;
+
+    // Submit a create_comment entry function transaction
+    const contract_response = await signAndSubmitTransaction(
+      createCommentOnChain({
+        community_id: data?.community?._id,
+        post_id: data?._id,
+        comment_id: id,
+        content: comment,
+      })
+    ).catch((error) => {
+      toast.error(error || "Failed to create comment on chain", {
+        className: "error-message",
+      });
+      setCommenting(false);
+      return;
+    });
+
+    if (!contract_response?.hash) return;
+
+    // Wait for the transaction to be committed to chain
+    const committedTransactionResponse = await aptosClient().waitForTransaction(
+      {
+        transactionHash: contract_response?.hash,
+      }
+    );
+
+    if (committedTransactionResponse.success) {
+      toast("Successfully commented on post");
+      setCommenting(false);
+      setComment("");
+    } else {
+      toast.error("Failed to create comment on chain", {
+        className: "error-message",
+      });
+      setCommenting(false);
+    }
   };
 
   return (
@@ -121,7 +190,9 @@ const PostCard = ({ data }: { data: Post }) => {
               className="size-[1.375rem]"
             />
 
-            <span>{data?.community?.name}</span>
+            <span className="inline-block capitalize">
+              {data?.community?.name}
+            </span>
           </Link>
           {/* <MdMoreHoriz size={16} /> */}
         </div>
@@ -164,7 +235,7 @@ const PostCard = ({ data }: { data: Post }) => {
                 setComment(value);
               }}
               placeholder="Add a comment..."
-              className="text-xs text-mako outline-none w-full"
+              className="text-xs text-mako h-full outline-none w-full"
             />
             <button
               disabled={!comment || commenting || !user}

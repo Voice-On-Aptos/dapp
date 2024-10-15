@@ -33,6 +33,7 @@ async function page({
     page,
     status === "all" ? "" : status
   );
+
   if (!slug || !community?.name) {
     notFound();
   }
